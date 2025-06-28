@@ -1,12 +1,36 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Counter } from './Counter';
-import { expect, it } from 'vitest';
+import { afterEach, expect, it } from 'vitest';
+
+afterEach(() => {
+  document.body.innerHTML = '';
+});
 
 it('shows initial state', () => {
   render(<Counter start={4} />);
 
   const count = screen.getByText('Count: 4');
 
+  expect(count).toBeInTheDocument();
+});
+
+it('increments', async () => {
+  render(<Counter start={0} />);
+
+  const increment = screen.getByText('+');
+  await userEvent.click(increment);
+
+  const count = screen.getByText('Count: 1');
+  expect(count).toBeInTheDocument();
+});
+
+it('decrements', async () => {
+  render(<Counter start={5} />);
+
+  const increment = screen.getByText('-');
+  await userEvent.click(increment);
+
+  const count = screen.getByText('Count: 4');
   expect(count).toBeInTheDocument();
 });
