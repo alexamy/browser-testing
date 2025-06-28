@@ -4,31 +4,38 @@ import { assert } from 'chai';
 import { useEffect } from 'react';
 import { Counter } from './Counter';
 
-async function test() {
-  await new Promise((r) => setTimeout(r, 0)); // React "Should not already be working"
+async function runTest(test: (root: HTMLElement) => void) {
+  // React "Should not already be working" hack
+  await new Promise((r) => setTimeout(r, 0));
 
+  // Find the test root element
   const root = document.getElementById('test-root');
   if (!root) {
     throw new Error('Test root is not found');
   }
 
+  // Run test and catch errors
   try {
-    const screen = render(<Counter start={0} />, { container: root });
-    const count = screen.getByText('Count: 0');
-
-    const increment = screen.getByRole('button', { name: /Inc/ });
-    await userEvent.click(increment);
-
-    assert.equal(count.innerText, 'Count: 1');
-    screen.unmount();
+    test(root);
   } catch (e) {
-    console.error(e);
+    console.error('Test error', e);
   }
+}
+
+async function test(root: HTMLElement) {
+  const screen = render(<Counter start={0} />, { container: root });
+  const count = screen.getByText('Count: 0');
+
+  const increment = screen.getByRole('button', { name: /Inc/ });
+  await userEvent.click(increment);
+
+  assert.equal(count.innerText, 'Count: 1');
+  screen.unmount();
 }
 
 export function App() {
   useEffect(() => {
-    test();
+    runTest(test);
   }, []);
 
   return (
