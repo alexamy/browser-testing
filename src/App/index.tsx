@@ -1,6 +1,21 @@
 import { useEffect } from 'react';
-import { runTests } from './Counter.bt';
+import { runTests, tests } from './Counter.bt';
 import s from './index.module.css';
+import type { TestInstance } from '../Framework';
+
+interface TestLineProps {
+  instance: TestInstance;
+}
+
+function TestLine({ instance }: TestLineProps) {
+  return (
+    <div>
+      {instance.description}
+      <br />
+      <button>Start</button>
+    </div>
+  );
+}
 
 //#region TestsUI
 export function TestsUI() {
@@ -14,9 +29,15 @@ export function TestsUI() {
     <>
       <div id="test-root" className={s.testRoot}></div>
       <div className={s.framework}>
-        <div className={s.testList}>
+        <div>
           <h4>Test list</h4>
+          <div className={s.testList}>
+            {tests.map((instance, i) => (
+              <TestLine key={i} instance={instance} />
+            ))}
+          </div>
         </div>
+
         <div className={s.logger}>
           <h4>Logger</h4>
         </div>

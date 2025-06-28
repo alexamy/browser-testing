@@ -20,7 +20,8 @@ body {
   max-width: 1024px;
 }
 
-p {
+p,
+h4 {
   margin: 0.7rem 0;
 }
 

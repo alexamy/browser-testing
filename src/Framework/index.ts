@@ -1,22 +1,22 @@
 import { render as renderRtl, cleanup } from '@testing-library/react';
 
 //#region runner
-interface TestOptions {
+export interface TestOptions {
   dummy?: void;
 }
 
-type TestMethod = (opts: TestOptions) => Promise<void>;
+export type TestMethod = (opts: TestOptions) => Promise<void>;
 
-interface TestInstance {
+export interface TestInstance {
   description: string;
   test: TestMethod;
 }
 
-interface MakeTestSuiteOptions {
+export interface MakeTestSuiteOptions {
   mountId: string;
 }
 
-async function runTest({ description, test }: TestInstance) {
+export async function runTest({ description, test }: TestInstance) {
   // Run test and catch assert and other errors
   try {
     console.log(`Running test:\n${description}`);

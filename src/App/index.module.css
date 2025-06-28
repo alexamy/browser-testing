@@ -1,10 +1,17 @@
 .testRoot {
   width: 100%;
+  min-height: 500px;
   background-color: lightblue;
 }
 
 .framework {
   display: flex;
-  justify-content: space-evenly;
+  gap: 120px;
   width: 100%;
+}
+
+.testList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
