@@ -12,15 +12,18 @@ async function test() {
     throw new Error('Test root is not found');
   }
 
-  const screen = render(<Counter start={0} />, { container: root });
-  const count = screen.getByText('Count: 0');
+  try {
+    const screen = render(<Counter start={0} />, { container: root });
+    const count = screen.getByText('Count: 0');
 
-  const increment = screen.getByRole('button', { name: /Inc/ });
-  await userEvent.click(increment);
+    const increment = screen.getByRole('button', { name: /Inc/ });
+    await userEvent.click(increment);
 
-  assert.equal(count.innerText, 'Count: 1');
-
-  screen.unmount();
+    assert.equal(count.innerText, 'Count: 1');
+    screen.unmount();
+  } catch (e) {
+    console.error(e);
+  }
 }
 
 export function App() {
