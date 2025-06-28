@@ -16,9 +16,6 @@ interface TestInstance {
 }
 
 async function runTest({ description, test }: TestInstance) {
-  // React "Should not already be working" hack
-  await new Promise((r) => setTimeout(r, 0));
-
   // Find the test root element
   const root = document.getElementById('test-root');
   if (!root) {
@@ -27,7 +24,7 @@ async function runTest({ description, test }: TestInstance) {
 
   // Run test and catch assert and other errors
   try {
-    console.log(`Running test: ${description}`);
+    console.log(`Running test:\n${description}`);
     await test({ root });
   } catch (e) {
     console.error('Test error', e);
@@ -37,7 +34,7 @@ async function runTest({ description, test }: TestInstance) {
   }
 }
 
-function makeSuite() {
+function makeTestSuite() {
   const tests: TestInstance[] = [];
 
   function it(description: string, test: TestMethod) {
@@ -54,7 +51,7 @@ function makeSuite() {
   return { tests, runTests, it };
 }
 
-const { runTests, it } = makeSuite();
+const { runTests, it } = makeTestSuite();
 
 it('increments', async ({ root }: TestOptions) => {
   const screen = render(<Counter start={0} />, { container: root });
@@ -78,7 +75,9 @@ it('decrements', async () => {
 
 export function App() {
   useEffect(() => {
-    runTests();
+    // React "Should not already be working" hack
+    const delay = new Promise((r) => setTimeout(r, 0));
+    delay.then(runTests);
   }, []);
 
   return (
