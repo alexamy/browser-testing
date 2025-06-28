@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import s from './Counter.module.css';
 
 export function Counter({ start }: { start: number }) {
   const [count, setCount] = useState(start);
@@ -7,12 +8,12 @@ export function Counter({ start }: { start: number }) {
   const decrement = () => setCount(Math.max(0, count - 1));
 
   return (
-    <div>
+    <div className={s.counter}>
       <p>Count: {count}</p>
-      <div style={{ display: 'flex', gap: 15 }}>
+      <div className={s.buttons}>
         <button onClick={increment}>+</button>
         <button onClick={decrement} disabled={count === 0}>
-          -
+          −
         </button>
       </div>
     </div>

@@ -1,0 +1,12 @@
+.counter {
+  font-size: 1.5rem;
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+
+  button {
+    font-size: 1.5rem;
+  }
+}
