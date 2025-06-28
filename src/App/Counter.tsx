@@ -11,9 +11,9 @@ export function Counter({ start }: { start: number }) {
     <div className={s.counter}>
       <p>Count: {count}</p>
       <div className={s.buttons}>
-        <button onClick={increment}>+</button>
+        <button onClick={increment}>Inc</button>
         <button onClick={decrement} disabled={count === 0}>
-          −
+          Dec
         </button>
       </div>
     </div>

@@ -18,7 +18,7 @@ it('shows initial state', () => {
 it('increments', async () => {
   render(<Counter start={0} />);
 
-  const increment = screen.getByText('+');
+  const increment = screen.getByText('Inc');
   await userEvent.click(increment);
 
   const count = screen.getByText('Count: 1');
@@ -28,7 +28,7 @@ it('increments', async () => {
 it('decrements', async () => {
   render(<Counter start={5} />);
 
-  const increment = screen.getByText('-');
+  const increment = screen.getByText('Dec');
   await userEvent.click(increment);
 
   const count = screen.getByText('Count: 4');
@@ -38,7 +38,7 @@ it('decrements', async () => {
 it('can be only positive', async () => {
   render(<Counter start={0} />);
 
-  const decrement = screen.getByText('-');
+  const decrement = screen.getByText('Dec');
   await userEvent.click(decrement);
 
   const count = screen.getByText('Count: 0');
@@ -48,6 +48,6 @@ it('can be only positive', async () => {
 it('decrement is disabled at 0', async () => {
   render(<Counter start={0} />);
 
-  const decrement = screen.getByText('-');
+  const decrement = screen.getByText('Dec');
   expect(decrement).toBeDisabled();
 });

@@ -1,12 +1,9 @@
 .counter {
-  font-size: 1.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .buttons {
   display: flex;
   gap: 10px;
-
-  button {
-    font-size: 1.5rem;
-  }
 }
