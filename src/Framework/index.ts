@@ -23,7 +23,7 @@ export interface RunTestOptions {
 export async function runTest({ description, test }: TestInstance, { log }: RunTestOptions) {
   // Run test and catch assert and other errors
   try {
-    log(`Running test:\n${description}`);
+    log(`Running test: ${description}`);
     await test({});
   } catch (e) {
     log('Test error', e);

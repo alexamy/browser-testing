@@ -38,12 +38,8 @@ function useTests() {
   }
 
   async function startTest(instance: TestInstance) {
-    setIsRunning(true);
-
-    // React "Should not already be working" hack
-    await new Promise((r) => setTimeout(r, 0));
-
     // Reset
+    setIsRunning(true);
     cleanup();
     setLogs([]);
 
