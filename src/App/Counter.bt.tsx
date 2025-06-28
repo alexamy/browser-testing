@@ -1,5 +1,5 @@
 import userEvent from '@testing-library/user-event';
-import { assert } from 'chai';
+import { expect } from 'chai';
 import { Counter } from './Counter';
 import { makeTestSuite, render } from './framework';
 
@@ -14,7 +14,7 @@ it('increments', async () => {
   const increment = screen.getByRole('button', { name: /Inc/ });
   await userEvent.click(increment);
 
-  assert.equal(count.innerText, 'Count: 1');
+  expect(count.innerText).equals('Count: 1');
 });
 
 it('decrements', async () => {
@@ -24,5 +24,5 @@ it('decrements', async () => {
   const increment = screen.getByText('Dec');
   await userEvent.click(increment);
 
-  assert.equal(count.innerText, 'Count: 4');
+  expect(count.innerText).equals('Count: 4');
 });
