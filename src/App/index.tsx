@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 import { runTests } from './Counter.bt';
 import s from './index.module.css';
 
-//#region framework
-export function App() {
+//#region TestsUI
+export function TestsUI() {
   useEffect(() => {
     // React "Should not already be working" hack
     const delay = new Promise((r) => setTimeout(r, 0));
