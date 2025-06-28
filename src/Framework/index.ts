@@ -1,4 +1,4 @@
-import { render as renderRtl, cleanup } from '@testing-library/react';
+import { render as renderRtl } from '@testing-library/react';
 
 //#region runner
 export interface TestOptions {
@@ -25,7 +25,6 @@ export async function runTest({ description, test }: TestInstance) {
     console.error('Test error', e);
   } finally {
     console.log('Completed!');
-    cleanup();
   }
 }
 

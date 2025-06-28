@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
-import { runTests, tests } from './Counter.bt';
+import { useEffect, useState } from 'react';
+import { tests } from './Counter.bt';
 import s from './index.module.css';
-import type { TestInstance } from '../Framework';
+import { runTest, type TestInstance } from '../Framework';
+import { cleanup } from '@testing-library/react';
 
 interface TestLineProps {
   instance: TestInstance;
@@ -23,11 +24,21 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
+  const [current, setCurrent] = useState<TestInstance>();
+
   useEffect(() => {
-    // React "Should not already be working" hack
-    const delay = new Promise((r) => setTimeout(r, 0));
-    delay.then(runTests);
-  }, []);
+    if (!current) return;
+
+    async function run() {
+      // React "Should not already be working" hack
+      await new Promise((r) => setTimeout(r, 0));
+      cleanup();
+      await runTest(current!);
+      setCurrent(undefined);
+    }
+
+    run();
+  }, [current]);
 
   return (
     <>
@@ -37,7 +48,12 @@ export function TestsUI() {
           <h4>Test list</h4>
           <div className={s.testList}>
             {tests.map((instance, i) => (
-              <TestLine key={i} instance={instance} />
+              <TestLine
+                key={i}
+                instance={instance}
+                disabled={Boolean(current)}
+                onStart={() => setCurrent(instance)}
+              />
             ))}
           </div>
         </div>
