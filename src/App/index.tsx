@@ -7,7 +7,11 @@ import { Counter } from './Counter';
 async function test() {
   await new Promise((r) => setTimeout(r, 0)); // React "Should not already be working"
 
-  const root = document.getElementById('test-root')!;
+  const root = document.getElementById('test-root');
+  if (!root) {
+    throw new Error('Test root is not found');
+  }
+
   const screen = render(<Counter start={0} />, { container: root });
   const count = screen.getByText('Count: 0');
 
