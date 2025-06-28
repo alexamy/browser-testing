@@ -15,13 +15,6 @@ interface TestInstance {
   test: TestMethod;
 }
 
-const tests: TestInstance[] = [];
-
-function it(description: string, test: TestMethod) {
-  const instance = { description, test };
-  tests.push(instance);
-}
-
 async function runTest({ description, test }: TestInstance) {
   // React "Should not already be working" hack
   await new Promise((r) => setTimeout(r, 0));
@@ -44,11 +37,24 @@ async function runTest({ description, test }: TestInstance) {
   }
 }
 
-async function runTests() {
-  for (const test of tests) {
-    await runTest(test);
+function makeSuite() {
+  const tests: TestInstance[] = [];
+
+  function it(description: string, test: TestMethod) {
+    const instance = { description, test };
+    tests.push(instance);
   }
+
+  async function runTests() {
+    for (const test of tests) {
+      await runTest(test);
+    }
+  }
+
+  return { tests, runTests, it };
 }
+
+const { runTests, it } = makeSuite();
 
 it('Count is incremented', async ({ root }: TestOptions) => {
   const screen = render(<Counter start={0} />, { container: root });
