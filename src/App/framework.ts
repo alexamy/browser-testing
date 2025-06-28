@@ -29,12 +29,6 @@ async function runTest({ description, test }: TestInstance) {
   }
 }
 
-export async function runTests(tests: TestInstance[]) {
-  for (const test of tests) {
-    await runTest(test);
-  }
-}
-
 function makeRender({ mountId }: MakeTestSuiteOptions) {
   return function render(
     ...[markup, options]: Parameters<typeof renderRtl>
@@ -62,5 +56,11 @@ export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
     tests.push(instance);
   }
 
-  return { tests, render, it };
+  async function runTests() {
+    for (const test of tests) {
+      await runTest(test);
+    }
+  }
+
+  return { tests, runTests, render, it };
 }
