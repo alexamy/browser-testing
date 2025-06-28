@@ -1,4 +1,4 @@
-import { render, cleanup } from '@testing-library/react';
+import { render as renderRtl, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { assert } from 'chai';
 import { useEffect } from 'react';
@@ -6,7 +6,7 @@ import { Counter } from './Counter';
 
 //#region runner
 interface TestOptions {
-  root: HTMLElement;
+  dummy?: void;
 }
 
 type TestMethod = (opts: TestOptions) => Promise<void>;
@@ -16,21 +16,30 @@ interface TestInstance {
   test: TestMethod;
 }
 
-async function runTest({ description, test }: TestInstance) {
+const TEST_ROOT_ID = 'test-root';
+
+function render(...[markup, options]: Parameters<typeof renderRtl>): ReturnType<typeof renderRtl> {
   // Find the test root element
-  const root = document.getElementById('test-root');
+  const root = document.getElementById(TEST_ROOT_ID);
   if (!root) {
     throw new Error('Test root is not found');
   }
 
+  // Render on test root element
+  const result = renderRtl(markup, { ...options, container: root });
+
+  return result;
+}
+
+async function runTest({ description, test }: TestInstance) {
   // Run test and catch assert and other errors
   try {
     console.log(`Running test:\n${description}`);
-    await test({ root });
+    await test({});
   } catch (e) {
     console.error('Test error', e);
   } finally {
-    console.log('Finished');
+    console.log('Completed!');
     cleanup();
   }
 }
@@ -55,8 +64,8 @@ function makeTestSuite() {
 //#region tests
 const { tests, it } = makeTestSuite();
 
-it('increments', async ({ root }) => {
-  const screen = render(<Counter start={0} />, { container: root });
+it('increments', async () => {
+  const screen = render(<Counter start={0} />);
   const count = screen.getByText('Count: 0');
 
   const increment = screen.getByRole('button', { name: /Inc/ });
@@ -65,8 +74,8 @@ it('increments', async ({ root }) => {
   assert.equal(count.innerText, 'Count: 1');
 });
 
-it('decrements', async ({ root }) => {
-  const screen = render(<Counter start={5} />, { container: root });
+it('decrements', async () => {
+  const screen = render(<Counter start={5} />);
   const count = screen.getByText('Count: 5');
 
   const increment = screen.getByText('Dec');
@@ -86,7 +95,8 @@ export function App() {
   return (
     <>
       Test runner ui
-      <div id="test-root"></div>
+      <div id={TEST_ROOT_ID}></div>
+      Footer
     </>
   );
 }
