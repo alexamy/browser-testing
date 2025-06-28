@@ -4,7 +4,18 @@ import { assert } from 'chai';
 import { useEffect } from 'react';
 import { Counter } from './Counter';
 
-async function runTest(description: string, test: (root: HTMLElement) => Promise<void>) {
+interface TestOptions {
+  root: HTMLElement;
+}
+
+type TestMethod = (opts: TestOptions) => Promise<void>;
+
+interface TestInstance {
+  description: string;
+  test: TestMethod;
+}
+
+async function runTest({ description, test }: TestInstance) {
   // React "Should not already be working" hack
   await new Promise((r) => setTimeout(r, 0));
 
@@ -17,7 +28,7 @@ async function runTest(description: string, test: (root: HTMLElement) => Promise
   // Run test and catch assert and other errors
   try {
     console.log(`Running test: ${description}`);
-    await test(root);
+    await test({ root });
   } catch (e) {
     console.error('Test error', e);
   } finally {
@@ -26,7 +37,11 @@ async function runTest(description: string, test: (root: HTMLElement) => Promise
   }
 }
 
-async function test(root: HTMLElement) {
+function it(description: string, test: TestMethod) {
+  return { description, test };
+}
+
+const test1 = it('Count is incremented', async ({ root }: TestOptions) => {
   const screen = render(<Counter start={0} />, { container: root });
   const count = screen.getByText('Count: 0');
 
@@ -34,11 +49,11 @@ async function test(root: HTMLElement) {
   await userEvent.click(increment);
 
   assert.equal(count.innerText, 'Count: 1');
-}
+});
 
 export function App() {
   useEffect(() => {
-    runTest('Count is incremented', test);
+    runTest(test1);
   }, []);
 
   return (
