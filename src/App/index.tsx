@@ -1,8 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { type TestInstance } from '../Framework';
+import { useTests } from '../Framework/react';
 import { tests } from './Counter.bt';
 import s from './index.module.css';
-import { runTest, type TestInstance } from '../Framework';
-import { cleanup } from '@testing-library/react';
 
 //#region TestLine
 interface TestLineProps {
@@ -24,39 +23,6 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 }
 
 //#region TestsUI
-function processLogMessage(arg: unknown) {
-  return typeof arg === 'string'
-    ? arg.split('\n')
-    : JSON.stringify(arg instanceof Error ? arg.message : arg);
-}
-
-function useTests() {
-  const [logs, setLogs] = useState<string[]>([]);
-  const [isRunning, setIsRunning] = useState(false);
-
-  function log(...args: unknown[]) {
-    const messages = args.flatMap(processLogMessage);
-    setLogs((logs) => [...logs, ...messages]);
-  }
-
-  async function startTest(instance: TestInstance) {
-    // Reset
-    setIsRunning(true);
-    cleanup();
-    setLogs([]);
-
-    // Run test
-    await runTest(instance, { log });
-    setIsRunning(false);
-  }
-
-  return {
-    startTest,
-    isRunning,
-    logs,
-  };
-}
-
 export function TestsUI() {
   const { startTest, isRunning, logs } = useTests();
 
