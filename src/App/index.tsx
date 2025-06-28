@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { tests } from './Counter.bt';
 import s from './index.module.css';
 import { runTest, type TestInstance } from '../Framework';
@@ -28,9 +28,9 @@ function processLogMessage(arg: unknown) {
   return typeof arg === 'string' ? arg.split('\n') : JSON.stringify(arg);
 }
 
-export function TestsUI() {
-  const [current, setCurrent] = useState<TestInstance>();
+function useTests() {
   const [logs, setLogs] = useState<string[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
 
   function log(...args: unknown[]) {
     const messages = args.flatMap(processLogMessage);
@@ -38,17 +38,29 @@ export function TestsUI() {
   }
 
   async function startTest(instance: TestInstance) {
+    setIsRunning(true);
+
     // React "Should not already be working" hack
     await new Promise((r) => setTimeout(r, 0));
 
-    // Prepare
+    // Reset
     cleanup();
     setLogs([]);
 
     // Run test
     await runTest(instance, { log });
-    setCurrent(undefined);
+    setIsRunning(false);
   }
+
+  return {
+    startTest,
+    isRunning,
+    logs,
+  };
+}
+
+export function TestsUI() {
+  const { startTest, isRunning, logs } = useTests();
 
   return (
     <>
@@ -61,7 +73,7 @@ export function TestsUI() {
               <TestLine
                 key={i}
                 instance={instance}
-                disabled={Boolean(current)}
+                disabled={isRunning}
                 onStart={() => startTest(instance)}
               />
             ))}
