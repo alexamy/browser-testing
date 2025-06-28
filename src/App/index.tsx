@@ -1,9 +1,8 @@
-import { Counter } from './Counter';
-
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { useEffect } from 'react';
 import { assert } from 'chai';
+import { useEffect } from 'react';
+import { Counter } from './Counter';
 
 export function App() {
   useEffect(() => {
