@@ -16,24 +16,20 @@ export interface MakeTestSuiteOptions {
   mountId: string;
 }
 
-export async function runTest({ description, test }: TestInstance) {
-  // Run test and catch assert and other errors
-  try {
-    console.log(`Running test:\n${description}`);
-    await test({});
-  } catch (e) {
-    console.error('Test error', e);
-  } finally {
-    console.log('Completed!');
-  }
+export interface RunTestOptions {
+  log(...args: unknown[]): void;
 }
 
-function makeRunTests(tests: TestInstance[]) {
-  return async function runTests() {
-    for (const test of tests) {
-      await runTest(test);
-    }
-  };
+export async function runTest({ description, test }: TestInstance, { log }: RunTestOptions) {
+  // Run test and catch assert and other errors
+  try {
+    log(`Running test:\n${description}`);
+    await test({});
+  } catch (e) {
+    log('Test error', e);
+  } finally {
+    log('Completed!');
+  }
 }
 
 function makeRender(mountId: string) {
@@ -56,7 +52,6 @@ function makeRender(mountId: string) {
 export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
   const tests: TestInstance[] = [];
 
-  const runTests = makeRunTests(tests);
   const render = makeRender(mountId);
 
   function it(description: string, test: TestMethod) {
@@ -64,5 +59,5 @@ export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
     tests.push(instance);
   }
 
-  return { tests, runTests, render, it };
+  return { tests, render, it };
 }

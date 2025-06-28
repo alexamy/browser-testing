@@ -3,11 +3,11 @@ import { expect } from 'chai';
 import { Counter } from './Counter';
 import { makeTestSuite } from '../Framework';
 
-const { runTests, tests, it, render } = makeTestSuite({
+const { tests, it, render } = makeTestSuite({
   mountId: 'test-root',
 });
 
-export { runTests, tests };
+export { tests };
 
 it('increments', async () => {
   const screen = render(<Counter start={0} />);

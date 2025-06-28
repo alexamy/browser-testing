@@ -4,6 +4,7 @@ import s from './index.module.css';
 import { runTest, type TestInstance } from '../Framework';
 import { cleanup } from '@testing-library/react';
 
+//#region TestLine
 interface TestLineProps {
   instance: TestInstance;
   onStart(): void;
@@ -33,7 +34,7 @@ export function TestsUI() {
       // React "Should not already be working" hack
       await new Promise((r) => setTimeout(r, 0));
       cleanup();
-      await runTest(current!);
+      await runTest(current!, { log: console.log });
       setCurrent(undefined);
     }
 
