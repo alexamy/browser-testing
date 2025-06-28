@@ -13,7 +13,14 @@ export function App() {
   return (
     <>
       <div id="test-root" className={s.testRoot}></div>
-      Footer
+      <div className={s.framework}>
+        <div className={s.testList}>
+          <h4>Test list</h4>
+        </div>
+        <div className={s.logger}>
+          <h4>Logger</h4>
+        </div>
+      </div>
     </>
   );
 }

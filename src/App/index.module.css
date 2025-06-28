@@ -2,3 +2,9 @@
   width: 100%;
   background-color: lightblue;
 }
+
+.framework {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
