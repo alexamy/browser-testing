@@ -56,7 +56,7 @@ function makeSuite() {
 
 const { runTests, it } = makeSuite();
 
-it('Count is incremented', async ({ root }: TestOptions) => {
+it('increments', async ({ root }: TestOptions) => {
   const screen = render(<Counter start={0} />, { container: root });
   const count = screen.getByText('Count: 0');
 
@@ -64,6 +64,16 @@ it('Count is incremented', async ({ root }: TestOptions) => {
   await userEvent.click(increment);
 
   assert.equal(count.innerText, 'Count: 1');
+});
+
+it('decrements', async () => {
+  const screen = render(<Counter start={5} />);
+  const count = screen.getByText('Count: 5');
+
+  const increment = screen.getByText('Dec');
+  await userEvent.click(increment);
+
+  assert.equal(count.innerText, 'Count: 4');
 });
 
 export function App() {
