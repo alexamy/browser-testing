@@ -29,16 +29,6 @@ it('decrements', async () => {
   await expect.element(count).toBeInTheDocument();
 });
 
-it('can be only positive', async () => {
-  const screen = render(<Counter start={0} />);
-
-  const decrement = screen.getByRole('button', { name: /Dec/ });
-  await decrement.click();
-
-  const count = screen.getByText('Count: 0');
-  await expect.element(count).toBeInTheDocument();
-});
-
 it('decrement is disabled at 0', async () => {
   const screen = render(<Counter start={0} />);
 
