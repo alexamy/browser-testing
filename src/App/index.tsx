@@ -65,8 +65,8 @@ it('increments', async ({ root }) => {
   assert.equal(count.innerText, 'Count: 1');
 });
 
-it('decrements', async () => {
-  const screen = render(<Counter start={5} />);
+it('decrements', async ({ root }) => {
+  const screen = render(<Counter start={5} />, { container: root });
   const count = screen.getByText('Count: 5');
 
   const increment = screen.getByText('Dec');
