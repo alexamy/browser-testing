@@ -1,7 +1,7 @@
 .testRoot {
   width: 100%;
   min-height: 500px;
-  background-color: lightblue;
+  background-color: #333;
 }
 
 .framework {

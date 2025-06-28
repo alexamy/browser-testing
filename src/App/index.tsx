@@ -5,14 +5,18 @@ import type { TestInstance } from '../Framework';
 
 interface TestLineProps {
   instance: TestInstance;
+  onStart(): void;
+  disabled?: boolean;
 }
 
-function TestLine({ instance }: TestLineProps) {
+function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
   return (
     <div>
       {instance.description}
       <br />
-      <button>Start</button>
+      <button disabled={disabled} onClick={onStart}>
+        Start
+      </button>
     </div>
   );
 }
