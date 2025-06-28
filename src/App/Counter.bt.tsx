@@ -1,7 +1,6 @@
-import userEvent from '@testing-library/user-event';
 import { expect } from 'chai';
 import { Counter } from './Counter';
-import { render, it } from '../Framework';
+import { render, it, userEvent } from '../Framework';
 
 it('increments', async () => {
   const screen = render(<Counter start={0} />);

@@ -1,6 +1,7 @@
 import { render as renderRtl } from '@testing-library/react';
+import userEventDefault from '@testing-library/user-event';
 
-//#region runner
+//#region types
 export interface TestOptions {
   dummy?: void;
 }
@@ -20,6 +21,7 @@ export interface RunTestOptions {
   log(...args: unknown[]): void;
 }
 
+//#region tests
 export async function runTest({ description, test }: TestInstance, { log }: RunTestOptions) {
   // Run test and catch assert and other errors
   try {
@@ -32,6 +34,14 @@ export async function runTest({ description, test }: TestInstance, { log }: RunT
   }
 }
 
+export const tests: TestInstance[] = [];
+
+export function it(description: string, test: TestMethod) {
+  const instance = { description, test };
+  tests.push(instance);
+}
+
+//#region testing library
 export const TESTS_MOUNT_ID = 'test-root';
 
 export function render(
@@ -49,9 +59,4 @@ export function render(
   return result;
 }
 
-export const tests: TestInstance[] = [];
-
-export function it(description: string, test: TestMethod) {
-  const instance = { description, test };
-  tests.push(instance);
-}
+export const userEvent = userEventDefault;
