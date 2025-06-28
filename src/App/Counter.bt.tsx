@@ -1,9 +1,11 @@
 import userEvent from '@testing-library/user-event';
 import { expect } from 'chai';
 import { Counter } from './Counter';
-import { makeTestSuite, render } from './framework';
+import { makeTestSuite } from './framework';
 
-const { tests, it } = makeTestSuite();
+const { tests, it, render } = makeTestSuite({
+  mountId: 'test-root',
+});
 
 export { tests };
 

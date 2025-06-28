@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { tests } from './Counter.bt';
-import { runTests, TEST_ROOT_ID } from './framework';
+import { runTests } from './framework';
 
 //#region framework
 export function App() {
@@ -13,7 +13,7 @@ export function App() {
   return (
     <>
       Test runner ui
-      <div id={TEST_ROOT_ID}></div>
+      <div id="test-root"></div>
       Footer
     </>
   );

@@ -12,21 +12,8 @@ interface TestInstance {
   test: TestMethod;
 }
 
-export const TEST_ROOT_ID = 'test-root';
-
-export function render(
-  ...[markup, options]: Parameters<typeof renderRtl>
-): ReturnType<typeof renderRtl> {
-  // Find the test root element
-  const root = document.getElementById(TEST_ROOT_ID);
-  if (!root) {
-    throw new Error('Test root is not found');
-  }
-
-  // Render on test root element
-  const result = renderRtl(markup, { ...options, container: root });
-
-  return result;
+interface MakeTestSuiteOptions {
+  mountId: string;
 }
 
 async function runTest({ description, test }: TestInstance) {
@@ -48,7 +35,7 @@ export async function runTests(tests: TestInstance[]) {
   }
 }
 
-export function makeTestSuite() {
+export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
   const tests: TestInstance[] = [];
 
   function it(description: string, test: TestMethod) {
@@ -56,5 +43,20 @@ export function makeTestSuite() {
     tests.push(instance);
   }
 
-  return { tests, it };
+  function render(
+    ...[markup, options]: Parameters<typeof renderRtl>
+  ): ReturnType<typeof renderRtl> {
+    // Find the test root element
+    const root = document.getElementById(mountId);
+    if (!root) {
+      throw new Error('Test root is not found');
+    }
+
+    // Render on test root element
+    const result = renderRtl(markup, { ...options, container: root });
+
+    return result;
+  }
+
+  return { tests, it, render };
 }
