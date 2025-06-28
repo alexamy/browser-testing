@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { tests } from './Counter.bt';
 import s from './index.module.css';
 import { runTest, type TestInstance } from '../Framework';
@@ -37,24 +37,18 @@ export function TestsUI() {
     setLogs((logs) => [...logs, ...messages]);
   }
 
-  useEffect(() => {
-    if (!current) return;
+  async function startTest(instance: TestInstance) {
+    // React "Should not already be working" hack
+    await new Promise((r) => setTimeout(r, 0));
 
-    async function run() {
-      // React "Should not already be working" hack
-      await new Promise((r) => setTimeout(r, 0));
+    // Prepare
+    cleanup();
+    setLogs([]);
 
-      // Prepare
-      cleanup();
-      setLogs([]);
-
-      // Run test
-      await runTest(current!, { log });
-      setCurrent(undefined);
-    }
-
-    run();
-  }, [current]);
+    // Run test
+    await runTest(instance, { log });
+    setCurrent(undefined);
+  }
 
   return (
     <>
@@ -68,7 +62,7 @@ export function TestsUI() {
                 key={i}
                 instance={instance}
                 disabled={Boolean(current)}
-                onStart={() => setCurrent(instance)}
+                onStart={() => startTest(instance)}
               />
             ))}
           </div>
