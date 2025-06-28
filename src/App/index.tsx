@@ -62,11 +62,7 @@ export function TestsUI() {
 
   return (
     <>
-      <div
-        id="test-root"
-        className={s.testRoot}
-        style={{ userSelect: isRunning ? 'none' : 'auto' }}
-      ></div>
+      <div id="test-root" className={s.testRoot}></div>
       <div className={s.framework}>
         <div>
           <h4>Test list</h4>
