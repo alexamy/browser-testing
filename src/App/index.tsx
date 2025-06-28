@@ -34,6 +34,12 @@ async function runTest({ description, test }: TestInstance) {
   }
 }
 
+async function runTests(tests: TestInstance[]) {
+  for (const test of tests) {
+    await runTest(test);
+  }
+}
+
 function makeTestSuite() {
   const tests: TestInstance[] = [];
 
@@ -42,16 +48,10 @@ function makeTestSuite() {
     tests.push(instance);
   }
 
-  async function runTests() {
-    for (const test of tests) {
-      await runTest(test);
-    }
-  }
-
-  return { tests, runTests, it };
+  return { tests, it };
 }
 
-const { runTests, it } = makeTestSuite();
+const { tests, it } = makeTestSuite();
 
 it('increments', async ({ root }: TestOptions) => {
   const screen = render(<Counter start={0} />, { container: root });
@@ -77,7 +77,7 @@ export function App() {
   useEffect(() => {
     // React "Should not already be working" hack
     const delay = new Promise((r) => setTimeout(r, 0));
-    delay.then(runTests);
+    delay.then(() => runTests(tests));
   }, []);
 
   return (
