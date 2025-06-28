@@ -43,7 +43,7 @@ export function App() {
   return (
     <>
       <div id="test-root"></div>
-      Text after
+      Test runner ui
     </>
   );
 }
