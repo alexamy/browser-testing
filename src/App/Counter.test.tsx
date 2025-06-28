@@ -38,9 +38,16 @@ it('decrements', async () => {
 it('can be only positive', async () => {
   render(<Counter start={0} />);
 
-  const increment = screen.getByText('-');
-  await userEvent.click(increment);
+  const decrement = screen.getByText('-');
+  await userEvent.click(decrement);
 
   const count = screen.getByText('Count: 0');
   expect(count).toBeInTheDocument();
+});
+
+it('decrement is disabled at 0', async () => {
+  render(<Counter start={0} />);
+
+  const decrement = screen.getByText('-');
+  expect(decrement).toBeDisabled();
 });
