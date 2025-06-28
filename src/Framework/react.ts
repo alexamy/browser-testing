@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { runTest, type TestInstance } from '.';
+import { runTest, tests, type TestInstance } from '.';
 import { cleanup } from '@testing-library/react';
 
 function processLogMessage(arg: unknown) {
@@ -29,6 +29,7 @@ export function useTests() {
   }
 
   return {
+    tests,
     startTest,
     isRunning,
     logs,

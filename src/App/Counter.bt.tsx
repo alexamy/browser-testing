@@ -1,13 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import { expect } from 'chai';
 import { Counter } from './Counter';
-import { makeTestSuite } from '../Framework';
-
-const { tests, it, render } = makeTestSuite({
-  mountId: 'test-root',
-});
-
-export { tests };
+import { render, it } from '../Framework';
 
 it('increments', async () => {
   const screen = render(<Counter start={0} />);

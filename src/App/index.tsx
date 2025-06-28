@@ -1,7 +1,7 @@
 import { type TestInstance } from '../Framework';
 import { useTests } from '../Framework/react';
-import { tests } from './Counter.bt';
 import s from './index.module.css';
+import './Counter.bt';
 
 //#region TestLine
 interface TestLineProps {
@@ -24,7 +24,7 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
-  const { startTest, isRunning, logs } = useTests();
+  const { tests, startTest, isRunning, logs } = useTests();
 
   return (
     <>
