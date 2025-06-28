@@ -26,6 +26,7 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 //#region TestsUI
 export function TestsUI() {
   const [current, setCurrent] = useState<TestInstance>();
+  const [logs, setLogs] = useState<string[]>([]);
 
   useEffect(() => {
     if (!current) return;
@@ -33,7 +34,12 @@ export function TestsUI() {
     async function run() {
       // React "Should not already be working" hack
       await new Promise((r) => setTimeout(r, 0));
+
+      // Prepare
       cleanup();
+      setLogs([]);
+
+      // Run test
       await runTest(current!, { log: console.log });
       setCurrent(undefined);
     }
@@ -59,8 +65,13 @@ export function TestsUI() {
           </div>
         </div>
 
-        <div className={s.logger}>
+        <div>
           <h4>Logger</h4>
+          <div className={s.logger}>
+            {logs.map((logLine) => (
+              <p>{logLine}</p>
+            ))}
+          </div>
         </div>
       </div>
     </>
