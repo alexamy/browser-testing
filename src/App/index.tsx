@@ -8,7 +8,7 @@ export function App() {
   useEffect(() => {
     async function test() {
       const count = screen.getByText('Count: 0');
-      const increment = screen.getByText('Inc');
+      const increment = screen.getByRole('button', { name: /Inc/ });
       await userEvent.click(increment);
 
       assert.equal(count.innerText, 'Count: 1');
