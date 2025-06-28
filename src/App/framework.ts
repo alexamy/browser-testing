@@ -35,15 +35,8 @@ export async function runTests(tests: TestInstance[]) {
   }
 }
 
-export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
-  const tests: TestInstance[] = [];
-
-  function it(description: string, test: TestMethod) {
-    const instance = { description, test };
-    tests.push(instance);
-  }
-
-  function render(
+function makeRender({ mountId }: MakeTestSuiteOptions) {
+  return function render(
     ...[markup, options]: Parameters<typeof renderRtl>
   ): ReturnType<typeof renderRtl> {
     // Find the test root element
@@ -56,7 +49,18 @@ export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
     const result = renderRtl(markup, { ...options, container: root });
 
     return result;
+  };
+}
+
+export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
+  const tests: TestInstance[] = [];
+
+  const render = makeRender({ mountId });
+
+  function it(description: string, test: TestMethod) {
+    const instance = { description, test };
+    tests.push(instance);
   }
 
-  return { tests, it, render };
+  return { tests, render, it };
 }
