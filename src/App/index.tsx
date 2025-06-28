@@ -19,6 +19,8 @@ async function test() {
   await userEvent.click(increment);
 
   assert.equal(count.innerText, 'Count: 1');
+
+  screen.unmount();
 }
 
 export function App() {
