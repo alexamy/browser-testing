@@ -4,6 +4,7 @@ import { assert } from 'chai';
 import { useEffect } from 'react';
 import { Counter } from './Counter';
 
+//#region runner
 interface TestOptions {
   root: HTMLElement;
 }
@@ -51,9 +52,10 @@ function makeTestSuite() {
   return { tests, it };
 }
 
+//#region tests
 const { tests, it } = makeTestSuite();
 
-it('increments', async ({ root }: TestOptions) => {
+it('increments', async ({ root }) => {
   const screen = render(<Counter start={0} />, { container: root });
   const count = screen.getByText('Count: 0');
 
@@ -73,6 +75,7 @@ it('decrements', async () => {
   assert.equal(count.innerText, 'Count: 4');
 });
 
+//#region framework
 export function App() {
   useEffect(() => {
     // React "Should not already be working" hack
@@ -82,8 +85,8 @@ export function App() {
 
   return (
     <>
-      <div id="test-root"></div>
       Test runner ui
+      <div id="test-root"></div>
     </>
   );
 }
