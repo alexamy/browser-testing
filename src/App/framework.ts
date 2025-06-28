@@ -37,7 +37,7 @@ function makeRunTests(tests: TestInstance[]) {
   };
 }
 
-function makeRender({ mountId }: MakeTestSuiteOptions) {
+function makeRender(mountId: string) {
   return function render(
     ...[markup, options]: Parameters<typeof renderRtl>
   ): ReturnType<typeof renderRtl> {
@@ -57,8 +57,8 @@ function makeRender({ mountId }: MakeTestSuiteOptions) {
 export function makeTestSuite({ mountId }: MakeTestSuiteOptions) {
   const tests: TestInstance[] = [];
 
-  const render = makeRender({ mountId });
   const runTests = makeRunTests(tests);
+  const render = makeRender(mountId);
 
   function it(description: string, test: TestMethod) {
     const instance = { description, test };
