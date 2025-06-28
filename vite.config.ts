@@ -6,8 +6,6 @@ export default defineConfig({
   plugins: [react()],
   test: {
     testTimeout: 500,
-    environment: 'happy-dom',
-    setupFiles: ['./vitest-setup.ts'],
     browser: {
       provider: 'playwright',
       enabled: true,
