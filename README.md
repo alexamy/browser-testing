@@ -2,6 +2,13 @@
 
 Just a fun project.
 
+## Quick start
+
+```
+npm i
+npm run dev
+```
+
 Write tests in any tsx file and import them inside App.
 
 - Wraps `render` to render on specific dom element
