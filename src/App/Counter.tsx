@@ -9,10 +9,12 @@ export function Counter({ start }: { start: number }) {
   return (
     <div>
       <p>Count: {count}</p>
-      <button onClick={increment}>+</button>
-      <button onClick={decrement} disabled={count === 0}>
-        -
-      </button>
+      <div style={{ display: 'flex', gap: 15 }}>
+        <button onClick={increment}>+</button>
+        <button onClick={decrement} disabled={count === 0}>
+          -
+        </button>
+      </div>
     </div>
   );
 }

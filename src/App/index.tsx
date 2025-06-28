@@ -1,3 +1,9 @@
+import { Counter } from './Counter';
+
 export function App() {
-  return <div>Hello!</div>;
+  return (
+    <div>
+      <Counter start={0} />
+    </div>
+  );
 }
