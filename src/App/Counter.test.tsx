@@ -1,11 +1,9 @@
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Counter } from './Counter';
 import { afterEach, expect, it } from 'vitest';
 
-afterEach(() => {
-  document.body.innerHTML = '';
-});
+afterEach(cleanup);
 
 it('shows initial state', () => {
   render(<Counter start={4} />);
