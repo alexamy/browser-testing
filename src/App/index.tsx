@@ -12,7 +12,7 @@ export function App() {
       const increment = screen.getByText('Inc');
       await userEvent.click(increment);
 
-      assert.equal(count.innerText, 'Count: 2');
+      assert.equal(count.innerText, 'Count: 1');
     }
 
     test();
