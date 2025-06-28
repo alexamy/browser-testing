@@ -19,3 +19,23 @@ Examples:
 
 - Test - `App/Counter.bt.tsx` (bt for browser-testing)
 - UI - `App/index.tsx`
+
+## Other approaches (not for comparison)
+
+`Counter.test.tsx`
+
+- Vitest + Testing library
+
+```
+git checkout main
+npm i
+npm run test
+```
+
+- Vitest browser mode + Playwright
+
+```
+git checkout playwright-browser
+npm i
+npm run test
+```
