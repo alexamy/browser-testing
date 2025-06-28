@@ -34,3 +34,13 @@ it('decrements', async () => {
   const count = screen.getByText('Count: 4');
   expect(count).toBeInTheDocument();
 });
+
+it('can be only positive', async () => {
+  render(<Counter start={0} />);
+
+  const increment = screen.getByText('-');
+  await userEvent.click(increment);
+
+  const count = screen.getByText('Count: 0');
+  expect(count).toBeInTheDocument();
+});

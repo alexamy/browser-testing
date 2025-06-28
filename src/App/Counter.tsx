@@ -7,7 +7,7 @@ export function Counter({ start }: { start: number }) {
     <div>
       <p>Count: {count}</p>
       <button onClick={() => setCount(count + 1)}>+</button>
-      <button onClick={() => setCount(count - 1)}>-</button>
+      <button onClick={() => setCount(Math.max(0, count - 1))}>-</button>
     </div>
   );
 }
