@@ -25,7 +25,9 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 
 //#region TestsUI
 function processLogMessage(arg: unknown) {
-  return typeof arg === 'string' ? arg.split('\n') : JSON.stringify(arg);
+  return typeof arg === 'string'
+    ? arg.split('\n')
+    : JSON.stringify(arg instanceof Error ? arg.message : arg);
 }
 
 function useTests() {
@@ -60,7 +62,11 @@ export function TestsUI() {
 
   return (
     <>
-      <div id="test-root" className={s.testRoot}></div>
+      <div
+        id="test-root"
+        className={s.testRoot}
+        style={{ userSelect: isRunning ? 'none' : 'auto' }}
+      ></div>
       <div className={s.framework}>
         <div>
           <h4>Test list</h4>
