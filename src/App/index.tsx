@@ -46,7 +46,7 @@ export function TestsUI() {
 
         <div>
           <h4>Logger</h4>
-          <div className={s.logger}>
+          <div className={s.logList}>
             {logs.map((logLine, i) => (
               <p key={i}>{logLine}</p>
             ))}

@@ -3,9 +3,10 @@ import { runTest, tests, type TestInstance } from '.';
 import { cleanup } from '@testing-library/react';
 
 function processLogMessage(arg: unknown) {
-  return typeof arg === 'string'
-    ? arg.split('\n')
-    : JSON.stringify(arg instanceof Error ? arg.message : arg);
+  const lines =
+    typeof arg === 'string' ? arg : arg instanceof Error ? arg.message : JSON.stringify(arg);
+
+  return lines.split('\n');
 }
 
 export function useTests() {
