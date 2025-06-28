@@ -4,7 +4,7 @@ import { assert } from 'chai';
 import { useEffect } from 'react';
 import { Counter } from './Counter';
 
-async function runTest(test: (root: HTMLElement) => Promise<void>) {
+async function runTest(description: string, test: (root: HTMLElement) => Promise<void>) {
   // React "Should not already be working" hack
   await new Promise((r) => setTimeout(r, 0));
 
@@ -16,11 +16,12 @@ async function runTest(test: (root: HTMLElement) => Promise<void>) {
 
   // Run test and catch assert and other errors
   try {
+    console.log(`Running test: ${description}`);
     await test(root);
   } catch (e) {
     console.error('Test error', e);
   } finally {
-    console.log('Cleaning up test root');
+    console.log('Finished');
     cleanup();
   }
 }
@@ -37,7 +38,7 @@ async function test(root: HTMLElement) {
 
 export function App() {
   useEffect(() => {
-    runTest(test);
+    runTest('Count is incremented', test);
   }, []);
 
   return (
