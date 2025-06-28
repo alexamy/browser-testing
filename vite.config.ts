@@ -7,5 +7,14 @@ export default defineConfig({
   test: {
     environment: 'happy-dom',
     setupFiles: ['./vitest-setup.ts'],
+    browser: {
+      provider: 'playwright',
+      enabled: true,
+      instances: [
+        {
+          browser: 'chromium',
+        },
+      ],
+    },
   },
 });
