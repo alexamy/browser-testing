@@ -10,6 +10,13 @@
     "preview": "vite preview",
     "test": "vitest"
   },
+  "prettier": {
+    "trailingComma": "es5",
+    "tabWidth": 2,
+    "semi": true,
+    "singleQuote": true,
+    "printWidth": 100
+  },
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
