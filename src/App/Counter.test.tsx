@@ -1,51 +1,47 @@
-import { cleanup, render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render } from 'vitest-browser-react';
 import { Counter } from './Counter';
-import { afterEach, expect, it } from 'vitest';
+import { expect, it } from 'vitest';
 
-afterEach(cleanup);
-
-it('shows initial state', () => {
-  render(<Counter start={4} />);
+it('shows initial state', async () => {
+  const screen = render(<Counter start={4} />);
 
   const count = screen.getByText('Count: 4');
-
-  expect(count).toBeInTheDocument();
+  await expect.element(count).toBeInTheDocument();
 });
 
 it('increments', async () => {
-  render(<Counter start={0} />);
+  const screen = render(<Counter start={0} />);
 
-  const increment = screen.getByText('Inc');
-  await userEvent.click(increment);
+  const increment = screen.getByRole('button', { name: /Inc/ });
+  await increment.click();
 
   const count = screen.getByText('Count: 1');
-  expect(count).toBeInTheDocument();
+  await expect.element(count).toBeInTheDocument();
 });
 
 it('decrements', async () => {
-  render(<Counter start={5} />);
+  const screen = render(<Counter start={5} />);
 
-  const increment = screen.getByText('Dec');
-  await userEvent.click(increment);
+  const decrement = screen.getByRole('button', { name: /Dec/ });
+  await decrement.click();
 
   const count = screen.getByText('Count: 4');
-  expect(count).toBeInTheDocument();
+  await expect.element(count).toBeInTheDocument();
 });
 
 it('can be only positive', async () => {
-  render(<Counter start={0} />);
+  const screen = render(<Counter start={0} />);
 
-  const decrement = screen.getByText('Dec');
-  await userEvent.click(decrement);
+  const decrement = screen.getByRole('button', { name: /Dec/ });
+  await decrement.click();
 
   const count = screen.getByText('Count: 0');
-  expect(count).toBeInTheDocument();
+  await expect.element(count).toBeInTheDocument();
 });
 
 it('decrement is disabled at 0', async () => {
-  render(<Counter start={0} />);
+  const screen = render(<Counter start={0} />);
 
-  const decrement = screen.getByText('Dec');
-  expect(decrement).toBeDisabled();
+  const decrement = screen.getByRole('button', { name: /Dec/ });
+  await expect.element(decrement).toBeDisabled();
 });
