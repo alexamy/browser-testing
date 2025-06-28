@@ -15,6 +15,13 @@ interface TestInstance {
   test: TestMethod;
 }
 
+const tests: TestInstance[] = [];
+
+function it(description: string, test: TestMethod) {
+  const instance = { description, test };
+  tests.push(instance);
+}
+
 async function runTest({ description, test }: TestInstance) {
   // React "Should not already be working" hack
   await new Promise((r) => setTimeout(r, 0));
@@ -37,11 +44,13 @@ async function runTest({ description, test }: TestInstance) {
   }
 }
 
-function it(description: string, test: TestMethod) {
-  return { description, test };
+async function runTests() {
+  for (const test of tests) {
+    await runTest(test);
+  }
 }
 
-const test1 = it('Count is incremented', async ({ root }: TestOptions) => {
+it('Count is incremented', async ({ root }: TestOptions) => {
   const screen = render(<Counter start={0} />, { container: root });
   const count = screen.getByText('Count: 0');
 
@@ -53,7 +62,7 @@ const test1 = it('Count is incremented', async ({ root }: TestOptions) => {
 
 export function App() {
   useEffect(() => {
-    runTest(test1);
+    runTests();
   }, []);
 
   return (
