@@ -24,9 +24,18 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 }
 
 //#region TestsUI
+function processLogMessage(arg: unknown) {
+  return typeof arg === 'string' ? arg.split('\n') : JSON.stringify(arg);
+}
+
 export function TestsUI() {
   const [current, setCurrent] = useState<TestInstance>();
   const [logs, setLogs] = useState<string[]>([]);
+
+  function log(...args: unknown[]) {
+    const messages = args.flatMap(processLogMessage);
+    setLogs((logs) => [...logs, ...messages]);
+  }
 
   useEffect(() => {
     if (!current) return;
@@ -40,7 +49,7 @@ export function TestsUI() {
       setLogs([]);
 
       // Run test
-      await runTest(current!, { log: console.log });
+      await runTest(current!, { log });
       setCurrent(undefined);
     }
 
@@ -68,8 +77,8 @@ export function TestsUI() {
         <div>
           <h4>Logger</h4>
           <div className={s.logger}>
-            {logs.map((logLine) => (
-              <p>{logLine}</p>
+            {logs.map((logLine, i) => (
+              <p key={i}>{logLine}</p>
             ))}
           </div>
         </div>
