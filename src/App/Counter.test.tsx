@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Counter } from './Counter';
 import { afterEach, expect, it } from 'vitest';
@@ -6,7 +6,7 @@ import { afterEach, expect, it } from 'vitest';
 afterEach(cleanup);
 
 it('shows initial state', () => {
-  render(<Counter start={4} />);
+  const screen = render(<Counter start={4} />);
 
   const count = screen.getByText('Count: 4');
 
@@ -14,7 +14,7 @@ it('shows initial state', () => {
 });
 
 it('increments', async () => {
-  render(<Counter start={0} />);
+  const screen = render(<Counter start={0} />);
 
   const increment = screen.getByText('Inc');
   await userEvent.click(increment);
@@ -24,7 +24,7 @@ it('increments', async () => {
 });
 
 it('decrements', async () => {
-  render(<Counter start={5} />);
+  const screen = render(<Counter start={5} />);
 
   const increment = screen.getByText('Dec');
   await userEvent.click(increment);
@@ -34,7 +34,7 @@ it('decrements', async () => {
 });
 
 it('can be only positive', async () => {
-  render(<Counter start={0} />);
+  const screen = render(<Counter start={0} />);
 
   const decrement = screen.getByText('Dec');
   await userEvent.click(decrement);
@@ -44,7 +44,7 @@ it('can be only positive', async () => {
 });
 
 it('decrement is disabled at 0', async () => {
-  render(<Counter start={0} />);
+  const screen = render(<Counter start={0} />);
 
   const decrement = screen.getByText('Dec');
   expect(decrement).toBeDisabled();
