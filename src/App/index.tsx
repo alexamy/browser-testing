@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { runTests } from './Counter.bt';
+import s from './index.module.css';
 
 //#region framework
 export function App() {
@@ -11,8 +12,7 @@ export function App() {
 
   return (
     <>
-      Test runner ui
-      <div id="test-root"></div>
+      <div id="test-root" className={s.testRoot}></div>
       Footer
     </>
   );
