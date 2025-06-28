@@ -7,7 +7,8 @@ import { Counter } from './Counter';
 async function test() {
   await new Promise((r) => setTimeout(r, 0)); // React "Should not already be working"
 
-  const screen = render(<Counter start={0} />);
+  const root = document.getElementById('test-root')!;
+  const screen = render(<Counter start={0} />, { container: root });
   const count = screen.getByText('Count: 0');
 
   const increment = screen.getByRole('button', { name: /Inc/ });
@@ -22,8 +23,9 @@ export function App() {
   }, []);
 
   return (
-    <div>
-      <Counter start={0} />
-    </div>
+    <>
+      <div id="test-root"></div>
+      Text after
+    </>
   );
 }
