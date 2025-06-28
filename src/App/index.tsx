@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, cleanup } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { assert } from 'chai';
 import { useEffect } from 'react';
@@ -14,14 +14,14 @@ async function runTest(test: (root: HTMLElement) => Promise<void>) {
     throw new Error('Test root is not found');
   }
 
-  // Run test and catch errors
+  // Run test and catch assert and other errors
   try {
     await test(root);
   } catch (e) {
     console.error('Test error', e);
   } finally {
     console.log('Cleaning up test root');
-    root.innerHTML = '';
+    cleanup();
   }
 }
 
