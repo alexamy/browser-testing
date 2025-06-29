@@ -3,6 +3,9 @@ import fs from 'fs/promises';
 import path from 'path';
 import { expect, it } from 'vitest';
 
+// @ts-expect-error No types for plugin
+import bodyDuplicatorPlugin from './bodyDuplicator.js';
+
 async function readTsx(filePath: string) {
   const resolvedFilePath = path.join(import.meta.dirname, filePath);
   const text = await fs.readFile(resolvedFilePath, 'utf-8');
@@ -18,7 +21,7 @@ it('duplicates method code', async () => {
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',
     presets: ['@babel/preset-typescript'],
-    plugins: [path.resolve(__dirname, 'bodyDuplicator.js')],
+    plugins: [bodyDuplicatorPlugin],
     generatorOpts: {
       retainLines: true,
     },
