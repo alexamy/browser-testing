@@ -27,7 +27,7 @@ Examples:
 - Vitest + Testing library
 
 ```
-git checkout main
+git checkout vitest-happy-dom
 npm i
 npm run test
 ```
