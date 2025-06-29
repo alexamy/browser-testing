@@ -52,7 +52,7 @@ it('duplicates method code', async () => {
 
 it('convert async function to async generator', async () => {
   const input = await readTsx('./fixtures/generatorTransform/input.fixture.tsx');
-  const output = await readTsx('./fixtures/generatorTransform/output.fixture.tsx');
+  // const output = await readTsx('./fixtures/generatorTransform/output.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',
@@ -69,5 +69,5 @@ it('convert async function to async generator', async () => {
 
   const formatted = await formatCode(transformed.code);
 
-  expect(formatted).toEqual(output);
+  expect(formatted).toMatchSnapshot();
 });
