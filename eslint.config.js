@@ -23,4 +23,7 @@ export default tseslint.config([
       '@typescript-eslint/no-unused-vars': 'warn',
     },
   },
+  {
+    ignores: ['**/*.fixture.{ts,tsx}'],
+  },
 ]);
