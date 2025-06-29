@@ -9,4 +9,5 @@ export default function generatorTransformPlugin() {
   };
 }
 
-function generatorTransform(path) {}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function generatorTransform(path: any) {}

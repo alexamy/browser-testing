@@ -2,11 +2,8 @@ import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
 import { expect, it } from 'vitest';
-
 import bodyDuplicatorPlugin from './bodyDuplicator';
-
-// @ts-expect-error No types for plugin
-import generatorTransformPlugin from './generatorTransform.js';
+import generatorTransformPlugin from './generatorTransform';
 
 async function readTsx(filePath: string) {
   const resolvedFilePath = path.join(import.meta.dirname, filePath);
