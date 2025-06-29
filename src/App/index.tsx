@@ -13,10 +13,9 @@ interface TestLineProps {
 function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
   return (
     <div>
-      {instance.description}
-      <br />
+      {instance.description}{' '}
       <button disabled={disabled} onClick={onStart}>
-        Start
+        {'>'}
       </button>
     </div>
   );
