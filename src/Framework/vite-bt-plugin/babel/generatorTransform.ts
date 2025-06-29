@@ -4,7 +4,7 @@ import { types as t } from '@babel/core';
 // yielding line number for each statement.
 export default function generatorTransformPlugin() {
   return {
-    name: 'test body duplicator',
+    name: 'test function generator',
     visitor: {
       CallExpression: generatorTransform,
     },
@@ -23,9 +23,7 @@ function generatorTransform(path: any) {
   const secondArg = path.node.arguments[1];
   const isFunction = t.isArrowFunctionExpression(secondArg) || t.isFunctionExpression(secondArg);
   const isProperMethod = isFunction && secondArg.async;
-  if (!isProperMethod) {
-    throw new Error('Expect async function with body as second argument to it.');
-  }
+  if (!isProperMethod) return;
 
   // Get line numbers of block
   const funcBody = secondArg.body;
@@ -33,5 +31,23 @@ function generatorTransform(path: any) {
     throw new Error('No function body line of code property found.');
   }
 
+  if (!t.isBlockStatement(funcBody)) {
+    throw new Error('Function body must be the block statement.');
+  }
+
   const start = funcBody.loc.start.line;
+
+  // Append yield for each body element
+  const expressions = [];
+  for (const expression of funcBody.body) {
+    if (!expression.loc) continue;
+    const line = expression.loc.start.line - start;
+    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+    const yieldStatement = t.expressionStatement(yieldExpression);
+
+    expressions.push(yieldStatement, expression);
+  }
+
+  // Replace body with yield augmentation
+  secondArg.body = t.blockStatement(expressions);
 }
