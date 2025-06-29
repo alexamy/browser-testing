@@ -15,29 +15,20 @@ const bodyDuplicator = {
       const isProperMethod = isFunction && secondArg.async;
       if (!isProperMethod) return;
 
-      // Get statements
-      const functionBody = secondArg.body;
-      const bodyStatements = functionBody.body;
+      // Get line numbers of block
+      const funcBody = secondArg.body;
+      const start = funcBody.loc.start.line;
+      const end = funcBody.loc.end.line - 1;
 
-      // Get the source code and extract line contents
+      // Get code for line numbers
       const sourceCode = path.hub.file.code;
       const sourceLines = sourceCode.split('\n');
-
-      // Extract line contents from the function body statements
-      const lineContents = bodyStatements
-        .filter((statement) => statement.loc) // Only statements with location info
-        .map((statement) => {
-          const lineNumber = statement.loc.start.line;
-          const lineContent = sourceLines[lineNumber - 1]; // Arrays are 0-indexed, line numbers are 1-indexed
-          return lineContent ? lineContent.trim() : '';
-        });
-
-      // Create array expression with line contents
-      const lineContentsArray = t.arrayExpression(
-        lineContents.map((content) => t.stringLiteral(content))
-      );
+      const codeLines = sourceLines.slice(start, end);
+      const codeLinesIndent = codeLines.map((line) => line.replace(/^\s{2}/, ''));
 
       // Add the line contents array as the third argument
+      const stringLiterals = codeLinesIndent.map((line) => t.stringLiteral(line));
+      const lineContentsArray = t.arrayExpression(stringLiterals);
       path.node.arguments.push(lineContentsArray);
     },
   },
