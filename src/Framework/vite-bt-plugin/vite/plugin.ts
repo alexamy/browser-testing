@@ -8,13 +8,14 @@ interface PluginOptions {
 }
 
 export function browserTestsPlugin({
-  includes = /\.bs\.(ts|tsx|js|jsx)$/,
+  includes = /\.bt\.(ts|tsx|js|jsx)$/,
 }: PluginOptions = {}): Plugin {
   return {
     name: 'babel-transform-bs-test-files',
+    enforce: 'pre',
     async transform(code, id) {
       // Check if file matches our pattern
-      if (!includes.test(id)) {
+      if (!includes.test(id) || id.includes('node_modules')) {
         return null;
       }
 
@@ -30,6 +31,11 @@ export function browserTestsPlugin({
 
       if (!result?.code) {
         throw new Error(`Babel transform failed for ${id}`);
+      }
+
+      // debug
+      if (id.endsWith('Counter.bt.tsx')) {
+        console.log('\n\n\n', id, code, '\n\n\n', result.code, '\n\n\n');
       }
 
       return {
