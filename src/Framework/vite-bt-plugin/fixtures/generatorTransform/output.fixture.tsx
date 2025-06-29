@@ -1,5 +1,7 @@
 // @ts-nocheck
 
+// NOT USED. See vitest snapshot.
+
 import { it } from '@framework';
 
 const x = 1;
