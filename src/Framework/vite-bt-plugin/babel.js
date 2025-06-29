@@ -1,4 +1,6 @@
-const bodyDuplicator = {
+// Duplicate the `'it` second argument function body
+// to array of strings, provided as third argument to `it` call.
+export const bodyDuplicator = {
   name: 'body duplicator',
   visitor: {
     CallExpression(path) {
@@ -18,12 +20,12 @@ const bodyDuplicator = {
       // Get line numbers of block
       const funcBody = secondArg.body;
       const start = funcBody.loc.start.line;
-      const end = funcBody.loc.end.line - 1;
+      const end = funcBody.loc.end.line;
 
       // Get code for line numbers
       const sourceCode = path.hub.file.code;
       const sourceLines = sourceCode.split('\n');
-      const codeLines = sourceLines.slice(start, end);
+      const codeLines = sourceLines.slice(start, end - 1);
       const codeLinesIndent = codeLines.map((line) => line.replace(/^\s{2}/, ''));
 
       // Add the line contents array as the third argument
