@@ -19,6 +19,9 @@ it('duplicates method code', async () => {
     filename: 'fixture.tsx',
     presets: ['@babel/preset-typescript'],
     plugins: [path.resolve(__dirname, 'bodyDuplicator.js')],
+    generatorOpts: {
+      retainLines: true,
+    },
   });
 
   if (!transformed || !transformed.code) {
