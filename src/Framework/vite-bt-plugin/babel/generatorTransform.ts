@@ -50,4 +50,16 @@ function generatorTransform(path: any) {
 
   // Replace body with yield augmentation
   secondArg.body = t.blockStatement(expressions);
+
+  // Change function to a async generator
+  const generatorFunction = t.functionExpression(
+    t.identifier('test'), // function name
+    secondArg.params, // keep same parameters
+    secondArg.body, // body
+    true, // generator: true
+    true // async: true
+  );
+
+  // Replace the arrow function with the generator function
+  path.node.arguments[1] = generatorFunction;
 }
