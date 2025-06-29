@@ -25,7 +25,7 @@ function generatorTransform(path: any) {
   const isProperMethod = isFunction && secondArg.async;
   if (!isProperMethod) return;
 
-  // Get line numbers of block
+  // Check function body
   const funcBody = secondArg.body;
   if (!funcBody.loc) {
     throw new Error('No function body line of code property found.');
@@ -35,10 +35,10 @@ function generatorTransform(path: any) {
     throw new Error('Function body must be the block statement.');
   }
 
-  const start = funcBody.loc.start.line;
-
   // Append yield for each body element
   const expressions = [];
+  const start = funcBody.loc.start.line;
+
   for (const expression of funcBody.body) {
     if (!expression.loc) continue;
     const line = expression.loc.start.line - start;
