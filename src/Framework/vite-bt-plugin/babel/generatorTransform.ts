@@ -67,10 +67,13 @@ function addYields(block: t.BlockStatement, startLine: number) {
     newBody.push(yieldStatement, expression);
 
     // Process control structures
+
+    // For
     if (t.isForStatement(expression) && expression.body) {
       if (t.isBlockStatement(expression.body) && expression.body.body) {
         addYields(expression.body, startLine);
       }
+      // If
     } else if (t.isIfStatement(expression)) {
       if (t.isBlockStatement(expression.consequent)) {
         addYields(expression.consequent, startLine);
