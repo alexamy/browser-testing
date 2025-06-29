@@ -5,10 +5,9 @@ export default function () {
   return {
     name: 'Browser tests plugin',
     visitor: {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      CallExpression(path: any) {
-        generatorTransform(path);
-        bodyDuplicator(path);
+      CallExpression: {
+        enter: generatorTransform,
+        exit: bodyDuplicator,
       },
     },
   };
