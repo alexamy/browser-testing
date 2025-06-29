@@ -8,7 +8,6 @@ const y = 2;
 it('increments', async function* test() {
   yield 0;
   const screen = render(<Counter start={0} />);
-
   yield 1;
   const count = screen.getByText('Count: 0');
 
