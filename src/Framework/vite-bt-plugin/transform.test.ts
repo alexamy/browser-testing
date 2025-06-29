@@ -2,9 +2,11 @@ import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
 import { expect, it } from 'vitest';
+import * as prettier from 'prettier';
 import bodyDuplicatorPlugin from './babel/bodyDuplicator';
 import generatorTransformPlugin from './babel/generatorTransform';
 
+// Read tsx and remove `@ts-nocheck` directive
 async function readTsx(filePath: string) {
   const resolvedFilePath = path.join(import.meta.dirname, filePath);
   const text = await fs.readFile(resolvedFilePath, 'utf-8');
@@ -13,7 +15,20 @@ async function readTsx(filePath: string) {
   return lines;
 }
 
-it('duplicates method code', async () => {
+// Format code with prettier to allow better DX with fixtures
+async function formatCode(code: string) {
+  const formatted = await prettier.format(code, {
+    parser: 'babel',
+    singleQuote: true,
+    trailingComma: 'es5',
+  });
+
+  const withLastNewline = formatted.replace(/\n$/, '');
+
+  return withLastNewline;
+}
+
+it.only('duplicates method code', async () => {
   const input = await readTsx('./fixtures/bodyDuplicator/input.fixture.tsx');
   const output = await readTsx('./fixtures/bodyDuplicator/output.fixture.tsx');
 
@@ -30,7 +45,9 @@ it('duplicates method code', async () => {
     throw new Error('Failed to transform code by Babel.');
   }
 
-  expect(transformed.code).toEqual(output);
+  const formatted = await formatCode(transformed.code);
+
+  expect(formatted).toEqual(output);
 });
 
 it('convert async function to async generator', async () => {
