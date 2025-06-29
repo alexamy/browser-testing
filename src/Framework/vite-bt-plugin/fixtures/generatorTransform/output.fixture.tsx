@@ -22,4 +22,7 @@ it('increments', async function* test() {
   yield 9;
 
   expect(count.innerText).equals('Count: 3');
+  yield 11;
+
+  for (let i = 0; i < 3; i++) await userEvent.click(increment);
 });

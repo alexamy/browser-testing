@@ -16,4 +16,6 @@ it('increments', async () => {
   }
 
   expect(count.innerText).equals('Count: 3');
+
+  for (let i = 0; i < 3; i++) await userEvent.click(increment);
 });
