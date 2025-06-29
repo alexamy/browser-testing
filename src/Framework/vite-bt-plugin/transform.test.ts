@@ -5,6 +5,7 @@ import { expect, it } from 'vitest';
 import * as prettier from 'prettier';
 import bodyDuplicatorPlugin from './babel/bodyDuplicator';
 import generatorTransformPlugin from './babel/generatorTransform';
+import browserTestsBabelPlugin from './babel';
 
 // Read tsx and remove `@ts-nocheck` directive
 async function readTsx(filePath: string) {
@@ -70,4 +71,26 @@ it('convert async function to async generator', async () => {
   const formatted = await formatCode(transformed.code);
 
   expect(formatted).toMatchSnapshot();
+});
+
+it('runs plugin in proper order', async () => {
+  const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
+  const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
+
+  const transformed = await babel.transformAsync(input, {
+    filename: 'fixture.tsx',
+    presets: ['@babel/preset-typescript'],
+    plugins: [browserTestsBabelPlugin],
+    generatorOpts: {
+      retainLines: true,
+    },
+  });
+
+  if (!transformed || !transformed.code) {
+    throw new Error('Failed to transform code by Babel.');
+  }
+
+  const formatted = await formatCode(transformed.code);
+
+  expect(formatted).toEqual(output);
 });
