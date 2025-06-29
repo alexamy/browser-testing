@@ -1,6 +1,7 @@
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
+  font-size: 20px;
   font-weight: 400;
 
   color-scheme: light dark;
@@ -15,6 +16,13 @@
 
 body {
   margin: 0;
+  padding: 30px;
+  max-width: 1024px;
+}
+
+p,
+h4 {
+  margin: 0.7rem 0;
 }
 
 @media (prefers-color-scheme: light) {
