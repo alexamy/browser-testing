@@ -2,8 +2,8 @@ import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
 import { expect, it } from 'vitest';
-import bodyDuplicatorPlugin from './bodyDuplicator';
-import generatorTransformPlugin from './generatorTransform';
+import bodyDuplicatorPlugin from './babel/bodyDuplicator';
+import generatorTransformPlugin from './babel/generatorTransform';
 
 async function readTsx(filePath: string) {
   const resolvedFilePath = path.join(import.meta.dirname, filePath);
