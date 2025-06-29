@@ -36,17 +36,8 @@ function generatorTransform(path: any) {
   }
 
   // Append yield for each body element
-  const expressions = [];
   const start = funcBody.loc.start.line;
-
-  for (const expression of funcBody.body) {
-    if (!expression.loc) continue;
-    const line = expression.loc.start.line - start - 1;
-    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
-    const yieldStatement = t.expressionStatement(yieldExpression);
-
-    expressions.push(yieldStatement, expression);
-  }
+  const expressions = addYields(funcBody.body, start);
 
   // Replace body with yield augmentation
   secondArg.body = t.blockStatement(expressions);
@@ -62,4 +53,20 @@ function generatorTransform(path: any) {
 
   // Replace the arrow function with the generator function
   path.node.arguments[1] = generatorFunction;
+}
+
+function addYields(body: t.Statement[], startLine: number) {
+  const expressions = [];
+
+  for (const expression of body) {
+    if (!expression.loc) continue;
+
+    const line = expression.loc.start.line - startLine - 1;
+    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+    const yieldStatement = t.expressionStatement(yieldExpression);
+
+    expressions.push(yieldStatement, expression);
+  }
+
+  return expressions;
 }
