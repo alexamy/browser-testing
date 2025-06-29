@@ -6,11 +6,13 @@ export interface TestOptions {
   dummy?: void;
 }
 
-export type TestMethod = (opts: TestOptions) => Promise<void>;
+export type TestUserMethod = (opts: TestOptions) => Promise<void>;
+export type TestMethod = (opts: TestOptions) => AsyncGenerator<number, void, unknown>;
 
 export interface TestInstance {
   description: string;
   test: TestMethod;
+  lines: string[];
 }
 
 export interface MakeTestSuiteOptions {
@@ -26,7 +28,9 @@ export async function runTest({ description, test }: TestInstance, { log }: RunT
   // Run test and catch assert and other errors
   try {
     log(`Running test: ${description}`);
-    await test({});
+    for await (const _ of test({})) {
+      //
+    }
   } catch (e) {
     log('Test error', e);
   } finally {
@@ -36,8 +40,18 @@ export async function runTest({ description, test }: TestInstance, { log }: RunT
 
 export const tests: TestInstance[] = [];
 
-export function it(description: string, test: TestMethod) {
-  const instance = { description, test };
+function convertTestWithVitestPlugin(test: TestUserMethod): TestMethod {
+  if (test.constructor.name !== 'AsyncGeneratorFunction') {
+    throw new Error(
+      'Found malformed test body. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
+  return test as unknown as TestMethod;
+}
+
+export function it(description: string, test: TestUserMethod, lines: string[] = []) {
+  const instance = { description, lines, test: convertTestWithVitestPlugin(test) };
   tests.push(instance);
 }
 
