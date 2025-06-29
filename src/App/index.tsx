@@ -1,7 +1,7 @@
 import { type TestInstance } from '../Framework';
 import { useTests } from '../Framework/react';
 import s from './index.module.css';
-import './Counter.bt';
+import './tests';
 
 //#region TestLine
 interface TestLineProps {
