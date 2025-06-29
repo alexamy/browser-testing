@@ -16,6 +16,7 @@ it('duplicates method code', async () => {
   const output = await readTsx('./fixtures/bodyDuplicator/output.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
+    filename: 'fixture.tsx',
     presets: ['@babel/preset-typescript'],
     plugins: [path.resolve(__dirname, 'bodyDuplicator.js')],
   });
