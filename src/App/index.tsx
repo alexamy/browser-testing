@@ -24,7 +24,7 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
-  const { tests, startTest, isRunning, logs } = useTests();
+  const { tests, startTest, current, isRunning, logs } = useTests();
 
   return (
     <>
@@ -55,7 +55,7 @@ export function TestsUI() {
 
         <div>
           <h4>Code</h4>
-          <pre></pre>
+          <pre>{current ? current.lines.join('\n') : null}</pre>
         </div>
       </div>
     </>
