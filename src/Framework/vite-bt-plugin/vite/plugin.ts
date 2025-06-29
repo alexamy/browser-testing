@@ -4,10 +4,12 @@ import bodyDuplicatorPlugin from '../babel/bodyDuplicator';
 import generatorTransformPlugin from '../babel/generatorTransform';
 
 interface PluginOptions {
-  includes: RegExp;
+  includes?: RegExp;
 }
 
-export function browserTestsPlugin({ includes = /\.bs\.(ts|tsx|js|jsx)$/ }: PluginOptions): Plugin {
+export function browserTestsPlugin({
+  includes = /\.bs\.(ts|tsx|js|jsx)$/,
+}: PluginOptions = {}): Plugin {
   return {
     name: 'babel-transform-bs-test-files',
     async transform(code, id) {
