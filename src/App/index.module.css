@@ -19,3 +19,7 @@
 .logList p {
   margin: 0.2rem;
 }
+
+.codeLines pre {
+  margin: 0.2rem 0;
+}

@@ -54,13 +54,15 @@ export function TestsUI() {
 
         <div>
           <h4>Code</h4>
-          {current
-            ? current.lines.map((source, i) => (
-                <pre key={i} style={{ fontWeight: i === currentLine ? 'bold' : 'normal' }}>
-                  {source}
-                </pre>
-              ))
-            : null}
+          <div className={s.codeLines}>
+            {current
+              ? current.lines.map((source, i) => (
+                  <pre key={i} style={{ fontWeight: i === currentLine ? 'bold' : 'normal' }}>
+                    {source}
+                  </pre>
+                ))
+              : null}
+          </div>
         </div>
       </div>
     </>
