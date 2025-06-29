@@ -1,7 +1,7 @@
-import { expect, it } from 'vitest';
-import { transformIt } from './transform';
+import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
+import { expect, it } from 'vitest';
 
 async function readTsx(filePath: string) {
   const resolvedFilePath = path.join(import.meta.dirname, filePath);
@@ -11,11 +11,18 @@ async function readTsx(filePath: string) {
   return lines;
 }
 
-it('transforms code', async () => {
-  const input = await readTsx('./input.fixture.tsx');
-  const output = await readTsx('./output.fixture.tsx');
+it('duplicates method code', async () => {
+  const input = await readTsx('./fixtures/bodyDuplicator/input.fixture.tsx');
+  const output = await readTsx('./fixtures/bodyDuplicator/output.fixture.tsx');
 
-  const result = transformIt(input);
+  const transformed = await babel.transformAsync(input, {
+    presets: ['@babel/preset-typescript'],
+    plugins: [path.resolve(__dirname, 'bodyDuplicator.js')],
+  });
 
-  expect(result).toEqual(output);
+  if (!transformed || !transformed.code) {
+    throw new Error('Failed to transform code by Babel.');
+  }
+
+  expect(transformed.code).toEqual(output);
 });

@@ -1,11 +1,15 @@
+import { types as t } from '@babel/core';
+
 // Duplicate the `it` second argument function body
 // to array of strings, provided as a third argument to `it` call.
-export const bodyDuplicatorPlugin = {
-  name: 'test body duplicator',
-  visitor: {
-    CallExpression: bodyDuplicator,
-  },
-};
+export default function () {
+  return {
+    name: 'test body duplicator',
+    visitor: {
+      CallExpression: bodyDuplicator,
+    },
+  };
+}
 
 function bodyDuplicator(path) {
   // Check if this is an 'it' call with exactly 2 arguments
