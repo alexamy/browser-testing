@@ -37,7 +37,7 @@ function generatorTransform(path: any) {
 
   // Append yield for each body element
   const start = funcBody.loc.start.line;
-  addYields(funcBody.body, start);
+  addYields(funcBody, start);
 
   // Change function to a async generator
   const generatorFunction = t.functionExpression(
@@ -52,26 +52,25 @@ function generatorTransform(path: any) {
   path.node.arguments[1] = generatorFunction;
 }
 
-function addYields(body: t.Statement[], startLine: number) {
-  const expressions: t.Statement[] = [];
+function addYields(block: t.BlockStatement, startLine: number) {
+  const newBody: t.Statement[] = [];
 
-  const addStatement = (expression: t.Statement) => {
-    if (!expression.loc) return;
+  for (let i = 0; i < block.body.length; i++) {
+    const expression = block.body[i];
+    if (!expression.loc) continue;
 
     const line = expression.loc.start.line - startLine - 1;
     const yieldExpression = t.yieldExpression(t.numericLiteral(line));
     const yieldStatement = t.expressionStatement(yieldExpression);
 
-    if (t.isForStatement(expression) && expression.body) {
-      if (t.isBlockStatement(expression.body) && expression.body.body) {
-        expression.body.body.forEach(addStatement);
-      }
-    }
+    newBody.push(yieldStatement, expression);
+  }
 
-    expressions.push(yieldStatement, expression);
-  };
+  block.body = newBody;
 
-  body.forEach(addStatement);
-
-  return expressions;
+  // if (t.isForStatement(expression) && expression.body) {
+  //   if (t.isBlockStatement(expression.body) && expression.body.body) {
+  //     expression.body.body.forEach(addStatement);
+  //   }
+  // }
 }
