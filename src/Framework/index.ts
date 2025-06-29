@@ -21,15 +21,19 @@ export interface MakeTestSuiteOptions {
 
 export interface RunTestOptions {
   log(...args: unknown[]): void;
+  setLine(line: number): void;
 }
 
 //#region tests
-export async function runTest({ description, test }: TestInstance, { log }: RunTestOptions) {
+export async function runTest(
+  { description, test }: TestInstance,
+  { log, setLine }: RunTestOptions
+) {
   // Run test and catch assert and other errors
   try {
     log(`Running test: ${description}`);
     for await (const line of test({})) {
-      console.log(line);
+      setLine(line);
       await new Promise((r) => setTimeout(r, 300)); // DEBUG delay
     }
   } catch (e) {

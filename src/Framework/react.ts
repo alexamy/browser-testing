@@ -11,7 +11,9 @@ function processLogMessage(arg: unknown) {
 
 export function useTests() {
   const [logs, setLogs] = useState<string[]>([]);
+
   const [current, setCurrent] = useState<TestInstance>();
+  const [line, setLine] = useState(0);
   const isRunning = Boolean(current);
 
   function log(...args: unknown[]) {
@@ -26,15 +28,16 @@ export function useTests() {
     setLogs([]);
 
     // Run test
-    await runTest(instance, { log });
+    await runTest(instance, { log, setLine });
     setCurrent(undefined);
   }
 
   return {
     tests,
     startTest,
+    logs,
     current,
     isRunning,
-    logs,
+    line,
   };
 }
