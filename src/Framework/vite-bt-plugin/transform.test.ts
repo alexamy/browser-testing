@@ -68,7 +68,6 @@ it('convert async function to async generator', async () => {
   }
 
   const formatted = await formatCode(transformed.code);
-  console.log(formatted);
 
   expect(formatted).toEqual(output);
 });

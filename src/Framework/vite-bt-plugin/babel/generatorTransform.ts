@@ -56,21 +56,22 @@ function addYields(block: t.BlockStatement, startLine: number) {
   const newBody: t.Statement[] = [];
 
   for (let i = 0; i < block.body.length; i++) {
+    // Find expression
     const expression = block.body[i];
     if (!expression.loc) continue;
 
+    // Add yield and original expression
     const line = expression.loc.start.line - startLine - 1;
     const yieldExpression = t.yieldExpression(t.numericLiteral(line));
     const yieldStatement = t.expressionStatement(yieldExpression);
+    newBody.push(yieldStatement, expression);
 
-    // process control structures
+    // Process control structures
     if (t.isForStatement(expression) && expression.body) {
       if (t.isBlockStatement(expression.body) && expression.body.body) {
         addYields(expression.body, startLine);
       }
     }
-
-    newBody.push(yieldStatement, expression);
   }
 
   block.body = newBody;
