@@ -24,8 +24,6 @@ it('decrements', async () => {
   const screen = render(<Counter start={5} />);
   const count = screen.getByText('Count: 5');
 
-  await new Promise((r) => setTimeout(r, 1000));
-
   const decrement = screen.getByRole('button', { name: /Dec/ });
   await userEvent.click(decrement);
 

@@ -28,8 +28,9 @@ export async function runTest({ description, test }: TestInstance, { log }: RunT
   // Run test and catch assert and other errors
   try {
     log(`Running test: ${description}`);
-    for await (const _ of test({})) {
-      //
+    for await (const line of test({})) {
+      console.log(line);
+      await new Promise((r) => setTimeout(r, 300)); // DEBUG delay
     }
   } catch (e) {
     log('Test error', e);
