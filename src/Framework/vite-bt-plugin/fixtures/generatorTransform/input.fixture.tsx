@@ -17,8 +17,6 @@ it('increments', async () => {
 
   expect(count.innerText).equals('Count: 3');
 
-  for (let i = 0; i < 3; i++) await userEvent.click(increment);
-
   if (true) {
     const x = 1;
   } else {
@@ -29,4 +27,8 @@ it('increments', async () => {
 
   if (true) f();
   else f();
+
+  true ? f() : f();
+
+  for (let i = 0; i < 3; i++) await userEvent.click(increment);
 });

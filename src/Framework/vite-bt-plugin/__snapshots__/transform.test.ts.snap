@@ -25,22 +25,25 @@ it('increments', async function* test() {
   expect(count.innerText).equals('Count: 3');
   yield 11;
 
-  for (let i = 0; i < 3; i++) await userEvent.click(increment);
-  yield 13;
-
   if (true) {
-    yield 14;
+    yield 12;
     const x = 1;
   } else {
-    yield 16;
+    yield 14;
     const y = 1;
   }
+  yield 17;
+
+  if (true) f();
   yield 19;
 
   if (true) f();
-  yield 21;
-
-  if (true) f();
   else f();
+  yield 22;
+
+  true ? f() : f();
+  yield 24;
+
+  for (let i = 0; i < 3; i++) await userEvent.click(increment);
 });"
 `;
