@@ -24,4 +24,8 @@ it('increments', async () => {
   } else {
     const y = 1;
   }
+
+  if (true) f();
+  if (true) f();
+  else f();
 });
