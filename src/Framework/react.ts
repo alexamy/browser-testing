@@ -13,7 +13,7 @@ export function useTests() {
   const [logs, setLogs] = useState<string[]>([]);
 
   const [current, setCurrent] = useState<TestInstance>();
-  const [line, setLine] = useState(0);
+  const [currentLine, setCurrentLine] = useState(0);
   const isRunning = Boolean(current);
 
   function log(...args: unknown[]) {
@@ -28,7 +28,7 @@ export function useTests() {
     setLogs([]);
 
     // Run test
-    await runTest(instance, { log, setLine });
+    await runTest(instance, { log, setCurrentLine });
     setCurrent(undefined);
   }
 
@@ -37,7 +37,7 @@ export function useTests() {
     startTest,
     logs,
     current,
+    currentLine,
     isRunning,
-    line,
   };
 }

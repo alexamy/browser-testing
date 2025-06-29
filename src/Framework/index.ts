@@ -21,20 +21,20 @@ export interface MakeTestSuiteOptions {
 
 export interface RunTestOptions {
   log(...args: unknown[]): void;
-  setLine(line: number): void;
+  setCurrentLine(lineNumber: number): void;
 }
 
 //#region tests
 export async function runTest(
   { description, test }: TestInstance,
-  { log, setLine }: RunTestOptions
+  { log, setCurrentLine }: RunTestOptions
 ) {
   // Run test and catch assert and other errors
   try {
     log(`Running test: ${description}`);
-    for await (const line of test({})) {
-      setLine(line);
-      await new Promise((r) => setTimeout(r, 300)); // DEBUG delay
+    for await (const lineNumber of test({})) {
+      setCurrentLine(lineNumber);
+      await new Promise((r) => setTimeout(r, 1200)); // DEBUG delay
     }
   } catch (e) {
     log('Test error', e);

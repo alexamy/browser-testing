@@ -23,7 +23,7 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
-  const { tests, startTest, current, isRunning, logs } = useTests();
+  const { tests, startTest, current, currentLine, isRunning, logs } = useTests();
 
   return (
     <>
@@ -54,7 +54,13 @@ export function TestsUI() {
 
         <div>
           <h4>Code</h4>
-          <pre>{current ? current.lines.join('\n') : null}</pre>
+          {current
+            ? current.lines.map((source, i) => (
+                <pre key={i} style={{ fontWeight: i === currentLine ? 'bold' : 'normal' }}>
+                  {source}
+                </pre>
+              ))
+            : null}
         </div>
       </div>
     </>
