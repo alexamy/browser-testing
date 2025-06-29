@@ -56,17 +56,19 @@ function generatorTransform(path: any) {
 }
 
 function addYields(body: t.Statement[], startLine: number) {
-  const expressions = [];
+  const expressions: t.Statement[] = [];
 
-  for (const expression of body) {
-    if (!expression.loc) continue;
+  const addStatement = (expression: t.Statement) => {
+    if (!expression.loc) return;
 
     const line = expression.loc.start.line - startLine - 1;
     const yieldExpression = t.yieldExpression(t.numericLiteral(line));
     const yieldStatement = t.expressionStatement(yieldExpression);
 
     expressions.push(yieldStatement, expression);
-  }
+  };
+
+  body.forEach(addStatement);
 
   return expressions;
 }
