@@ -71,6 +71,13 @@ function addYields(block: t.BlockStatement, startLine: number) {
       if (t.isBlockStatement(expression.body) && expression.body.body) {
         addYields(expression.body, startLine);
       }
+    } else if (t.isIfStatement(expression)) {
+      if (t.isBlockStatement(expression.consequent)) {
+        addYields(expression.consequent, startLine);
+      }
+      if (t.isBlockStatement(expression.alternate)) {
+        addYields(expression.alternate, startLine);
+      }
     }
   }
 
