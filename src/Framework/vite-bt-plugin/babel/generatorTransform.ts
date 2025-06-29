@@ -12,7 +12,7 @@ export default function generatorTransformPlugin() {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function generatorTransform(path: any) {
+export function generatorTransform(path: any) {
   // Check if this is an 'it' call with exactly 2 arguments
   const isItCall = t.isIdentifier(path.node.callee, { name: 'it' });
   const hasTwoArguments = path.node.arguments.length === 2;

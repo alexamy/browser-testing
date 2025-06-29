@@ -1,7 +1,6 @@
 import * as babel from '@babel/core';
 import { type Plugin } from 'vite';
-import bodyDuplicatorPlugin from '../babel/bodyDuplicator';
-import generatorTransformPlugin from '../babel/generatorTransform';
+import browserTestsBabelPlugin from '../babel';
 
 interface PluginOptions {
   includes?: RegExp;
@@ -14,16 +13,20 @@ export function browserTestsPlugin({
     name: 'babel-transform-bs-test-files',
     enforce: 'pre',
     async transform(code, id) {
+      console.log(id);
+
       // Check if file matches our pattern
       if (!includes.test(id) || id.includes('node_modules')) {
         return null;
       }
 
+      console.log(id);
+
       // Transform
       const result = await babel.transformAsync(code, {
         filename: id,
         presets: ['@babel/preset-typescript'],
-        plugins: [bodyDuplicatorPlugin, generatorTransformPlugin],
+        plugins: [browserTestsBabelPlugin],
         generatorOpts: {
           retainLines: true,
         },

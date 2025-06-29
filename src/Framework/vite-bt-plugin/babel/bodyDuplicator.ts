@@ -12,7 +12,7 @@ export default function () {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function bodyDuplicator(path: any) {
+export function bodyDuplicator(path: any) {
   // Check if this is an 'it' call with exactly 2 arguments
   const isItCall = t.isIdentifier(path.node.callee, { name: 'it' });
   const hasTwoArguments = path.node.arguments.length === 2;
