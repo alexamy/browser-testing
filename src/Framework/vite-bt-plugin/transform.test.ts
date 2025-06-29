@@ -28,7 +28,7 @@ async function formatCode(code: string) {
   return withLastNewline;
 }
 
-it.only('duplicates method code', async () => {
+it('duplicates method code', async () => {
   const input = await readTsx('./fixtures/bodyDuplicator/input.fixture.tsx');
   const output = await readTsx('./fixtures/bodyDuplicator/output.fixture.tsx');
 
@@ -67,5 +67,7 @@ it('convert async function to async generator', async () => {
     throw new Error('Failed to transform code by Babel.');
   }
 
-  expect(transformed.code).toEqual(output);
+  const formatted = await formatCode(transformed.code);
+
+  expect(formatted).toEqual(output);
 });

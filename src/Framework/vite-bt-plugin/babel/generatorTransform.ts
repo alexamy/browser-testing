@@ -41,7 +41,7 @@ function generatorTransform(path: any) {
 
   for (const expression of funcBody.body) {
     if (!expression.loc) continue;
-    const line = expression.loc.start.line - start;
+    const line = expression.loc.start.line - start - 1;
     const yieldExpression = t.yieldExpression(t.numericLiteral(line));
     const yieldStatement = t.expressionStatement(yieldExpression);
 
