@@ -26,6 +26,7 @@ it('increments', async () => {
   }
 
   if (true) f();
+
   if (true) f();
   else f();
 });

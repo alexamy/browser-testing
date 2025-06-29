@@ -37,6 +37,10 @@ it('increments', async function* test() {
   }
   yield 19;
 
-  if (true) console.log();
+  if (true) f();
+  yield 21;
+
+  if (true) f();
+  else f();
 });"
 `;
