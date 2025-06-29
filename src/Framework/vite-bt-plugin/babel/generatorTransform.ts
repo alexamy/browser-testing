@@ -37,16 +37,13 @@ function generatorTransform(path: any) {
 
   // Append yield for each body element
   const start = funcBody.loc.start.line;
-  const expressions = addYields(funcBody.body, start);
-
-  // Replace body with yield augmentation
-  secondArg.body = t.blockStatement(expressions);
+  addYields(funcBody.body, start);
 
   // Change function to a async generator
   const generatorFunction = t.functionExpression(
     t.identifier('test'), // function name
     secondArg.params, // keep same parameters
-    secondArg.body, // body
+    funcBody, // body
     true, // generator: true
     true // async: true
   );
@@ -64,6 +61,12 @@ function addYields(body: t.Statement[], startLine: number) {
     const line = expression.loc.start.line - startLine - 1;
     const yieldExpression = t.yieldExpression(t.numericLiteral(line));
     const yieldStatement = t.expressionStatement(yieldExpression);
+
+    if (t.isForStatement(expression) && expression.body) {
+      if (t.isBlockStatement(expression.body) && expression.body.body) {
+        expression.body.body.forEach(addStatement);
+      }
+    }
 
     expressions.push(yieldStatement, expression);
   };
