@@ -13,14 +13,10 @@ export function browserTestsPlugin({
     name: 'babel-transform-bs-test-files',
     enforce: 'pre',
     async transform(code, id) {
-      console.log(id);
-
       // Check if file matches our pattern
       if (!includes.test(id) || id.includes('node_modules')) {
         return null;
       }
-
-      console.log(id);
 
       // Transform
       const result = await babel.transformAsync(code, {
@@ -34,11 +30,6 @@ export function browserTestsPlugin({
 
       if (!result?.code) {
         throw new Error(`Babel transform failed for ${id}`);
-      }
-
-      // debug
-      if (id.endsWith('Counter.bt.tsx')) {
-        console.log('\n\n\n', id, code, '\n\n\n', result.code, '\n\n\n');
       }
 
       return {
