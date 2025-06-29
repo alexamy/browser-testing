@@ -6,7 +6,7 @@ import { expect, it } from 'vitest';
 async function readTsx(filePath: string) {
   const resolvedFilePath = path.join(import.meta.dirname, filePath);
   const text = await fs.readFile(resolvedFilePath, 'utf-8');
-  const lines = text.split('\n').slice(2).join('\n');
+  const lines = text.split('\n').slice(2).join('\n').trim();
 
   return lines;
 }
