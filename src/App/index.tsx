@@ -52,6 +52,11 @@ export function TestsUI() {
             ))}
           </div>
         </div>
+
+        <div>
+          <h4>Code</h4>
+          <pre></pre>
+        </div>
       </div>
     </>
   );

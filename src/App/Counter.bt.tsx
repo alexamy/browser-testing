@@ -14,8 +14,6 @@ it('increments', async () => {
   const screen = render(<Counter start={0} />);
   const count = screen.getByText('Count: 0');
 
-  // await new Promise((r) => setTimeout(r, 2000));
-
   const increment = screen.getByRole('button', { name: /Inc/ });
   await userEvent.click(increment);
 
@@ -25,6 +23,8 @@ it('increments', async () => {
 it('decrements', async () => {
   const screen = render(<Counter start={5} />);
   const count = screen.getByText('Count: 5');
+
+  await new Promise((r) => setTimeout(r, 1000));
 
   const decrement = screen.getByRole('button', { name: /Dec/ });
   await userEvent.click(decrement);

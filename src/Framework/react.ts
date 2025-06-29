@@ -11,7 +11,8 @@ function processLogMessage(arg: unknown) {
 
 export function useTests() {
   const [logs, setLogs] = useState<string[]>([]);
-  const [isRunning, setIsRunning] = useState(false);
+  const [current, setCurrent] = useState<TestInstance>();
+  const isRunning = Boolean(current);
 
   function log(...args: unknown[]) {
     const messages = args.flatMap(processLogMessage);
@@ -20,18 +21,19 @@ export function useTests() {
 
   async function startTest(instance: TestInstance) {
     // Reset
-    setIsRunning(true);
+    setCurrent(instance);
     cleanup();
     setLogs([]);
 
     // Run test
     await runTest(instance, { log });
-    setIsRunning(false);
+    setCurrent(undefined);
   }
 
   return {
     tests,
     startTest,
+    current,
     isRunning,
     logs,
   };
