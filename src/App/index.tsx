@@ -21,21 +21,13 @@ function TestLine({ instance, onClick }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
-  const { tests, startTest, currentLine, logs } = useTests();
-  const [selected, setSelected] = useState<TestInstance>();
+  const t = useTests();
 
-  function onStart() {
-    if (!selected) return;
-    startTest(selected);
-  }
+  function onStart() {}
 
-  function onStep() {
-    if (!selected) return;
-  }
+  function onStep() {}
 
-  function onRestart() {
-    if (!selected) return;
-  }
+  function onRestart() {}
 
   return (
     <>
@@ -44,12 +36,12 @@ export function TestsUI() {
         <div>
           <h4>Test list</h4>
           <div className={s.testList}>
-            {tests.map((instance, i) => (
+            {t.tests.map((instance, i) => (
               <TestLine
                 key={i}
                 instance={instance}
-                disabled={Boolean(selected)}
-                onClick={() => setSelected(instance)}
+                disabled={Boolean(t.current)}
+                onClick={() => t.selectTest(instance)}
               />
             ))}
           </div>
@@ -58,7 +50,7 @@ export function TestsUI() {
         <div>
           <h4>Logger</h4>
           <div className={s.logList}>
-            {logs.map((logLine, i) => (
+            {t.logs.map((logLine, i) => (
               <p key={i}>{logLine}</p>
             ))}
           </div>
@@ -67,7 +59,7 @@ export function TestsUI() {
         <div>
           <h4>Code</h4>
           <div>
-            {selected ? (
+            {t.current ? (
               <div className={s.codeButtons}>
                 <button onClick={onStart}>Start</button>
                 <button onClick={onStep}>Step</button>
@@ -76,9 +68,9 @@ export function TestsUI() {
             ) : null}
           </div>
           <div className={s.codeLines}>
-            {selected
-              ? selected.lines.map((source, i) => (
-                  <pre key={i} style={{ fontWeight: i === currentLine ? 'bold' : 'normal' }}>
+            {t.current
+              ? t.current.lines.map((source, i) => (
+                  <pre key={i} style={{ fontWeight: i === t.currentLine ? 'bold' : 'normal' }}>
                     {source}
                   </pre>
                 ))
