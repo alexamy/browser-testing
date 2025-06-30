@@ -26,12 +26,6 @@ function useLogs() {
 }
 
 //#region useTests
-interface TestObject {
-  instance: TestInstance;
-  generator: TestGenerator;
-  iteration?: IteratorYieldResult<number>;
-}
-
 function useTest() {
   const [instance, setInstance] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
