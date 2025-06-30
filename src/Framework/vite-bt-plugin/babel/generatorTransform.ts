@@ -67,7 +67,7 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
       const yieldStatement = t.expressionStatement(yieldExpression);
       newBody.push(yieldStatement, expression);
       // Recursively call add yields for inner blocks
-      processExpression(expression);
+      iterateInnerBlocks(expression);
     }
 
     // Update block body
@@ -79,7 +79,7 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
   }
 
   // Process control structures
-  function processExpression(expression: t.Statement) {
+  function iterateInnerBlocks(expression: t.Statement) {
     // Cycles
     if (
       t.isForStatement(expression) ||
