@@ -38,7 +38,7 @@ it('increments', async () => {
     await f();
   }
 
-  // also for-in, for-of, do-while
+  // also for-in, for-of, do-while are implemented in transform logic
 
   //#region switch
   switch (x) {

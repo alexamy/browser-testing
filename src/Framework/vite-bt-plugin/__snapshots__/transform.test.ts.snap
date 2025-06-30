@@ -55,17 +55,21 @@ it('increments', async function* test() {
     await f();
   }
 
-  // also for-in, for-of, do-while
+  // also for-in, for-of, do-while are implemented in transform logic
 
   //#region switch
   yield 35;
   switch (x) {
     case 1:
+      yield 37;
       await userEvent.click(increment);
       break;
     default:
+      yield 40;
       await userEvent.click(increment);
+      yield 41;
       if (condition) {
+        yield 42;
         console.log('');
       }
       break;
