@@ -98,7 +98,6 @@ export function useTests() {
 
   async function start() {
     test.restart();
-    logs.log(`Running test: ${test.instance!.description}`);
 
     await runWithLogs(async () => {
       await test.run();
