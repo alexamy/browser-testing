@@ -7,7 +7,8 @@ export interface TestOptions {
 }
 
 export type TestUserMethod = (opts: TestOptions) => Promise<void>;
-export type TestMethod = (opts: TestOptions) => AsyncGenerator<number, void, unknown>;
+export type TestGenerator = AsyncGenerator<number, void, unknown>;
+export type TestMethod = (opts: TestOptions) => TestGenerator;
 
 export interface TestInstance {
   description: string;
@@ -21,28 +22,10 @@ export interface MakeTestSuiteOptions {
 
 export interface RunTestOptions {
   log(...args: unknown[]): void;
-  setCurrentLine(lineNumber: number): void;
+  setGenerator(test: TestGenerator): void;
 }
 
 //#region tests
-export async function runTest(
-  { description, test }: TestInstance,
-  { log, setCurrentLine }: RunTestOptions
-) {
-  // Run test and catch assert and other errors
-  try {
-    log(`Running test: ${description}`);
-    for await (const lineNumber of test({})) {
-      setCurrentLine(lineNumber);
-      await new Promise((r) => setTimeout(r, 200)); // DEBUG delay
-    }
-  } catch (e) {
-    log('Test error', e);
-  } finally {
-    log('Completed!');
-  }
-}
-
 export const tests: TestInstance[] = [];
 
 function convertTestWithVitestPlugin(test: TestUserMethod, lines: string[]): TestMethod {

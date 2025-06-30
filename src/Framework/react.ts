@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { runTest, tests, type TestInstance } from '.';
+import { tests, type TestInstance } from '.';
 import { cleanup } from '@testing-library/react';
 
 function processLogMessage(arg: unknown) {
@@ -21,6 +21,21 @@ export function useTests() {
     setLogs((logs) => [...logs, ...messages]);
   }
 
+  async function runTest({ description, test }: TestInstance) {
+    // Run test and catch assert and other errors
+    try {
+      log(`Running test: ${description}`);
+      for await (const line of test({})) {
+        setCurrentLine(line);
+        await new Promise((r) => setTimeout(r, 300));
+      }
+    } catch (e) {
+      log('Test error', e);
+    } finally {
+      log('Completed!');
+    }
+  }
+
   async function startTest(instance: TestInstance) {
     // Reset
     setCurrent(instance);
@@ -28,7 +43,7 @@ export function useTests() {
     setLogs([]);
 
     // Run test
-    await runTest(instance, { log, setCurrentLine });
+    runTest(instance);
     setCurrentLine(undefined);
     setCurrent(undefined);
   }
