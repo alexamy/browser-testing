@@ -68,11 +68,19 @@ export function useTests() {
     logs.log('Completed!');
   }
 
+  async function stepTest() {
+    if (!generator) return;
+
+    const line = await generator.next();
+    if (line.value) setCurrentLine(line.value);
+  }
+
   const restartTest = () => selectTest(current);
 
   return {
     tests,
     startTest,
+    stepTest,
     selectTest,
     restartTest,
 
