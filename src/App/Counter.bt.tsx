@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { Counter } from './Counter';
-import { render, it, userEvent } from '../Framework';
+import { render, it, userEvent } from '@framework/test';
 
 it('shows initial state', async () => {
   const screen = render(<Counter start={4} />);

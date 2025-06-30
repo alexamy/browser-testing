@@ -1,5 +1,6 @@
 import { defineConfig, type Plugin } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import { browserTestsPlugin } from './src/Framework/vite-bt-plugin/vite/plugin';
 
 function reloadPageOnHMR(): Plugin {
@@ -14,7 +15,7 @@ function reloadPageOnHMR(): Plugin {
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), reloadPageOnHMR(), browserTestsPlugin()],
+  plugins: [tsconfigPaths(), react(), reloadPageOnHMR(), browserTestsPlugin()],
   test: {
     environment: 'happy-dom',
     setupFiles: ['./vitest-setup.ts'],

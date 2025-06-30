@@ -1,5 +1,5 @@
-import { type TestInstance } from '../Framework';
-import { useTests } from '../Framework/react';
+import { type TestInstance } from '@framework/test';
+import { useTests } from '@framework/react';
 import s from './index.module.css';
 import './tests';
 

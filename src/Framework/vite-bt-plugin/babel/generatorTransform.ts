@@ -37,7 +37,7 @@ export function generatorTransform(path: any) {
 
   // Append yield for each body element
   const start = funcBody.loc.start.line;
-  addYields(funcBody, start);
+  addYieldsAt(funcBody, start);
 
   // Change function to a async generator
   const generatorFunction = t.functionExpression(
@@ -52,23 +52,34 @@ export function generatorTransform(path: any) {
   path.node.arguments[1] = generatorFunction;
 }
 
-function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
-  const newBody: t.Statement[] = [];
+function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) {
+  addYields(block);
 
-  const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
+  function addYields(block: t.BlockStatement | t.SwitchCase) {
+    const newBody: t.Statement[] = [];
+    const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
-  for (let i = 0; i < oldBody.length; i++) {
-    // Find expression
-    const expression = oldBody[i];
-    if (!expression.loc) continue;
+    for (const expression of oldBody) {
+      // Add yield and original expression
+      if (!expression.loc) return;
+      const line = expression.loc.start.line - startLine - 1;
+      const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+      const yieldStatement = t.expressionStatement(yieldExpression);
+      newBody.push(yieldStatement, expression);
+      // Recursively call add yields for inner blocks
+      iterateInnerBlocks(expression);
+    }
 
-    // Add yield and original expression
-    const line = expression.loc.start.line - startLine - 1;
-    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
-    const yieldStatement = t.expressionStatement(yieldExpression);
-    newBody.push(yieldStatement, expression);
+    // Update block body
+    if (t.isSwitchCase(block)) {
+      block.consequent = newBody;
+    } else {
+      block.body = newBody;
+    }
+  }
 
-    // Process control structures
+  // Process control structures
+  function iterateInnerBlocks(expression: t.Statement) {
     // Cycles
     if (
       t.isForStatement(expression) ||
@@ -78,38 +89,31 @@ function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
       t.isDoWhileStatement(expression)
     ) {
       if (expression.body && t.isBlockStatement(expression.body) && expression.body.body) {
-        addYields(expression.body, startLine);
+        addYields(expression.body);
       }
       // If
     } else if (t.isIfStatement(expression)) {
       if (t.isBlockStatement(expression.consequent)) {
-        addYields(expression.consequent, startLine);
+        addYields(expression.consequent);
       }
       if (t.isBlockStatement(expression.alternate)) {
-        addYields(expression.alternate, startLine);
+        addYields(expression.alternate);
       }
       // Switch
     } else if (t.isSwitchStatement(expression)) {
       expression.cases.forEach((caseClause) => {
         if (caseClause.consequent) {
-          addYields(caseClause, startLine);
+          addYields(caseClause);
         }
       });
       // Simple block
     } else if (t.isBlockStatement(expression)) {
-      addYields(expression, startLine);
+      addYields(expression);
       // Exceptions
     } else if (t.isTryStatement(expression)) {
-      addYields(expression.block, startLine);
-      if (expression.handler) addYields(expression.handler.body, startLine);
-      if (expression.finalizer) addYields(expression.finalizer, startLine);
+      addYields(expression.block);
+      if (expression.handler) addYields(expression.handler.body);
+      if (expression.finalizer) addYields(expression.finalizer);
     }
-  }
-
-  // Update block body
-  if (t.isSwitchCase(block)) {
-    block.consequent = newBody;
-  } else {
-    block.body = newBody;
   }
 }
