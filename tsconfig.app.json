@@ -23,7 +23,13 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "types": ["vitest", "@testing-library/jest-dom"]
+    "types": ["vitest", "@testing-library/jest-dom"],
+
+    "baseUrl": ".",
+    "paths": {
+      "@framework": ["./src/Framework/index.ts"],
+      "@framework/*": ["./src/Framework/*"]
+    }
   },
   "include": ["src"]
 }
