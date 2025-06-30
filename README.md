@@ -22,7 +22,7 @@ npm run dev
 
 Write tests in `.bt.tsx` files and import them inside the App.
 
-- Use `import { render, it, userEvent } from '../Framework';`
+- Use `import { render, it, userEvent } from '@framework/test';`
 - Use assertions from `chai` package
 
 Examples:
