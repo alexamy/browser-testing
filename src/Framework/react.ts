@@ -92,6 +92,10 @@ export function useTests() {
     test.select(instance);
   }
 
+  function restart() {
+    select(test.test);
+  }
+
   async function start() {
     test.restart();
     logs.log(`Running test: ${test.test!.description}`);
@@ -107,10 +111,6 @@ export function useTests() {
     await runWithLogs(async () => {
       test.step();
     });
-  }
-
-  function restart() {
-    select(test.test);
   }
 
   return {
