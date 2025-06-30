@@ -34,6 +34,14 @@ export function useTests() {
   const [currentLine, setCurrentLine] = useState<number>();
   const isRunning = Boolean(current);
 
+  async function runWithLogs(f: () => void | Promise<void>) {
+    try {
+      await f();
+    } catch (e) {
+      logs.log('Test error', e);
+    }
+  }
+
   function selectTest(instance: TestInstance | undefined) {
     setCurrent(instance);
     setGenerator(instance?.test());
@@ -43,17 +51,15 @@ export function useTests() {
     if (!generator) return;
 
     // Run test and catch assert and other errors
-    try {
-      logs.log(`Running test: ${description}`);
+    logs.log(`Running test: ${current?.description}`);
+    await runWithLogs(async () => {
       for await (const line of generator) {
         setCurrentLine(line);
         await new Promise((r) => setTimeout(r, 300));
       }
-    } catch (e) {
-      logs.log('Test error', e);
-    } finally {
-      logs.log('Completed!');
-    }
+    });
+
+    logs.log('Completed!');
   }
 
   async function startTest(instance: TestInstance) {
