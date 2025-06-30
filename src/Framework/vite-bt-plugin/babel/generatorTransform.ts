@@ -55,20 +55,25 @@ export function generatorTransform(path: any) {
 function addYields(block: t.BlockStatement, startLine: number) {
   const newBody: t.Statement[] = [];
 
+  function appendYield(expression: t.Statement) {
+    if (!expression.loc) return;
+
+    const line = expression.loc.start.line - startLine - 1;
+    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+    const yieldStatement = t.expressionStatement(yieldExpression);
+    newBody.push(yieldStatement, expression);
+  }
+
   for (let i = 0; i < block.body.length; i++) {
     // Find expression
     const expression = block.body[i];
     if (!expression.loc) continue;
 
     // Add yield and original expression
-    const line = expression.loc.start.line - startLine - 1;
-    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
-    const yieldStatement = t.expressionStatement(yieldExpression);
-    newBody.push(yieldStatement, expression);
+    appendYield(expression);
 
     // Process control structures
-
-    // For
+    // Cycles
     if (
       t.isForStatement(expression) ||
       t.isForInStatement(expression) ||
@@ -87,6 +92,20 @@ function addYields(block: t.BlockStatement, startLine: number) {
       if (t.isBlockStatement(expression.alternate)) {
         addYields(expression.alternate, startLine);
       }
+      // Switch
+    } else if (t.isSwitchStatement(expression)) {
+      expression.cases.forEach((caseClause) => {
+        if (caseClause.consequent) {
+          // caseClause.consequent.forEach((consExpression) => {
+          //   if (!t.isBreakStatement(consExpression)) {
+          //     appendYield(consExpression);
+          //   }
+          //   if (t.isBlockStatement(consExpression)) {
+          //     addYields(consExpression, startLine);
+          //   }
+          // });
+        }
+      });
     }
   }
 

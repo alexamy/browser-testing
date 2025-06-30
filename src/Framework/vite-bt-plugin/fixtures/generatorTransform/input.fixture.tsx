@@ -39,4 +39,17 @@ it('increments', async () => {
   }
 
   // also for-in, for-of, do-while
+
+  //#region switch
+  switch (x) {
+    case 1:
+      await userEvent.click(increment);
+      break;
+    default:
+      await userEvent.click(increment);
+      if (condition) {
+        console.log('');
+      }
+      break;
+  }
 });
