@@ -24,6 +24,12 @@ export function TestsUI() {
   const { tests, startTest, currentLine, logs } = useTests();
   const [selected, setSelected] = useState<TestInstance>();
 
+  function onStart() {
+    if (!selected) return;
+
+    startTest(selected);
+  }
+
   return (
     <>
       <div id="test-root" className={s.testRoot}></div>
@@ -53,6 +59,13 @@ export function TestsUI() {
 
         <div>
           <h4>Code</h4>
+          <div>
+            {selected ? (
+              <>
+                <button onClick={onStart}>Start</button>
+              </>
+            ) : null}
+          </div>
           <div className={s.codeLines}>
             {selected
               ? selected.lines.map((source, i) => (
