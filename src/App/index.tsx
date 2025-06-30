@@ -21,7 +21,7 @@ function TestLine({ instance, onClick }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
-  const { tests, startTest, current, currentLine, isRunning, logs } = useTests();
+  const { tests, startTest, currentLine, logs } = useTests();
   const [selected, setSelected] = useState<TestInstance>();
 
   return (
@@ -54,8 +54,8 @@ export function TestsUI() {
         <div>
           <h4>Code</h4>
           <div className={s.codeLines}>
-            {current
-              ? current.lines.map((source, i) => (
+            {selected
+              ? selected.lines.map((source, i) => (
                   <pre key={i} style={{ fontWeight: i === currentLine ? 'bold' : 'normal' }}>
                     {source}
                   </pre>
