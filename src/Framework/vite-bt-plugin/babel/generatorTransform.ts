@@ -60,7 +60,14 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
     const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
     for (const expression of oldBody) {
-      processExpression(expression, newBody);
+      // Add yield and original expression
+      if (!expression.loc) return;
+      const line = expression.loc.start.line - startLine - 1;
+      const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+      const yieldStatement = t.expressionStatement(yieldExpression);
+      newBody.push(yieldStatement, expression);
+      // Recursively call add yields for inner blocks
+      processExpression(expression);
     }
 
     // Update block body
@@ -71,15 +78,8 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
     }
   }
 
-  function processExpression(expression: t.Statement, newBody: t.Statement[]) {
-    // Add yield and original expression
-    if (!expression.loc) return;
-    const line = expression.loc.start.line - startLine - 1;
-    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
-    const yieldStatement = t.expressionStatement(yieldExpression);
-    newBody.push(yieldStatement, expression);
-
-    // Process control structures
+  // Process control structures
+  function processExpression(expression: t.Statement) {
     // Cycles
     if (
       t.isForStatement(expression) ||
