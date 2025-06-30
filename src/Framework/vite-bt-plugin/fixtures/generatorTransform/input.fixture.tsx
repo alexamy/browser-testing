@@ -58,4 +58,13 @@ it('increments', async () => {
     const x = 1;
     x += 1;
   }
+
+  // Exceptions
+  try {
+    const x = 1;
+  } catch {
+    const y = 1;
+  } finally {
+    const z = 1;
+  }
 });

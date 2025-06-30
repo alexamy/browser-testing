@@ -98,6 +98,11 @@ function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
       // Simple block
     } else if (t.isBlockStatement(expression)) {
       addYields(expression, startLine);
+      // Exceptions
+    } else if (t.isTryStatement(expression)) {
+      addYields(expression.block, startLine);
+      if (expression.handler) addYields(expression.handler.body, startLine);
+      if (expression.finalizer) addYields(expression.finalizer, startLine);
     }
   }
 
