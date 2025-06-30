@@ -52,4 +52,10 @@ it('increments', async () => {
       }
       break;
   }
+
+  // simple block
+  {
+    const x = 1;
+    x += 1;
+  }
 });

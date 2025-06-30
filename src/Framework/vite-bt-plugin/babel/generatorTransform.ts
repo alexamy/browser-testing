@@ -95,6 +95,9 @@ function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
           addYields(caseClause, startLine);
         }
       });
+      // Simple block
+    } else if (t.isBlockStatement(expression)) {
+      addYields(expression, startLine);
     }
   }
 

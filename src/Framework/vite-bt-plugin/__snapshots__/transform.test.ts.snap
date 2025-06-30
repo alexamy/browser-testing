@@ -76,5 +76,14 @@ it('increments', async function* test() {
       yield 44;
       break;
   }
+
+  // simple block
+  yield 48;
+  {
+    yield 49;
+    const x = 1;
+    yield 50;
+    x += 1;
+  }
 });"
 `;
