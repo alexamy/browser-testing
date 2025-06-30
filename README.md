@@ -2,6 +2,13 @@
 
 Just a fun project.
 
+Powered by:
+
+- React
+- Vite
+- Testing library
+- Chai
+
 ## Quick start
 
 ```
@@ -11,7 +18,9 @@ npm run dev
 
 ## Description
 
-Write tests in any `.bt.tsx` file and import them inside the App.
+### DX
+
+Write tests in `.bt.tsx` files and import them inside the App.
 
 - Use `import { render, it, userEvent } from '../Framework';`
 - Use assertions from `chai` package
@@ -19,6 +28,12 @@ Write tests in any `.bt.tsx` file and import them inside the App.
 Examples:
 
 - Test - `App/Counter.bt.tsx` (bt for browser testing)
+
+## How does it work?
+
+- All tests run in browser
+- Any `*.bt.tsx` file is transpiled by Vite plugin to allow inspection and step-by-step execution
+- `Testing library` helpers and `Chai` assertions can work in browser
 
 ## Other approaches (not for comparison)
 
