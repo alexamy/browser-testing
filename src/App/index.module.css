@@ -25,6 +25,17 @@
   margin: 0.2rem;
 }
 
+.codeLines {
+  max-width: 28rem;
+}
+
 .codeLines pre {
   margin: 0.2rem 0;
+  font-size: 0.85rem;
+  white-space: pre-line;
+}
+
+.codeButtons {
+  display: flex;
+  gap: 10px;
 }

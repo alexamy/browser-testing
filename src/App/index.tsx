@@ -68,11 +68,11 @@ export function TestsUI() {
           <h4>Code</h4>
           <div>
             {selected ? (
-              <>
+              <div className={s.codeButtons}>
                 <button onClick={onStart}>Start</button>
                 <button onClick={onStep}>Step</button>
                 <button onClick={onRestart}>Restart</button>
-              </>
+              </div>
             ) : null}
           </div>
           <div className={s.codeLines}>
