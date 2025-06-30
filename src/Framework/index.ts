@@ -45,10 +45,16 @@ export async function runTest(
 
 export const tests: TestInstance[] = [];
 
-function convertTestWithVitestPlugin(test: TestUserMethod): TestMethod {
+function convertTestWithVitestPlugin(test: TestUserMethod, lines: string[]): TestMethod {
   if (test.constructor.name !== 'AsyncGeneratorFunction') {
     throw new Error(
       'Found malformed test body. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
+  if (lines.length === 0) {
+    throw new Error(
+      'Found empty test body source. Check that Vite plugin is enabled and transpiles bt tests correctly.'
     );
   }
 
@@ -56,7 +62,8 @@ function convertTestWithVitestPlugin(test: TestUserMethod): TestMethod {
 }
 
 export function it(description: string, test: TestUserMethod, lines: string[] = []) {
-  const instance = { description, lines, test: convertTestWithVitestPlugin(test) };
+  const testGenerator = convertTestWithVitestPlugin(test, lines);
+  const instance = { description, lines, test: testGenerator };
   tests.push(instance);
 }
 
