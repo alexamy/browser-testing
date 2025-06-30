@@ -105,8 +105,7 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
     const newBody: t.Statement[] = [];
     const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
-    for (let i = 0; i < oldBody.length; i++) {
-      const expression = oldBody[i];
+    for (const expression of oldBody) {
       processExpression(expression, newBody);
     }
 
