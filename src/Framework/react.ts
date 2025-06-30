@@ -45,10 +45,10 @@ function useTest() {
     if (!generator) return;
 
     const { done, value: line } = await generator.next();
-    setIsDone(Boolean(done));
-
     const hasLine = line !== undefined && Number.isFinite(line);
+
     setCurrentLine(hasLine ? line : undefined);
+    setIsDone(Boolean(done));
   }
 
   async function run() {
