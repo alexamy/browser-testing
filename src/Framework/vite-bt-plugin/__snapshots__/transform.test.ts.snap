@@ -85,5 +85,18 @@ it('increments', async function* test() {
     yield 50;
     x += 1;
   }
+
+  // Exceptions
+  yield 54;
+  try {
+    yield 55;
+    const x = 1;
+  } catch {
+    yield 57;
+    const y = 1;
+  } finally {
+    yield 59;
+    const z = 1;
+  }
 });"
 `;
