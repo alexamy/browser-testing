@@ -55,22 +55,16 @@ export function generatorTransform(path: any) {
 function addYields(block: t.BlockStatement, startLine: number) {
   const newBody: t.Statement[] = [];
 
-  function appendYield(expression: t.Statement) {
-    if (!expression.loc) return;
-
-    const line = expression.loc.start.line - startLine - 1;
-    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
-    const yieldStatement = t.expressionStatement(yieldExpression);
-    newBody.push(yieldStatement, expression);
-  }
-
   for (let i = 0; i < block.body.length; i++) {
     // Find expression
     const expression = block.body[i];
     if (!expression.loc) continue;
 
     // Add yield and original expression
-    appendYield(expression);
+    const line = expression.loc.start.line - startLine - 1;
+    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+    const yieldStatement = t.expressionStatement(yieldExpression);
+    newBody.push(yieldStatement, expression);
 
     // Process control structures
     // Cycles
