@@ -72,8 +72,10 @@ export function useTests() {
     if (!generator) return;
 
     await runWithLogs(async () => {
-      const line = await generator.next();
-      if (line.value) setCurrentLine(line.value);
+      const { value: line } = await generator.next();
+      if (line !== undefined && Number.isFinite(line)) {
+        setCurrentLine(line);
+      }
     });
   }
 
