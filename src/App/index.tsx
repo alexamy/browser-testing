@@ -7,12 +7,16 @@ import './tests';
 interface TestLineProps {
   instance: TestInstance;
   onClick(): void;
-  disabled?: boolean;
+  selected?: boolean;
 }
 
-function TestLine({ instance, onClick }: TestLineProps) {
+function TestLine({ instance, onClick, selected }: TestLineProps) {
   return (
-    <div className={s.testLine} onClick={onClick}>
+    <div
+      className={s.testLine}
+      onClick={onClick}
+      style={{ fontWeight: selected ? 'bold' : 'normal' }}
+    >
       {instance.description}{' '}
     </div>
   );
@@ -33,7 +37,7 @@ export function TestsUI() {
               <TestLine
                 key={i}
                 instance={instance}
-                disabled={Boolean(t.current)}
+                selected={instance === t.current}
                 onClick={() => t.select(instance)}
               />
             ))}
