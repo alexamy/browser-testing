@@ -52,12 +52,14 @@ export function generatorTransform(path: any) {
   path.node.arguments[1] = generatorFunction;
 }
 
-function addYields(block: t.BlockStatement, startLine: number) {
+function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
   const newBody: t.Statement[] = [];
 
-  for (let i = 0; i < block.body.length; i++) {
+  const oldBody = t.isBlockStatement(block) ? block.body : block.consequent;
+
+  for (let i = 0; i < oldBody.length; i++) {
     // Find expression
-    const expression = block.body[i];
+    const expression = oldBody[i];
     if (!expression.loc) continue;
 
     // Add yield and original expression
@@ -90,18 +92,15 @@ function addYields(block: t.BlockStatement, startLine: number) {
     } else if (t.isSwitchStatement(expression)) {
       expression.cases.forEach((caseClause) => {
         if (caseClause.consequent) {
-          // caseClause.consequent.forEach((consExpression) => {
-          //   if (!t.isBreakStatement(consExpression)) {
-          //     appendYield(consExpression);
-          //   }
-          //   if (t.isBlockStatement(consExpression)) {
-          //     addYields(consExpression, startLine);
-          //   }
-          // });
+          addYields(caseClause, startLine);
         }
       });
     }
   }
 
-  block.body = newBody;
+  if (t.isBlockStatement(block)) {
+    block.body = newBody;
+  } else {
+    block.consequent = newBody;
+  }
 }

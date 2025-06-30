@@ -63,6 +63,7 @@ it('increments', async function* test() {
     case 1:
       yield 37;
       await userEvent.click(increment);
+      yield 38;
       break;
     default:
       yield 40;
@@ -72,6 +73,7 @@ it('increments', async function* test() {
         yield 42;
         console.log('');
       }
+      yield 44;
       break;
   }
 });"
