@@ -11,19 +11,23 @@ function processLogMessage(arg: unknown) {
 }
 
 function useLogs() {
-  const [logs, setLogs] = useState<string[]>([]);
+  const [data, setData] = useState<string[]>([]);
 
   function log(...args: unknown[]) {
     const messages = args.flatMap(processLogMessage);
-    setLogs((logs) => [...logs, ...messages]);
+    setData((logs) => [...logs, ...messages]);
   }
 
-  return { logs, log };
+  function reset() {
+    setData([]);
+  }
+
+  return { data, log, reset };
 }
 
 //#region useTests
 export function useTests() {
-  const { logs, log } = useLogs();
+  const logs = useLogs();
 
   const [current, setCurrent] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
@@ -40,22 +44,22 @@ export function useTests() {
 
     // Run test and catch assert and other errors
     try {
-      log(`Running test: ${description}`);
+      logs.log(`Running test: ${description}`);
       for await (const line of generator) {
         setCurrentLine(line);
         await new Promise((r) => setTimeout(r, 300));
       }
     } catch (e) {
-      log('Test error', e);
+      logs.log('Test error', e);
     } finally {
-      log('Completed!');
+      logs.log('Completed!');
     }
   }
 
   async function startTest(instance: TestInstance) {
     // Reset
     cleanup();
-    setLogs([]);
+    logs.reset();
 
     // Run test
     runTest(instance);
@@ -68,7 +72,7 @@ export function useTests() {
     startTest,
     selectTest,
 
-    logs,
+    logs: logs.data,
     current,
     currentLine,
     isRunning,
