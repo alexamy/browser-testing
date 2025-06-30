@@ -55,6 +55,22 @@ export function generatorTransform(path: any) {
 function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) {
   addYields(block);
 
+  function addYields(block: t.BlockStatement | t.SwitchCase) {
+    const newBody: t.Statement[] = [];
+    const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
+
+    for (const expression of oldBody) {
+      processExpression(expression, newBody);
+    }
+
+    // Update block body
+    if (t.isSwitchCase(block)) {
+      block.consequent = newBody;
+    } else {
+      block.body = newBody;
+    }
+  }
+
   function processExpression(expression: t.Statement, newBody: t.Statement[]) {
     // Add yield and original expression
     if (!expression.loc) return;
@@ -98,22 +114,6 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
       addYields(expression.block);
       if (expression.handler) addYields(expression.handler.body);
       if (expression.finalizer) addYields(expression.finalizer);
-    }
-  }
-
-  function addYields(block: t.BlockStatement | t.SwitchCase) {
-    const newBody: t.Statement[] = [];
-    const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
-
-    for (const expression of oldBody) {
-      processExpression(expression, newBody);
-    }
-
-    // Update block body
-    if (t.isSwitchCase(block)) {
-      block.consequent = newBody;
-    } else {
-      block.body = newBody;
     }
   }
 }
