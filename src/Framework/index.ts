@@ -12,7 +12,7 @@ export type TestMethod = (opts?: TestOptions) => TestGenerator;
 
 export interface TestInstance {
   description: string;
-  test: TestMethod;
+  method: TestMethod;
   lines: string[];
 }
 
@@ -46,7 +46,7 @@ function convertTestWithVitestPlugin(test: TestUserMethod, lines: string[]): Tes
 
 export function it(description: string, test: TestUserMethod, lines: string[] = []) {
   const testGenerator = convertTestWithVitestPlugin(test, lines);
-  const instance = { description, lines, test: testGenerator };
+  const instance = { description, lines, method: testGenerator };
   tests.push(instance);
 }
 
