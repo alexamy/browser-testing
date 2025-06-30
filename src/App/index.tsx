@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { type TestInstance } from '../Framework';
 import { useTests } from '../Framework/react';
 import s from './index.module.css';

@@ -71,8 +71,10 @@ export function useTests() {
   async function step() {
     if (!generator) return;
 
-    const line = await generator.next();
-    if (line.value) setCurrentLine(line.value);
+    await runWithLogs(async () => {
+      const line = await generator.next();
+      if (line.value) setCurrentLine(line.value);
+    });
   }
 
   const restart = () => select(current);
