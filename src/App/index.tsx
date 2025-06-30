@@ -49,7 +49,9 @@ export function TestsUI() {
           <div>
             {t.current ? (
               <div className={s.codeButtons}>
-                <button onClick={t.start}>Start</button>
+                <button onClick={t.start} disabled={t.isDone}>
+                  Start
+                </button>
                 <button onClick={t.step} disabled={t.isDone}>
                   Step
                 </button>
