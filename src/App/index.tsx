@@ -23,12 +23,6 @@ function TestLine({ instance, onClick }: TestLineProps) {
 export function TestsUI() {
   const t = useTests();
 
-  function onStart() {}
-
-  function onStep() {}
-
-  function onRestart() {}
-
   return (
     <>
       <div id="test-root" className={s.testRoot}></div>
@@ -62,8 +56,8 @@ export function TestsUI() {
             {t.current ? (
               <div className={s.codeButtons}>
                 <button onClick={t.startTest}>Start</button>
-                <button onClick={onStep}>Step</button>
-                <button onClick={onRestart}>Restart</button>
+                {/* <button onClick={onStep}>Step</button> */}
+                <button onClick={t.restartTest}>Restart</button>
               </div>
             ) : null}
           </div>

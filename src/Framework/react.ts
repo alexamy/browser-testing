@@ -43,11 +43,17 @@ export function useTests() {
   }
 
   function selectTest(instance: TestInstance | undefined) {
+    // cleanup
+    cleanup();
+    logs.reset();
+
+    // select
     setCurrent(instance);
     setGenerator(instance?.test());
+    setCurrentLine(undefined);
   }
 
-  async function runTest() {
+  async function startTest() {
     if (!current || !generator) return;
 
     logs.log(`Running test: ${current.description}`);
@@ -62,21 +68,13 @@ export function useTests() {
     logs.log('Completed!');
   }
 
-  async function startTest() {
-    // Reset
-    cleanup();
-    logs.reset();
-
-    // Run test
-    await runTest();
-    setCurrentLine(undefined);
-    selectTest(undefined);
-  }
+  const restartTest = () => selectTest(current);
 
   return {
     tests,
     startTest,
     selectTest,
+    restartTest,
 
     logs: logs.data,
     current,
