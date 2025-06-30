@@ -48,10 +48,10 @@ export function useTests() {
   }
 
   async function runTest() {
-    if (!generator) return;
+    if (!current || !generator) return;
 
-    // Run test and catch assert and other errors
-    logs.log(`Running test: ${current?.description}`);
+    logs.log(`Running test: ${current.description}`);
+
     await runWithLogs(async () => {
       for await (const line of generator) {
         setCurrentLine(line);
@@ -62,13 +62,13 @@ export function useTests() {
     logs.log('Completed!');
   }
 
-  async function startTest(instance: TestInstance) {
+  async function startTest() {
     // Reset
     cleanup();
     logs.reset();
 
     // Run test
-    runTest(instance);
+    await runTest();
     setCurrentLine(undefined);
     selectTest(undefined);
   }
