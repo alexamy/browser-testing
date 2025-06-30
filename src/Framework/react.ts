@@ -63,7 +63,6 @@ export function useTests() {
     await runWithLogs(async () => {
       for await (const line of generator) {
         setCurrentLine(line);
-        await new Promise((r) => setTimeout(r, 300));
       }
     });
 
