@@ -46,5 +46,13 @@ it('increments', async function* test() {
     yield 24;
     await userEvent.click(increment);
   }
+  yield 27;
+
+  while (conidition) await f();
+  yield 28;
+  while (conidition) {
+    yield 29;
+    await f();
+  }
 });"
 `;

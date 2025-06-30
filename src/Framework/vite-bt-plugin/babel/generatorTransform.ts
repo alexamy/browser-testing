@@ -69,8 +69,14 @@ function addYields(block: t.BlockStatement, startLine: number) {
     // Process control structures
 
     // For
-    if (t.isForStatement(expression) && expression.body) {
-      if (t.isBlockStatement(expression.body) && expression.body.body) {
+    if (
+      t.isForStatement(expression) ||
+      t.isForInStatement(expression) ||
+      t.isForOfStatement(expression) ||
+      t.isWhileStatement(expression) ||
+      t.isDoWhileStatement(expression)
+    ) {
+      if (expression.body && t.isBlockStatement(expression.body) && expression.body.body) {
         addYields(expression.body, startLine);
       }
       // If

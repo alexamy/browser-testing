@@ -32,4 +32,11 @@ it('increments', async () => {
   for (let i = 0; i < 3; i++) {
     await userEvent.click(increment);
   }
+
+  while (conidition) await f();
+  while (conidition) {
+    await f();
+  }
+
+  // also for-in, for-of, do-while
 });
