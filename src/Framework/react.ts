@@ -26,13 +26,57 @@ function useLogs() {
 }
 
 //#region useTests
-export function useTests() {
-  const logs = useLogs();
+interface TestObject {
+  instance: TestInstance;
+  generator: TestGenerator;
+  iteration?: IteratorYieldResult<number>;
+}
 
-  const [current, setCurrent] = useState<TestInstance>();
+function useTest() {
+  const [test, setTest] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
   const [currentLine, setCurrentLine] = useState<number>();
   const [isDone, setIsDone] = useState(false);
+
+  function select(instance: TestInstance | undefined) {
+    setTest(instance);
+    setGenerator(instance?.test());
+    setCurrentLine(undefined);
+    setIsDone(false);
+  }
+
+  const restart = () => select(test);
+
+  async function step() {
+    if (!generator) return;
+
+    const { done, value: line } = await generator.next();
+    setIsDone(Boolean(done));
+
+    if (line !== undefined && Number.isFinite(line)) {
+      setCurrentLine(line);
+    } else {
+      setCurrentLine(undefined);
+    }
+  }
+
+  async function run() {
+    if (!generator) return;
+
+    for await (const line of generator) {
+      setCurrentLine(line);
+    }
+
+    setCurrentLine(undefined);
+    setIsDone(true);
+  }
+
+  return { test, currentLine, isDone, select, step, run, restart };
+}
+
+export function useTests() {
+  const logs = useLogs();
+  const test = useTest();
 
   async function runWithLogs(f: () => void | Promise<void>) {
     try {
@@ -48,41 +92,29 @@ export function useTests() {
     logs.reset();
 
     // select
-    setCurrent(instance);
-    setGenerator(instance?.test());
-    setCurrentLine(undefined);
-    setIsDone(false);
+    test.select(instance);
   }
 
   async function start() {
-    if (!current || !generator) return;
-
-    restart();
-    logs.log(`Running test: ${current.description}`);
+    test.restart();
+    logs.log(`Running test: ${test.test!.description}`);
 
     await runWithLogs(async () => {
-      for await (const line of generator) {
-        setCurrentLine(line);
-      }
+      await test.run();
     });
 
-    setIsDone(true);
     logs.log('Completed!');
   }
 
   async function step() {
-    if (!generator) return;
-
     await runWithLogs(async () => {
-      const { done, value: line } = await generator.next();
-      setIsDone(Boolean(done));
-
-      const isLineNumber = line !== undefined && Number.isFinite(line);
-      if (isLineNumber) setCurrentLine(line);
+      test.step();
     });
   }
 
-  const restart = () => select(current);
+  function restart() {
+    select(test.test);
+  }
 
   return {
     tests,
@@ -92,8 +124,8 @@ export function useTests() {
     restart,
 
     logs: logs.data,
-    current,
-    currentLine,
-    isDone,
+    current: test.test,
+    currentLine: test.currentLine,
+    isDone: test.isDone,
   };
 }
