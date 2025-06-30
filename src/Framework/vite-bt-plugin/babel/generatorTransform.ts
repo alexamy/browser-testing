@@ -59,12 +59,9 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
     const newBody: t.Statement[] = [];
     const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
-    for (let i = 0; i < oldBody.length; i++) {
-      // Find expression
-      const expression = oldBody[i];
-      if (!expression.loc) continue;
-
+    function processExpression(expression: t.Statement) {
       // Add yield and original expression
+      if (!expression.loc) return;
       const line = expression.loc.start.line - startLine - 1;
       const yieldExpression = t.yieldExpression(t.numericLiteral(line));
       const yieldStatement = t.expressionStatement(yieldExpression);
@@ -106,6 +103,10 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
         if (expression.handler) addYields(expression.handler.body);
         if (expression.finalizer) addYields(expression.finalizer);
       }
+    }
+
+    for (let i = 0; i < oldBody.length; i++) {
+      processExpression(oldBody[i]);
     }
 
     // Update block body
