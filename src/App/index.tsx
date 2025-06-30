@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { type TestInstance } from '../Framework';
 import { useTests } from '../Framework/react';
 import s from './index.module.css';
@@ -6,17 +7,14 @@ import './tests';
 //#region TestLine
 interface TestLineProps {
   instance: TestInstance;
-  onStart(): void;
+  onClick(): void;
   disabled?: boolean;
 }
 
-function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
+function TestLine({ instance, onClick }: TestLineProps) {
   return (
-    <div>
+    <div className={s.testLine} onClick={onClick}>
       {instance.description}{' '}
-      <button disabled={disabled} onClick={onStart}>
-        {'>'}
-      </button>
     </div>
   );
 }
@@ -24,6 +22,7 @@ function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
 //#region TestsUI
 export function TestsUI() {
   const { tests, startTest, current, currentLine, isRunning, logs } = useTests();
+  const [selected, setSelected] = useState<TestInstance>();
 
   return (
     <>
@@ -36,8 +35,8 @@ export function TestsUI() {
               <TestLine
                 key={i}
                 instance={instance}
-                disabled={isRunning}
-                onStart={() => startTest(instance)}
+                disabled={Boolean(selected)}
+                onClick={() => setSelected(instance)}
               />
             ))}
           </div>
