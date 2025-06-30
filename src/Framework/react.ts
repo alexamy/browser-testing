@@ -57,6 +57,7 @@ export function useTests() {
   async function start() {
     if (!current || !generator) return;
 
+    restart();
     logs.log(`Running test: ${current.description}`);
 
     await runWithLogs(async () => {
@@ -66,6 +67,7 @@ export function useTests() {
       }
     });
 
+    setIsDone(true);
     logs.log('Completed!');
   }
 
