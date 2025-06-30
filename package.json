@@ -21,8 +21,10 @@
     "printWidth": 100
   },
   "dependencies": {
+    "@xstate/react": "^6.0.0",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "xstate": "^5.20.0"
   },
   "devDependencies": {
     "@babel/core": "^7.27.7",
