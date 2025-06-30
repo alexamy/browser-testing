@@ -32,7 +32,7 @@ export function useTests() {
   const [current, setCurrent] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
   const [currentLine, setCurrentLine] = useState<number>();
-  const isRunning = Boolean(current);
+  const [isDone, setIsDone] = useState(false);
 
   async function runWithLogs(f: () => void | Promise<void>) {
     try {
@@ -51,6 +51,7 @@ export function useTests() {
     setCurrent(instance);
     setGenerator(instance?.test());
     setCurrentLine(undefined);
+    setIsDone(false);
   }
 
   async function start() {
@@ -72,7 +73,9 @@ export function useTests() {
     if (!generator) return;
 
     await runWithLogs(async () => {
-      const { value: line } = await generator.next();
+      const { done, value: line } = await generator.next();
+      setIsDone(Boolean(done));
+
       const isLineNumber = line !== undefined && Number.isFinite(line);
       if (isLineNumber) setCurrentLine(line);
     });
@@ -90,6 +93,6 @@ export function useTests() {
     logs: logs.data,
     current,
     currentLine,
-    isRunning,
+    isDone,
   };
 }

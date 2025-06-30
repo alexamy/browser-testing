@@ -55,7 +55,9 @@ export function TestsUI() {
             {t.current ? (
               <div className={s.codeButtons}>
                 <button onClick={t.start}>Start</button>
-                <button onClick={t.step}>Step</button>
+                <button onClick={t.step} disabled={t.isDone}>
+                  Step
+                </button>
                 <button onClick={t.restart}>Restart</button>
               </div>
             ) : null}
