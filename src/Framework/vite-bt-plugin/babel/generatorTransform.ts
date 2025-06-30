@@ -55,58 +55,59 @@ export function generatorTransform(path: any) {
 function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) {
   addYields(block);
 
+  function processExpression(expression: t.Statement, newBody: t.Statement[]) {
+    // Add yield and original expression
+    if (!expression.loc) return;
+    const line = expression.loc.start.line - startLine - 1;
+    const yieldExpression = t.yieldExpression(t.numericLiteral(line));
+    const yieldStatement = t.expressionStatement(yieldExpression);
+    newBody.push(yieldStatement, expression);
+
+    // Process control structures
+    // Cycles
+    if (
+      t.isForStatement(expression) ||
+      t.isForInStatement(expression) ||
+      t.isForOfStatement(expression) ||
+      t.isWhileStatement(expression) ||
+      t.isDoWhileStatement(expression)
+    ) {
+      if (expression.body && t.isBlockStatement(expression.body) && expression.body.body) {
+        addYields(expression.body);
+      }
+      // If
+    } else if (t.isIfStatement(expression)) {
+      if (t.isBlockStatement(expression.consequent)) {
+        addYields(expression.consequent);
+      }
+      if (t.isBlockStatement(expression.alternate)) {
+        addYields(expression.alternate);
+      }
+      // Switch
+    } else if (t.isSwitchStatement(expression)) {
+      expression.cases.forEach((caseClause) => {
+        if (caseClause.consequent) {
+          addYields(caseClause);
+        }
+      });
+      // Simple block
+    } else if (t.isBlockStatement(expression)) {
+      addYields(expression);
+      // Exceptions
+    } else if (t.isTryStatement(expression)) {
+      addYields(expression.block);
+      if (expression.handler) addYields(expression.handler.body);
+      if (expression.finalizer) addYields(expression.finalizer);
+    }
+  }
+
   function addYields(block: t.BlockStatement | t.SwitchCase) {
     const newBody: t.Statement[] = [];
     const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
-    function processExpression(expression: t.Statement) {
-      // Add yield and original expression
-      if (!expression.loc) return;
-      const line = expression.loc.start.line - startLine - 1;
-      const yieldExpression = t.yieldExpression(t.numericLiteral(line));
-      const yieldStatement = t.expressionStatement(yieldExpression);
-      newBody.push(yieldStatement, expression);
-
-      // Process control structures
-      // Cycles
-      if (
-        t.isForStatement(expression) ||
-        t.isForInStatement(expression) ||
-        t.isForOfStatement(expression) ||
-        t.isWhileStatement(expression) ||
-        t.isDoWhileStatement(expression)
-      ) {
-        if (expression.body && t.isBlockStatement(expression.body) && expression.body.body) {
-          addYields(expression.body);
-        }
-        // If
-      } else if (t.isIfStatement(expression)) {
-        if (t.isBlockStatement(expression.consequent)) {
-          addYields(expression.consequent);
-        }
-        if (t.isBlockStatement(expression.alternate)) {
-          addYields(expression.alternate);
-        }
-        // Switch
-      } else if (t.isSwitchStatement(expression)) {
-        expression.cases.forEach((caseClause) => {
-          if (caseClause.consequent) {
-            addYields(caseClause);
-          }
-        });
-        // Simple block
-      } else if (t.isBlockStatement(expression)) {
-        addYields(expression);
-        // Exceptions
-      } else if (t.isTryStatement(expression)) {
-        addYields(expression.block);
-        if (expression.handler) addYields(expression.handler.body);
-        if (expression.finalizer) addYields(expression.finalizer);
-      }
-    }
-
     for (let i = 0; i < oldBody.length; i++) {
-      processExpression(oldBody[i]);
+      const expression = oldBody[i];
+      processExpression(expression, newBody);
     }
 
     // Update block body
