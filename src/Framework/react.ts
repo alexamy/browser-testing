@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { tests, type TestInstance } from '.';
 import { cleanup } from '@testing-library/react';
+import { useState } from 'react';
+import { tests, type TestGenerator, type TestInstance } from '.';
 
 function processLogMessage(arg: unknown) {
   const lines =
@@ -16,6 +16,8 @@ export function useTests() {
   const [currentLine, setCurrentLine] = useState<number>();
   const isRunning = Boolean(current);
 
+  const [generator, setGenerator] = useState<TestGenerator>();
+
   function log(...args: unknown[]) {
     const messages = args.flatMap(processLogMessage);
     setLogs((logs) => [...logs, ...messages]);
@@ -25,7 +27,7 @@ export function useTests() {
     // Run test and catch assert and other errors
     try {
       log(`Running test: ${description}`);
-      for await (const line of test({})) {
+      for await (const line of test()) {
         setCurrentLine(line);
         await new Promise((r) => setTimeout(r, 300));
       }

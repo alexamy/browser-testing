@@ -6,9 +6,9 @@ export interface TestOptions {
   dummy?: void;
 }
 
-export type TestUserMethod = (opts: TestOptions) => Promise<void>;
+export type TestUserMethod = (opts?: TestOptions) => Promise<void>;
 export type TestGenerator = AsyncGenerator<number, void, unknown>;
-export type TestMethod = (opts: TestOptions) => TestGenerator;
+export type TestMethod = (opts?: TestOptions) => TestGenerator;
 
 export interface TestInstance {
   description: string;
