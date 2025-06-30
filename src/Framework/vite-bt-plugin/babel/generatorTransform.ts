@@ -55,7 +55,7 @@ export function generatorTransform(path: any) {
 function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
   const newBody: t.Statement[] = [];
 
-  const oldBody = t.isBlockStatement(block) ? block.body : block.consequent;
+  const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
   for (let i = 0; i < oldBody.length; i++) {
     // Find expression
@@ -98,9 +98,10 @@ function addYields(block: t.BlockStatement | t.SwitchCase, startLine: number) {
     }
   }
 
-  if (t.isBlockStatement(block)) {
-    block.body = newBody;
-  } else {
+  // Update block body
+  if (t.isSwitchCase(block)) {
     block.consequent = newBody;
+  } else {
+    block.body = newBody;
   }
 }
