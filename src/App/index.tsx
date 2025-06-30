@@ -26,8 +26,15 @@ export function TestsUI() {
 
   function onStart() {
     if (!selected) return;
-
     startTest(selected);
+  }
+
+  function onStep() {
+    if (!selected) return;
+  }
+
+  function onRestart() {
+    if (!selected) return;
   }
 
   return (
@@ -63,6 +70,8 @@ export function TestsUI() {
             {selected ? (
               <>
                 <button onClick={onStart}>Start</button>
+                <button onClick={onStep}>Step</button>
+                <button onClick={onRestart}>Restart</button>
               </>
             ) : null}
           </div>
