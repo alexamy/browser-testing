@@ -10,13 +10,9 @@ it('increments', async () => {
   const count = screen.getByText('Count: 0');
 
   const increment = screen.getByRole('button', { name: /Inc/ });
-
-  for (let i = 0; i < 3; i++) {
-    await userEvent.click(increment);
-  }
-
   expect(count.innerText).equals('Count: 3');
 
+  //#region conditionals
   if (true) {
     const x = 1;
   } else {
@@ -30,5 +26,10 @@ it('increments', async () => {
 
   true ? f() : f();
 
+  //#region cycles
   for (let i = 0; i < 3; i++) await userEvent.click(increment);
+
+  for (let i = 0; i < 3; i++) {
+    await userEvent.click(increment);
+  }
 });

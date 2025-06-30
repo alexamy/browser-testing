@@ -14,36 +14,37 @@ it('increments', async function* test() {
   yield 3;
 
   const increment = screen.getByRole('button', { name: /Inc/ });
-  yield 5;
-
-  for (let i = 0; i < 3; i++) {
-    yield 6;
-    await userEvent.click(increment);
-  }
-  yield 9;
-
+  yield 4;
   expect(count.innerText).equals('Count: 3');
-  yield 11;
 
+  //#region conditionals
+  yield 7;
   if (true) {
-    yield 12;
+    yield 8;
     const x = 1;
   } else {
-    yield 14;
+    yield 10;
     const y = 1;
   }
-  yield 17;
+  yield 13;
 
   if (true) f();
-  yield 19;
+  yield 15;
 
   if (true) f();
   else f();
-  yield 22;
+  yield 18;
 
   true ? f() : f();
-  yield 24;
 
+  //#region cycles
+  yield 21;
   for (let i = 0; i < 3; i++) await userEvent.click(increment);
+  yield 23;
+
+  for (let i = 0; i < 3; i++) {
+    yield 24;
+    await userEvent.click(increment);
+  }
 });"
 `;
