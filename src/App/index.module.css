@@ -4,6 +4,11 @@
   background-color: #333;
 }
 
+.testLine:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 .framework {
   display: flex;
   gap: 120px;
@@ -13,9 +18,20 @@
 .testList {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 4px;
 }
 
 .logList p {
   margin: 0.2rem;
+}
+
+.codeLines pre {
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+  white-space: pre-line;
+}
+
+.codeButtons {
+  display: flex;
+  gap: 10px;
 }

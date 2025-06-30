@@ -1,30 +1,30 @@
 import { type TestInstance } from '../Framework';
 import { useTests } from '../Framework/react';
 import s from './index.module.css';
-import './Counter.bt';
+import './tests';
 
 //#region TestLine
 interface TestLineProps {
   instance: TestInstance;
-  onStart(): void;
-  disabled?: boolean;
+  onClick(): void;
+  selected?: boolean;
 }
 
-function TestLine({ instance, onStart, disabled = false }: TestLineProps) {
+function TestLine({ instance, onClick, selected }: TestLineProps) {
   return (
-    <div>
-      {instance.description}
-      <br />
-      <button disabled={disabled} onClick={onStart}>
-        Start
-      </button>
+    <div
+      className={s.testLine}
+      onClick={onClick}
+      style={{ fontWeight: selected ? 'bold' : 'normal' }}
+    >
+      {instance.description}{' '}
     </div>
   );
 }
 
 //#region TestsUI
 export function TestsUI() {
-  const { tests, startTest, isRunning, logs } = useTests();
+  const t = useTests();
 
   return (
     <>
@@ -33,21 +33,47 @@ export function TestsUI() {
         <div>
           <h4>Test list</h4>
           <div className={s.testList}>
-            {tests.map((instance, i) => (
+            {t.tests.map((instance, i) => (
               <TestLine
                 key={i}
                 instance={instance}
-                disabled={isRunning}
-                onStart={() => startTest(instance)}
+                selected={instance === t.current}
+                onClick={() => t.select(instance)}
               />
             ))}
           </div>
         </div>
 
         <div>
+          <h4>Code</h4>
+          <div>
+            {t.current ? (
+              <div className={s.codeButtons}>
+                <button onClick={t.start} disabled={t.isDone}>
+                  Start
+                </button>
+                <button onClick={t.step} disabled={t.isDone}>
+                  Step
+                </button>
+                <button onClick={t.restart}>Restart</button>
+              </div>
+            ) : null}
+          </div>
+          <div className={s.codeLines}>
+            {t.current
+              ? t.current.lines.map((source, i) => (
+                  <pre key={i} style={{ fontWeight: i === t.currentLine ? 'bold' : 'normal' }}>
+                    {source}
+                  </pre>
+                ))
+              : null}
+          </div>
+        </div>
+
+        <div>
           <h4>Logger</h4>
           <div className={s.logList}>
-            {logs.map((logLine, i) => (
+            {t.logs.map((logLine, i) => (
               <p key={i}>{logLine}</p>
             ))}
           </div>

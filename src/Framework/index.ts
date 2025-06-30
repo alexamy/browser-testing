@@ -6,11 +6,14 @@ export interface TestOptions {
   dummy?: void;
 }
 
-export type TestMethod = (opts: TestOptions) => Promise<void>;
+export type TestUserMethod = (opts?: TestOptions) => Promise<void>;
+export type TestGenerator = AsyncGenerator<number, void, unknown>;
+export type TestMethod = (opts?: TestOptions) => TestGenerator;
 
 export interface TestInstance {
   description: string;
-  test: TestMethod;
+  method: TestMethod;
+  lines: string[];
 }
 
 export interface MakeTestSuiteOptions {
@@ -19,25 +22,31 @@ export interface MakeTestSuiteOptions {
 
 export interface RunTestOptions {
   log(...args: unknown[]): void;
+  setGenerator(test: TestGenerator): void;
 }
 
 //#region tests
-export async function runTest({ description, test }: TestInstance, { log }: RunTestOptions) {
-  // Run test and catch assert and other errors
-  try {
-    log(`Running test: ${description}`);
-    await test({});
-  } catch (e) {
-    log('Test error', e);
-  } finally {
-    log('Completed!');
-  }
-}
-
 export const tests: TestInstance[] = [];
 
-export function it(description: string, test: TestMethod) {
-  const instance = { description, test };
+function convertTestWithVitestPlugin(test: TestUserMethod, lines: string[]): TestMethod {
+  if (test.constructor.name !== 'AsyncGeneratorFunction') {
+    throw new Error(
+      'Found malformed test body. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
+  if (lines.length === 0) {
+    throw new Error(
+      'Found empty test body source. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
+  return test as unknown as TestMethod;
+}
+
+export function it(description: string, test: TestUserMethod, lines: string[] = []) {
+  const testGenerator = convertTestWithVitestPlugin(test, lines);
+  const instance = { description, lines, method: testGenerator };
   tests.push(instance);
 }
 
