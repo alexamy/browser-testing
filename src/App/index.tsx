@@ -41,15 +41,6 @@ export function TestsUI() {
         </div>
 
         <div>
-          <h4>Logger</h4>
-          <div className={s.logList}>
-            {t.logs.map((logLine, i) => (
-              <p key={i}>{logLine}</p>
-            ))}
-          </div>
-        </div>
-
-        <div>
           <h4>Code</h4>
           <div>
             {t.current ? (
@@ -70,6 +61,15 @@ export function TestsUI() {
                   </pre>
                 ))
               : null}
+          </div>
+        </div>
+
+        <div>
+          <h4>Logger</h4>
+          <div className={s.logList}>
+            {t.logs.map((logLine, i) => (
+              <p key={i}>{logLine}</p>
+            ))}
           </div>
         </div>
       </div>
