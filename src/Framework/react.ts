@@ -33,19 +33,19 @@ interface TestObject {
 }
 
 function useTest() {
-  const [test, setTest] = useState<TestInstance>();
+  const [instance, setInstance] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
   const [currentLine, setCurrentLine] = useState<number>();
   const [isDone, setIsDone] = useState(false);
 
-  function select(instance: TestInstance | undefined) {
-    setTest(instance);
-    setGenerator(instance?.test());
+  function select(test: TestInstance | undefined) {
+    setInstance(test);
+    setGenerator(test?.test());
     setCurrentLine(undefined);
     setIsDone(false);
   }
 
-  const restart = () => select(test);
+  const restart = () => select(instance);
 
   async function step() {
     if (!generator) return;
@@ -68,7 +68,7 @@ function useTest() {
     setIsDone(true);
   }
 
-  return { test, currentLine, isDone, select, step, run, restart };
+  return { instance, currentLine, isDone, select, step, run, restart };
 }
 
 export function useTests() {
@@ -93,12 +93,12 @@ export function useTests() {
   }
 
   function restart() {
-    select(test.test);
+    select(test.instance);
   }
 
   async function start() {
     test.restart();
-    logs.log(`Running test: ${test.test!.description}`);
+    logs.log(`Running test: ${test.instance!.description}`);
 
     await runWithLogs(async () => {
       await test.run();
@@ -121,7 +121,7 @@ export function useTests() {
     restart,
 
     logs: logs.data,
-    current: test.test,
+    current: test.instance,
     currentLine: test.currentLine,
     isDone: test.isDone,
   };
