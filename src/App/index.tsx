@@ -35,7 +35,7 @@ export function TestsUI() {
                 key={i}
                 instance={instance}
                 disabled={Boolean(t.current)}
-                onClick={() => t.selectTest(instance)}
+                onClick={() => t.select(instance)}
               />
             ))}
           </div>
@@ -55,9 +55,9 @@ export function TestsUI() {
           <div>
             {t.current ? (
               <div className={s.codeButtons}>
-                <button onClick={t.startTest}>Start</button>
-                <button onClick={t.stepTest}>Step</button>
-                <button onClick={t.restartTest}>Restart</button>
+                <button onClick={t.start}>Start</button>
+                <button onClick={t.step}>Step</button>
+                <button onClick={t.restart}>Restart</button>
               </div>
             ) : null}
           </div>

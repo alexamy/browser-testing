@@ -42,7 +42,7 @@ export function useTests() {
     }
   }
 
-  function selectTest(instance: TestInstance | undefined) {
+  function select(instance: TestInstance | undefined) {
     // cleanup
     cleanup();
     logs.reset();
@@ -53,7 +53,7 @@ export function useTests() {
     setCurrentLine(undefined);
   }
 
-  async function startTest() {
+  async function start() {
     if (!current || !generator) return;
 
     logs.log(`Running test: ${current.description}`);
@@ -68,21 +68,21 @@ export function useTests() {
     logs.log('Completed!');
   }
 
-  async function stepTest() {
+  async function step() {
     if (!generator) return;
 
     const line = await generator.next();
     if (line.value) setCurrentLine(line.value);
   }
 
-  const restartTest = () => selectTest(current);
+  const restart = () => select(current);
 
   return {
     tests,
-    startTest,
-    stepTest,
-    selectTest,
-    restartTest,
+    start,
+    step,
+    select,
+    restart,
 
     logs: logs.data,
     current,
