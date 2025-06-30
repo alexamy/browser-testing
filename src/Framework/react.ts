@@ -53,11 +53,8 @@ function useTest() {
     const { done, value: line } = await generator.next();
     setIsDone(Boolean(done));
 
-    if (line !== undefined && Number.isFinite(line)) {
-      setCurrentLine(line);
-    } else {
-      setCurrentLine(undefined);
-    }
+    const hasLine = line !== undefined && Number.isFinite(line);
+    setCurrentLine(hasLine ? line : undefined);
   }
 
   async function run() {
