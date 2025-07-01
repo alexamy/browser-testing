@@ -51,11 +51,14 @@ function useTest() {
     setIsDone(Boolean(done));
   }
 
-  async function run() {
+  async function run(delay = 0) {
     if (!generator) return;
 
     for await (const line of generator) {
       setCurrentLine(line);
+      if (delay > 0) {
+        await new Promise((r) => setTimeout(r, delay));
+      }
     }
 
     setCurrentLine(undefined);
@@ -96,7 +99,7 @@ export function useTests() {
     test.restart();
 
     await runWithLogs(async () => {
-      await test.run();
+      await test.run(stepDelay);
     });
 
     logs.log('Completed!');
@@ -105,9 +108,6 @@ export function useTests() {
   async function step() {
     await runWithLogs(async () => {
       await test.step();
-      if (stepDelay > 0) {
-        await new Promise((r) => setTimeout(r, stepDelay));
-      }
     });
   }
 
