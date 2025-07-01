@@ -61,8 +61,8 @@ export function TestsUI() {
                   <input
                     type="number"
                     min={0}
-                    value={t.stepTime}
-                    onChange={(e) => t.setStepTime(parseInt(e.currentTarget.value))}
+                    value={t.stepDelay}
+                    onChange={(e) => t.setStepDelay(parseInt(e.currentTarget.value))}
                     style={{ width: '100px' }}
                   />
                 </label>

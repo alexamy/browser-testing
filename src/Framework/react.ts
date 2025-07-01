@@ -111,7 +111,7 @@ export function useTests() {
     });
   }
 
-  function setStepTime(time: number) {
+  function setStepDelayChecked(time: number) {
     if (time < 0) {
       throw new Error('Step time cannot be negative.');
     }
@@ -126,8 +126,8 @@ export function useTests() {
     select,
     restart,
 
-    stepTime: stepDelay,
-    setStepTime,
+    stepDelay,
+    setStepDelay: setStepDelayChecked,
 
     logs: logs.data,
     current: test.instance,
