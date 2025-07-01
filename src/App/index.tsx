@@ -7,7 +7,7 @@ export function App() {
   return (
     <>
       <Route path="/" component={TestsUI} />
-      <Route path="/home" component={Sandbox} />
+      <Route path="/sandbox" component={Sandbox} />
     </>
   );
 }
