@@ -26,7 +26,7 @@ function TestLine({ instance, onClick, selected }: TestLineProps) {
 export function TestsUI() {
   const t = useTests();
 
-  useBodyStyle('uiBody');
+  useBodyStyle('ui');
 
   return (
     <>
