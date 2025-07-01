@@ -126,6 +126,7 @@ export function useTests() {
     select,
     restart,
 
+    stepTime: stepDelay,
     setStepTime,
 
     logs: logs.data,
