@@ -2,7 +2,7 @@ import { type TestInstance } from '@framework/test';
 import { useTests } from '@framework/react';
 import { useEffect } from 'react';
 import s from './ui.module.css';
-import sRoot from './ui.module.css';
+import sBody from './uiBody.module.css';
 
 //#region TestLine
 interface TestLineProps {
@@ -28,7 +28,7 @@ export function TestsUI() {
   const t = useTests();
 
   useEffect(() => {
-    document.body.classList.add(sRoot.bodyStyle);
+    document.body.classList.add(sBody.bodyStyle);
   }, []);
 
   return (
