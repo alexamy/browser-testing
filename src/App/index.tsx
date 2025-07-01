@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { Route } from './Route';
 import s from './index.module.css';
+import './tests';
 
 export function App() {
   useEffect(() => {

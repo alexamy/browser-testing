@@ -1,7 +1,6 @@
 import { type TestInstance } from '@framework/test';
 import { useTests } from '@framework/react';
 import s from './index.module.css';
-import './tests';
 
 //#region TestLine
 interface TestLineProps {
