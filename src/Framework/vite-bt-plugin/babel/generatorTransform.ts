@@ -61,7 +61,7 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
 
     for (const expression of oldBody) {
       // Add yield and original expression
-      if (!expression.loc) return;
+      if (!expression.loc) continue;
       const line = expression.loc.start.line - startLine - 1;
       const yieldExpression = t.yieldExpression(t.numericLiteral(line));
       const yieldStatement = t.expressionStatement(yieldExpression);
