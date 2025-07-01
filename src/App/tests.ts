@@ -1,1 +1,1 @@
-import './Counter.bt';
+import './Counter/Counter.bt';
