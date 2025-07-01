@@ -102,7 +102,7 @@ export function useTests() {
 
   async function step() {
     await runWithLogs(async () => {
-      test.step();
+      await test.step();
     });
   }
 
