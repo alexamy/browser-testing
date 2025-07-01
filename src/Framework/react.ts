@@ -51,11 +51,14 @@ function useTest() {
     setIsDone(Boolean(done));
   }
 
-  async function run() {
+  async function run(delay = 0) {
     if (!generator) return;
 
     for await (const line of generator) {
       setCurrentLine(line);
+      if (delay > 0) {
+        await new Promise((r) => setTimeout(r, delay));
+      }
     }
 
     setCurrentLine(undefined);
@@ -68,6 +71,8 @@ function useTest() {
 export function useTests() {
   const logs = useLogs();
   const test = useTest();
+
+  const [stepDelay, setStepDelay] = useState(0);
 
   async function runWithLogs(f: () => void | Promise<void>) {
     try {
@@ -94,7 +99,7 @@ export function useTests() {
     test.restart();
 
     await runWithLogs(async () => {
-      await test.run();
+      await test.run(stepDelay);
     });
 
     logs.log('Completed!');
@@ -102,8 +107,16 @@ export function useTests() {
 
   async function step() {
     await runWithLogs(async () => {
-      test.step();
+      await test.step();
     });
+  }
+
+  function setStepDelayChecked(time: number) {
+    if (time < 0) {
+      throw new Error('Step time cannot be negative.');
+    }
+
+    setStepDelay(time);
   }
 
   return {
@@ -112,6 +125,9 @@ export function useTests() {
     step,
     select,
     restart,
+
+    stepDelay,
+    setStepDelay: setStepDelayChecked,
 
     logs: logs.data,
     current: test.instance,
