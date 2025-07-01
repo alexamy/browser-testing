@@ -1,7 +1,7 @@
 import { Route } from './Route';
 import { Sandbox } from './Sandbox';
-import './tests';
 import { TestsUI } from './UI';
+import './tests';
 
 export function App() {
   return (
