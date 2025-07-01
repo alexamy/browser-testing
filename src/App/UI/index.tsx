@@ -1,6 +1,8 @@
 import { type TestInstance } from '@framework/test';
 import { useTests } from '@framework/react';
-import s from './index.module.css';
+import { useEffect } from 'react';
+import s from './ui.module.css';
+import sRoot from './ui.module.css';
 
 //#region TestLine
 interface TestLineProps {
@@ -24,6 +26,10 @@ function TestLine({ instance, onClick, selected }: TestLineProps) {
 //#region TestsUI
 export function TestsUI() {
   const t = useTests();
+
+  useEffect(() => {
+    document.body.classList.add(sRoot.bodyStyle);
+  }, []);
 
   return (
     <>
