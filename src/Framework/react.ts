@@ -69,6 +69,8 @@ export function useTests() {
   const logs = useLogs();
   const test = useTest();
 
+  const [stepDelay, setStepDelay] = useState(0);
+
   async function runWithLogs(f: () => void | Promise<void>) {
     try {
       await f();
@@ -103,7 +105,18 @@ export function useTests() {
   async function step() {
     await runWithLogs(async () => {
       await test.step();
+      if (stepDelay > 0) {
+        await new Promise((r) => setTimeout(r, stepDelay));
+      }
     });
+  }
+
+  function setStepTime(time: number) {
+    if (time < 0) {
+      throw new Error('Step time cannot be negative.');
+    }
+
+    setStepDelay(time);
   }
 
   return {
@@ -112,6 +125,8 @@ export function useTests() {
     step,
     select,
     restart,
+
+    setStepTime,
 
     logs: logs.data,
     current: test.instance,
