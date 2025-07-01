@@ -22,22 +22,22 @@ body.ui-root {
   margin: 0;
   padding: 30px;
   max-width: 1024px;
-}
 
-p,
-h4 {
-  margin: 0.7rem 0;
-}
+  p,
+  h4 {
+    margin: 0.7rem 0;
+  }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
+  @media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+    a:hover {
+      color: #747bff;
+    }
+    button {
+      background-color: #f9f9f9;
+    }
   }
 }
