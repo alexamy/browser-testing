@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Route } from './Route';
+import s from './index.module.css';
 
 export function App() {
   useEffect(() => {
     const path = window.location.pathname;
 
     if (path === '/') {
-      document.body.classList.add('ui-root');
+      document.body.classList.add(s.uiRoot);
     }
   }, []);
 

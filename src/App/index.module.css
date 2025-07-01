@@ -1,37 +1,32 @@
-.testRoot {
-  width: 100%;
-  min-height: 500px;
-  background-color: #333;
-}
+.uiRoot {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-size: 18px;
+  font-weight: 400;
 
-.testLine:hover {
-  cursor: pointer;
-  text-decoration: underline;
-}
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
 
-.framework {
-  display: flex;
-  gap: 120px;
-  width: 100%;
-}
+  margin: 0;
+  padding: 30px;
+  max-width: 1024px;
 
-.testList {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+  p,
+  h4 {
+    margin: 0.7rem 0;
+  }
 
-.logList p {
-  margin: 0.2rem;
-}
-
-.codeLines pre {
-  margin: 0.2rem 0;
-  font-size: 0.85rem;
-  white-space: pre-line;
-}
-
-.codeButtons {
-  display: flex;
-  gap: 10px;
+  @media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+    a:hover {
+      color: #747bff;
+    }
+    button {
+      background-color: #f9f9f9;
+    }
+  }
 }

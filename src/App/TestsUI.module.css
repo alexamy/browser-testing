@@ -1,0 +1,37 @@
+.testRoot {
+  width: 100%;
+  min-height: 500px;
+  background-color: #333;
+}
+
+.testLine:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.framework {
+  display: flex;
+  gap: 120px;
+  width: 100%;
+}
+
+.testList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.logList p {
+  margin: 0.2rem;
+}
+
+.codeLines pre {
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+  white-space: pre-line;
+}
+
+.codeButtons {
+  display: flex;
+  gap: 10px;
+}
