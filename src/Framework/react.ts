@@ -25,7 +25,7 @@ function useLogs() {
   return { data, log, reset };
 }
 
-//#region useTests
+//#region useTest
 function useTest() {
   const [instance, setInstance] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
@@ -68,6 +68,7 @@ function useTest() {
   return { instance, currentLine, isDone, select, step, run, restart };
 }
 
+//#region useTests
 export function useTests() {
   const logs = useLogs();
   const test = useTest();
