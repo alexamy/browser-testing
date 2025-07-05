@@ -37,7 +37,7 @@ async function formatCode(code: string) {
   return withLastNewline;
 }
 
-it.only('duplicates method code', async () => {
+it('duplicates method code', async () => {
   const input = await readTsx('./fixtures/bodyDuplicator/input.fixture.tsx');
   const output = await readTsx('./fixtures/bodyDuplicator/output.fixture.tsx');
 
