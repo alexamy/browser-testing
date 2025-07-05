@@ -14,7 +14,7 @@ export interface TestInstance {
   description: string;
   id: string;
   lines: string[];
-  method: TestMethod;
+  generator: TestMethod;
 }
 
 interface TestGeneratedMeta {
@@ -65,7 +65,7 @@ export const tests: TestInstance[] = [];
 
 export function it(description: string, test: TestUserMethod, generatedMeta?: TestGeneratedMeta) {
   const meta = validateGeneratedMeta(generatedMeta);
-  const instance = { description, method: meta.generator, id: meta.id, lines: meta.lines };
+  const instance = { ...meta, description };
   tests.push(instance);
 }
 
