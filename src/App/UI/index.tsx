@@ -30,7 +30,6 @@ export function TestsUI() {
 
   return (
     <>
-      <div id="test-root" className={s.testRoot}></div>
       <iframe src="/sandbox" />
 
       <div className={s.framework}>
