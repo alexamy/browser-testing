@@ -1,5 +1,18 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`process inner blocks 1`] = `
+"describe('test group', () => {
+  it('checks', () => {
+    function y() {
+      console.log('hello');
+    }
+
+    const x = 1;
+    expect(1).toBe(1);
+  });
+});"
+`;
+
 exports[`transforms all language features properly 1`] = `
 "import { it } from '@framework';
 

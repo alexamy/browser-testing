@@ -77,3 +77,24 @@ it('runs plugin in proper order', async () => {
 
   expect(formatted).toEqual(output);
 });
+
+it('process inner blocks', async () => {
+  const input = await readTsx('./fixtures/indentation.fixture.tsx');
+
+  const transformed = await babel.transformAsync(input, {
+    filename: 'fixture.tsx',
+    presets: ['@babel/preset-typescript'],
+    plugins: [browserTestsBabelPlugin],
+    generatorOpts: {
+      retainLines: true,
+    },
+  });
+
+  if (!transformed || !transformed.code) {
+    throw new Error('Failed to transform code by Babel.');
+  }
+
+  const formatted = await formatCode(transformed.code);
+
+  expect(formatted).toMatchSnapshot();
+});
