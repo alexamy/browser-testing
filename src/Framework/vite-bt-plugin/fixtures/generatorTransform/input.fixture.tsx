@@ -67,4 +67,9 @@ it('increments', async () => {
   } finally {
     const z = 1;
   }
+
+  // function definition
+  function x() {
+    const x = 1;
+  }
 });

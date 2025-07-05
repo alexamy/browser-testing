@@ -98,5 +98,10 @@ it('increments', async function* test() {
     yield 59;
     const z = 1;
   }
+
+  // function definition
+  function x() {
+    const x = 1;
+  }
 });"
 `;

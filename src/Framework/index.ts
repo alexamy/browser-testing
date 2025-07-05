@@ -11,6 +11,7 @@ export interface TestInstance {
   description: string;
   method: TestMethod;
   lines: string[];
+  id: string;
 }
 
 export interface MakeTestSuiteOptions {
@@ -25,7 +26,11 @@ export interface RunTestOptions {
 //#region tests
 export const tests: TestInstance[] = [];
 
-function convertTestWithVitestPlugin(test: TestUserMethod, lines: string[]): TestMethod {
+function convertTestWithVitestPlugin(
+  test: TestUserMethod,
+  lines: string[],
+  id: string = ''
+): TestMethod {
   if (test.constructor.name !== 'AsyncGeneratorFunction') {
     throw new Error(
       'Found malformed test body. Check that Vite plugin is enabled and transpiles bt tests correctly.'
@@ -38,11 +43,22 @@ function convertTestWithVitestPlugin(test: TestUserMethod, lines: string[]): Tes
     );
   }
 
+  if (!id) {
+    throw new Error(
+      'Found empty id. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
   return test as unknown as TestMethod;
 }
 
-export function it(description: string, test: TestUserMethod, lines: string[] = []) {
-  const testGenerator = convertTestWithVitestPlugin(test, lines);
-  const instance = { description, lines, method: testGenerator };
+export function it(
+  description: string,
+  test: TestUserMethod,
+  lines: string[] = [],
+  id: string = ''
+) {
+  const testGenerator = convertTestWithVitestPlugin(test, lines, id);
+  const instance = { id, description, lines, method: testGenerator };
   tests.push(instance);
 }
