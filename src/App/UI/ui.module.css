@@ -1,3 +1,8 @@
+.frame {
+  width: 100%;
+  min-height: 300px;
+}
+
 .testRoot {
   width: 100%;
   min-height: 500px;
