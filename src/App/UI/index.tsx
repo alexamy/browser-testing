@@ -17,7 +17,7 @@ function TestLine({ instance, onClick, selected }: TestLineProps) {
       onClick={onClick}
       style={{ fontWeight: selected ? 'bold' : 'normal' }}
     >
-      {instance.description}{' '}
+      {instance.id} {instance.description}
     </div>
   );
 }
