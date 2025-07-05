@@ -58,6 +58,14 @@ it('transforms all language features properly', async () => {
   expect(output).toMatchSnapshot();
 });
 
+it('remove extra indentations for inner blocks', async () => {
+  const fixturePath = './fixtures/indentation.fixture.tsx';
+  const input = await readTsx(fixturePath);
+  const output = await transformCode(input);
+
+  expect(output).toMatchSnapshot();
+});
+
 it('runs plugin in proper order', async () => {
   const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
   const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
@@ -65,12 +73,4 @@ it('runs plugin in proper order', async () => {
   const transformed = await transformCode(input);
 
   expect(transformed).toEqual(output);
-});
-
-it('remove extra indentations for inner blocks', async () => {
-  const fixturePath = './fixtures/indentation.fixture.tsx';
-  const input = await readTsx(fixturePath);
-  const output = await transformCode(input);
-
-  expect(output).toMatchSnapshot();
 });
