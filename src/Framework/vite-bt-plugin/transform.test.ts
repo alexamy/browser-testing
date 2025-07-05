@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
-import browserTestsBabelPlugin from './babel';
+import browserTestsBabelPlugin from './babelBrowserTestsPlugin.ts';
 
 vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
   const mod = await importOriginal();

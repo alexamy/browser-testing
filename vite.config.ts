@@ -1,7 +1,7 @@
 import { defineConfig, type Plugin } from 'vitest/config';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { browserTestsPlugin } from './src/Framework/vite-bt-plugin/vite/plugin';
+import { browserTestsPlugin } from './src/Framework/vite-bt-plugin/viteBrowserTestsPlugin';
 
 function reloadPageOnHMR(): Plugin {
   return {
