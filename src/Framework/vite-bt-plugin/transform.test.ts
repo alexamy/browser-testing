@@ -78,7 +78,7 @@ it('runs plugin in proper order', async () => {
   expect(formatted).toEqual(output);
 });
 
-it('process inner blocks', async () => {
+it('remove extra indentations for inner blocks', async () => {
   const input = await readTsx('./fixtures/indentation.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {

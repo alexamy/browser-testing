@@ -2,7 +2,7 @@
 import { it, describe, expect } from '@framework';
 
 describe('test group', () => {
-  it('checks', () => {
+  it('checks', async () => {
     function y() {
       console.log('hello');
     }
