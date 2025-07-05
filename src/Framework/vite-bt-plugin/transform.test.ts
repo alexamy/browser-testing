@@ -38,7 +38,7 @@ async function formatCode(code: string) {
 }
 
 it('duplicates method code', async () => {
-  const input = await readTsx('./fixtures/bodyDuplicator/input.fixture.tsx');
+  const input = await readTsx('./fixtures/bodyDuplicator.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',
@@ -59,7 +59,7 @@ it('duplicates method code', async () => {
 });
 
 it('convert async function to async generator', async () => {
-  const input = await readTsx('./fixtures/generatorTransform/input.fixture.tsx');
+  const input = await readTsx('./fixtures/generatorTransform.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',
