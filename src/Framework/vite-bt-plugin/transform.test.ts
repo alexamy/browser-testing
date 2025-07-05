@@ -22,9 +22,24 @@ async function readTsx(filePath: string) {
   return lines;
 }
 
-// Format code with prettier to allow better DX with fixtures
-async function formatCode(code: string) {
-  const formatted = await prettier.format(code, {
+/** Transforms code with babel and format with prettier. */
+async function transformCode(code: string) {
+  // babel
+  const transformed = await babel.transformAsync(code, {
+    filename: 'fixture.tsx',
+    presets: ['@babel/preset-typescript'],
+    plugins: [browserTestsBabelPlugin],
+    generatorOpts: {
+      retainLines: true,
+    },
+  });
+
+  if (!transformed || !transformed.code) {
+    throw new Error('Failed to transform code by Babel.');
+  }
+
+  // prettier
+  const formatted = await prettier.format(transformed.code, {
     parser: 'babel',
     singleQuote: true,
     trailingComma: 'es5',
@@ -36,65 +51,26 @@ async function formatCode(code: string) {
 }
 
 it('transforms all language features properly', async () => {
-  const input = await readTsx('./fixtures/generatorTransform.fixture.tsx');
+  const fixturePath = './fixtures/generatorTransform.fixture.tsx';
+  const input = await readTsx(fixturePath);
+  const output = await transformCode(input);
 
-  const transformed = await babel.transformAsync(input, {
-    filename: 'fixture.tsx',
-    presets: ['@babel/preset-typescript'],
-    plugins: [browserTestsBabelPlugin],
-    generatorOpts: {
-      retainLines: true,
-    },
-  });
+  expect(output).toMatchSnapshot();
+});
 
-  if (!transformed || !transformed.code) {
-    throw new Error('Failed to transform code by Babel.');
-  }
+it('remove extra indentations for inner blocks', async () => {
+  const fixturePath = './fixtures/indentation.fixture.tsx';
+  const input = await readTsx(fixturePath);
+  const output = await transformCode(input);
 
-  const formatted = await formatCode(transformed.code);
-
-  expect(formatted).toMatchSnapshot();
+  expect(output).toMatchSnapshot();
 });
 
 it('runs plugin in proper order', async () => {
   const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
   const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
 
-  const transformed = await babel.transformAsync(input, {
-    filename: 'fixture.tsx',
-    presets: ['@babel/preset-typescript'],
-    plugins: [browserTestsBabelPlugin],
-    generatorOpts: {
-      retainLines: true,
-    },
-  });
+  const transformed = await transformCode(input);
 
-  if (!transformed || !transformed.code) {
-    throw new Error('Failed to transform code by Babel.');
-  }
-
-  const formatted = await formatCode(transformed.code);
-
-  expect(formatted).toEqual(output);
-});
-
-it('remove extra indentations for inner blocks', async () => {
-  const input = await readTsx('./fixtures/indentation.fixture.tsx');
-
-  const transformed = await babel.transformAsync(input, {
-    filename: 'fixture.tsx',
-    presets: ['@babel/preset-typescript'],
-    plugins: [browserTestsBabelPlugin],
-    generatorOpts: {
-      retainLines: true,
-    },
-  });
-
-  if (!transformed || !transformed.code) {
-    throw new Error('Failed to transform code by Babel.');
-  }
-
-  const formatted = await formatCode(transformed.code);
-
-  expect(formatted).toMatchSnapshot();
+  expect(transformed).toEqual(output);
 });
