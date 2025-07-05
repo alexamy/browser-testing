@@ -39,7 +39,6 @@ async function formatCode(code: string) {
 
 it('duplicates method code', async () => {
   const input = await readTsx('./fixtures/bodyDuplicator/input.fixture.tsx');
-  const output = await readTsx('./fixtures/bodyDuplicator/output.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',
@@ -56,7 +55,7 @@ it('duplicates method code', async () => {
 
   const formatted = await formatCode(transformed.code);
 
-  expect(formatted).toEqual(output);
+  expect(formatted).toMatchSnapshot();
 });
 
 it('convert async function to async generator', async () => {
