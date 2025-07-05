@@ -34,7 +34,7 @@ function useTest() {
 
   function select(test: TestInstance | undefined) {
     setInstance(test);
-    setGenerator(test?.method());
+    setGenerator(test?.generator());
     setCurrentLine(undefined);
     setIsDone(false);
   }
