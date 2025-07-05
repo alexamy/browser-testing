@@ -1,11 +1,19 @@
 import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
-import { expect, it } from 'vitest';
+import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
 import bodyDuplicatorPlugin from './babel/bodyDuplicator';
 import generatorTransformPlugin from './babel/generatorTransform';
 import browserTestsBabelPlugin from './babel';
+
+beforeEach(() => {
+  vi.spyOn(Math, 'random').mockImplementation(() => 0.42);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 // Read tsx and remove `@ts-nocheck` directive
 async function readTsx(filePath: string) {
