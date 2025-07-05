@@ -14,9 +14,15 @@ export function blockDuplicator(codeBlock: t.BlockStatement, sourceCode: string)
   // Get code for line numbers
   const sourceLines = sourceCode.split('\n');
   const codeLines = sourceLines.slice(start, end - 1);
-  const codeLinesIndent = codeLines.map((line) => line.replace(/^\s{2}/, ''));
+
+  // Remove extra indentation
+  const spaceRegex = / {0,}/;
+  const nonEmptyLines = codeLines.filter((line) => line);
+  const indentationLevels = nonEmptyLines.map((line) => line.match(spaceRegex)![0].length);
+  const startIndentation = Math.min(...indentationLevels);
 
   // Make the line contents array
+  const codeLinesIndent = codeLines.map((line) => line.substring(startIndentation));
   const lineContentLiterals = codeLinesIndent.map((line) => t.stringLiteral(line));
   const lineContentsArray = t.arrayExpression(lineContentLiterals);
 

@@ -1,7 +1,7 @@
-import { blockDuplicator } from './blockDuplicator';
-import { generatorTransform } from './generatorTransform';
+import { blockDuplicator } from './babel/blockDuplicator';
+import { generatorTransform } from './babel/generatorTransform';
 import { types as t } from '@babel/core';
-import { getRandomId } from './randomId';
+import { getRandomId } from './babel/randomId';
 
 export default function () {
   return {

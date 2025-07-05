@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
-import browserTestsBabelPlugin from './babel';
+import browserTestsBabelPlugin from './babelBrowserTestsPlugin.ts';
 
 vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
   const mod = await importOriginal();
@@ -76,4 +76,25 @@ it('runs plugin in proper order', async () => {
   const formatted = await formatCode(transformed.code);
 
   expect(formatted).toEqual(output);
+});
+
+it('remove extra indentations for inner blocks', async () => {
+  const input = await readTsx('./fixtures/indentation.fixture.tsx');
+
+  const transformed = await babel.transformAsync(input, {
+    filename: 'fixture.tsx',
+    presets: ['@babel/preset-typescript'],
+    plugins: [browserTestsBabelPlugin],
+    generatorOpts: {
+      retainLines: true,
+    },
+  });
+
+  if (!transformed || !transformed.code) {
+    throw new Error('Failed to transform code by Babel.');
+  }
+
+  const formatted = await formatCode(transformed.code);
+
+  expect(formatted).toMatchSnapshot();
 });
