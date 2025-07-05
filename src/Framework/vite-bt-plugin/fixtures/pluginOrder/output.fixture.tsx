@@ -39,16 +39,13 @@ it(
       yield 1;
       const count = screen.getByText('Count: 0');
       yield 3;
-
       const increment = screen.getByRole('button', { name: /Inc/ });
       yield 5;
-
       for (let i = 0; i < 3; i++) {
         yield 6;
         await userEvent.click(increment);
       }
       yield 9;
-
       expect(count.innerText).equals('Count: 3');
     },
   }
