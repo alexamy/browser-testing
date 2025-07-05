@@ -3,7 +3,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
-import bodyDuplicatorPlugin from './babel/bodyDuplicator';
+import bodyDuplicatorPlugin from './babel/blockDuplicator.ts';
 import generatorTransformPlugin from './babel/generatorTransform';
 import browserTestsBabelPlugin from './babel';
 
