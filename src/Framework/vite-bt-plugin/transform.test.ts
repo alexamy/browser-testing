@@ -1,11 +1,19 @@
 import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
-import { expect, it } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
 import bodyDuplicatorPlugin from './babel/bodyDuplicator';
 import generatorTransformPlugin from './babel/generatorTransform';
 import browserTestsBabelPlugin from './babel';
+
+vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
+  const mod = await importOriginal();
+  return {
+    ...mod,
+    getRandomId: vi.fn(() => '6b851eb851eb84'),
+  };
+});
 
 // Read tsx and remove `@ts-nocheck` directive
 async function readTsx(filePath: string) {
@@ -53,7 +61,6 @@ it('duplicates method code', async () => {
 
 it('convert async function to async generator', async () => {
   const input = await readTsx('./fixtures/generatorTransform/input.fixture.tsx');
-  // const output = await readTsx('./fixtures/generatorTransform/output.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',

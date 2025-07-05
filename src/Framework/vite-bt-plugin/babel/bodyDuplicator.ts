@@ -1,4 +1,5 @@
 import { types as t } from '@babel/core';
+import { getRandomId } from './randomId';
 
 // Duplicate the `it` second argument function body
 // to array of strings, provided as a third argument to `it` call.
@@ -46,4 +47,9 @@ export function bodyDuplicator(path: any) {
   const stringLiterals = codeLinesIndent.map((line) => t.stringLiteral(line));
   const lineContentsArray = t.arrayExpression(stringLiterals);
   path.node.arguments.push(lineContentsArray);
+
+  // Add the random id as the fourth argument
+  const randomId = getRandomId();
+  const idArgument = t.stringLiteral(randomId);
+  path.node.arguments.push(idArgument);
 }

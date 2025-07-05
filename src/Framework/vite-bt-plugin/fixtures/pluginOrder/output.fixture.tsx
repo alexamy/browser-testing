@@ -36,5 +36,6 @@ it(
     '}',
     '',
     "expect(count.innerText).equals('Count: 3');",
-  ]
+  ],
+  '6b851eb851eb84'
 );
