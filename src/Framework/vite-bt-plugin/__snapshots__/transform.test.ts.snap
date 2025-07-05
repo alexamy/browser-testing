@@ -1,112 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`convert async function to async generator 1`] = `
-"import { it } from '@framework';
-
-const x = 1;
-const y = 2;
-
-it('increments', async function* test() {
-  yield 0;
-  const screen = render(<Counter start={0} />);
-  yield 1;
-  const count = screen.getByText('Count: 0');
-  yield 3;
-
-  const increment = screen.getByRole('button', { name: /Inc/ });
-  yield 4;
-  expect(count.innerText).equals('Count: 3');
-
-  //#region conditionals
-  yield 7;
-  if (true) {
-    yield 8;
-    const x = 1;
-  } else {
-    yield 10;
-    const y = 1;
-  }
-  yield 13;
-
-  if (true) f();
-  yield 15;
-
-  if (true) f();
-  else f();
-  yield 18;
-
-  true ? f() : f();
-
-  //#region cycles
-  yield 21;
-  for (let i = 0; i < 3; i++) await userEvent.click(increment);
-  yield 23;
-
-  for (let i = 0; i < 3; i++) {
-    yield 24;
-    await userEvent.click(increment);
-  }
-  yield 27;
-
-  while (conidition) await f();
-  yield 28;
-  while (conidition) {
-    yield 29;
-    await f();
-  }
-
-  // also for-in, for-of, do-while are implemented in transform logic
-
-  //#region switch
-  yield 35;
-  switch (x) {
-    case 1:
-      yield 37;
-      await userEvent.click(increment);
-      yield 38;
-      break;
-    default:
-      yield 40;
-      await userEvent.click(increment);
-      yield 41;
-      if (condition) {
-        yield 42;
-        console.log('');
-      }
-      yield 44;
-      break;
-  }
-
-  // simple block
-  yield 48;
-  {
-    yield 49;
-    const x = 1;
-    yield 50;
-    x += 1;
-  }
-
-  // Exceptions
-  yield 54;
-  try {
-    yield 55;
-    const x = 1;
-  } catch {
-    yield 57;
-    const y = 1;
-  } finally {
-    yield 59;
-    const z = 1;
-  }
-
-  // function definition
-  function x() {
-    const x = 1;
-  }
-});"
-`;
-
-exports[`duplicates method code 1`] = `
+exports[`transforms all language features properly 1`] = `
 "import { it } from '@framework';
 
 const x = 1;
@@ -119,12 +13,68 @@ it(
     const count = screen.getByText('Count: 0');
 
     const increment = screen.getByRole('button', { name: /Inc/ });
+    expect(count.innerText).equals('Count: 3');
+
+    //#region conditionals
+    if (true) {
+      const x = 1;
+    } else {
+      const y = 1;
+    }
+
+    if (true) f();
+
+    if (true) f();
+    else f();
+
+    true ? f() : f();
+
+    //#region cycles
+    for (let i = 0; i < 3; i++) await userEvent.click(increment);
 
     for (let i = 0; i < 3; i++) {
       await userEvent.click(increment);
     }
 
-    expect(count.innerText).equals('Count: 3');
+    while (conidition) await f();
+    while (conidition) {
+      await f();
+    }
+
+    // also for-in, for-of, do-while are implemented in transform logic
+
+    //#region switch
+    switch (x) {
+      case 1:
+        await userEvent.click(increment);
+        break;
+      default:
+        await userEvent.click(increment);
+        if (condition) {
+          console.log('');
+        }
+        break;
+    }
+
+    // simple block
+    {
+      const x = 1;
+      x += 1;
+    }
+
+    // Exceptions
+    try {
+      const x = 1;
+    } catch {
+      const y = 1;
+    } finally {
+      const z = 1;
+    }
+
+    // function definition
+    function x() {
+      const x = 1;
+    }
   },
   {
     id: '6b851eb851eb84',
@@ -133,13 +83,148 @@ it(
       "const count = screen.getByText('Count: 0');",
       '',
       "const increment = screen.getByRole('button', { name: /Inc/ });",
+      "expect(count.innerText).equals('Count: 3');",
+      '',
+      '//#region conditionals',
+      'if (true) {',
+      '  const x = 1;',
+      '} else {',
+      '  const y = 1;',
+      '}',
+      '',
+      'if (true) f();',
+      '',
+      'if (true) f();',
+      'else f();',
+      '',
+      'true ? f() : f();',
+      '',
+      '//#region cycles',
+      'for (let i = 0; i < 3; i++) await userEvent.click(increment);',
       '',
       'for (let i = 0; i < 3; i++) {',
       '  await userEvent.click(increment);',
       '}',
       '',
-      "expect(count.innerText).equals('Count: 3');",
+      'while (conidition) await f();',
+      'while (conidition) {',
+      '  await f();',
+      '}',
+      '',
+      '// also for-in, for-of, do-while are implemented in transform logic',
+      '',
+      '//#region switch',
+      'switch (x) {',
+      '  case 1:',
+      '    await userEvent.click(increment);',
+      '    break;',
+      '  default:',
+      '    await userEvent.click(increment);',
+      '    if (condition) {',
+      "      console.log('');",
+      '    }',
+      '    break;',
+      '}',
+      '',
+      '// simple block',
+      '{',
+      '  const x = 1;',
+      '  x += 1;',
+      '}',
+      '',
+      '// Exceptions',
+      'try {',
+      '  const x = 1;',
+      '} catch {',
+      '  const y = 1;',
+      '} finally {',
+      '  const z = 1;',
+      '}',
+      '',
+      '// function definition',
+      'function x() {',
+      '  const x = 1;',
+      '}',
     ],
+    generator: async function* test() {
+      yield 0;
+      const screen = render(<Counter start={0} />);
+      yield 1;
+      const count = screen.getByText('Count: 0');
+      yield 3;
+      const increment = screen.getByRole('button', { name: /Inc/ });
+      yield 4;
+      expect(count.innerText).equals('Count: 3'); //#region conditionals
+      yield 7;
+      if (true) {
+        yield 8;
+        const x = 1;
+      } else {
+        yield 10;
+        const y = 1;
+      }
+      yield 13;
+      if (true) f();
+      yield 15;
+      if (true) f();
+      else f();
+      yield 18;
+      true ? f() : f(); //#region cycles
+      yield 21;
+      for (let i = 0; i < 3; i++) await userEvent.click(increment);
+      yield 23;
+      for (let i = 0; i < 3; i++) {
+        yield 24;
+        await userEvent.click(increment);
+      }
+      yield 27;
+      while (conidition) await f();
+      yield 28;
+      while (conidition) {
+        yield 29;
+        await f();
+      } // also for-in, for-of, do-while are implemented in transform logic
+      //#region switch
+      yield 35;
+      switch (x) {
+        case 1:
+          yield 37;
+          await userEvent.click(increment);
+          yield 38;
+          break;
+        default:
+          yield 40;
+          await userEvent.click(increment);
+          yield 41;
+          if (condition) {
+            yield 42;
+            console.log('');
+          }
+          yield 44;
+          break;
+      } // simple block
+      yield 48;
+      {
+        yield 49;
+        const x = 1;
+        yield 50;
+        x += 1;
+      } // Exceptions
+      yield 54;
+      try {
+        yield 55;
+        const x = 1;
+      } catch {
+        yield 57;
+        const y = 1;
+      } finally {
+        yield 59;
+        const z = 1;
+      } // function definition
+      function x() {
+        const x = 1;
+      }
+    },
   }
 );"
 `;

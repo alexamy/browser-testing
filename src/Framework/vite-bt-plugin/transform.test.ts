@@ -3,8 +3,6 @@ import fs from 'fs/promises';
 import path from 'path';
 import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
-import bodyDuplicatorPlugin from './babel/blockDuplicator.ts';
-import generatorTransformPlugin from './babel/generatorTransform';
 import browserTestsBabelPlugin from './babel';
 
 vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
@@ -37,34 +35,13 @@ async function formatCode(code: string) {
   return withLastNewline;
 }
 
-it('duplicates method code', async () => {
-  const input = await readTsx('./fixtures/bodyDuplicator.fixture.tsx');
-
-  const transformed = await babel.transformAsync(input, {
-    filename: 'fixture.tsx',
-    presets: ['@babel/preset-typescript'],
-    plugins: [bodyDuplicatorPlugin],
-    generatorOpts: {
-      retainLines: true,
-    },
-  });
-
-  if (!transformed || !transformed.code) {
-    throw new Error('Failed to transform code by Babel.');
-  }
-
-  const formatted = await formatCode(transformed.code);
-
-  expect(formatted).toMatchSnapshot();
-});
-
-it('convert async function to async generator', async () => {
+it('transforms all language features properly', async () => {
   const input = await readTsx('./fixtures/generatorTransform.fixture.tsx');
 
   const transformed = await babel.transformAsync(input, {
     filename: 'fixture.tsx',
     presets: ['@babel/preset-typescript'],
-    plugins: [generatorTransformPlugin],
+    plugins: [browserTestsBabelPlugin],
     generatorOpts: {
       retainLines: true,
     },
@@ -79,7 +56,7 @@ it('convert async function to async generator', async () => {
   expect(formatted).toMatchSnapshot();
 });
 
-it.only('runs plugin in proper order', async () => {
+it('runs plugin in proper order', async () => {
   const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
   const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
 
