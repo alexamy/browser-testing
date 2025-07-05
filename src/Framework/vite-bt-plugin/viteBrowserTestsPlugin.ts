@@ -1,6 +1,6 @@
 import * as babel from '@babel/core';
 import { type Plugin } from 'vite';
-import browserTestsBabelPlugin from '../babel';
+import browserTestsBabelPlugin from './babelBrowserTestsPlugin';
 
 interface PluginOptions {
   includes?: RegExp;

@@ -9,14 +9,15 @@ export type TestMethod = (opts?: TestOptions) => TestGenerator;
 
 export interface TestInstance {
   description: string;
-  method: TestMethod;
-  lines: string[];
   id: string;
+  lines: string[];
+  generator: TestMethod;
 }
 
 interface TestGeneratedMeta {
   id: string;
   lines: string[];
+  generator: TestMethod;
 }
 
 export interface MakeTestSuiteOptions {
@@ -29,7 +30,7 @@ export interface RunTestOptions {
 }
 
 //#region tests
-function convertTestWithVitestPlugin(test: TestUserMethod, meta: TestGeneratedMeta | undefined) {
+function validateGeneratedMeta(meta: TestGeneratedMeta | undefined) {
   if (!meta) {
     throw new Error(
       'No meta provided. Check that Vite plugin is enabled and transpiles bt tests correctly.'
@@ -48,22 +49,19 @@ function convertTestWithVitestPlugin(test: TestUserMethod, meta: TestGeneratedMe
     );
   }
 
-  if (test.constructor.name !== 'AsyncGeneratorFunction') {
+  if (meta.generator.constructor.name !== 'AsyncGeneratorFunction') {
     throw new Error(
       'Found malformed test body. Check that Vite plugin is enabled and transpiles bt tests correctly.'
     );
   }
 
-  return {
-    method: test as unknown as TestMethod,
-    meta,
-  };
+  return meta;
 }
 
 export const tests: TestInstance[] = [];
 
 export function it(description: string, test: TestUserMethod, generatedMeta?: TestGeneratedMeta) {
-  const { method, meta } = convertTestWithVitestPlugin(test, generatedMeta);
-  const instance = { description, method, id: meta.id, lines: meta.lines };
+  const meta = validateGeneratedMeta(generatedMeta);
+  const instance = { ...meta, description };
   tests.push(instance);
 }
