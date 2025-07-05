@@ -17,6 +17,11 @@ export interface TestInstance {
   id: string;
 }
 
+interface TestGeneratedMeta {
+  id: string;
+  lines: string[];
+}
+
 export interface MakeTestSuiteOptions {
   mountId: string;
 }
@@ -27,42 +32,42 @@ export interface RunTestOptions {
 }
 
 //#region tests
-export const tests: TestInstance[] = [];
+function convertTestWithVitestPlugin(test: TestUserMethod, meta: TestGeneratedMeta | undefined) {
+  if (!meta) {
+    throw new Error(
+      'No meta provided. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
 
-function convertTestWithVitestPlugin(
-  test: TestUserMethod,
-  lines: string[],
-  id: string = ''
-): TestMethod {
+  if (!meta.id) {
+    throw new Error(
+      'Found empty id. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
+  if (meta.lines.length === 0) {
+    throw new Error(
+      'Found empty test body source. Check that Vite plugin is enabled and transpiles bt tests correctly.'
+    );
+  }
+
   if (test.constructor.name !== 'AsyncGeneratorFunction') {
     throw new Error(
       'Found malformed test body. Check that Vite plugin is enabled and transpiles bt tests correctly.'
     );
   }
 
-  if (lines.length === 0) {
-    throw new Error(
-      'Found empty test body source. Check that Vite plugin is enabled and transpiles bt tests correctly.'
-    );
-  }
-
-  if (!id) {
-    throw new Error(
-      'Found empty id. Check that Vite plugin is enabled and transpiles bt tests correctly.'
-    );
-  }
-
-  return test as unknown as TestMethod;
+  return {
+    method: test as unknown as TestMethod,
+    meta,
+  };
 }
 
-export function it(
-  description: string,
-  test: TestUserMethod,
-  lines: string[] = [],
-  id: string = ''
-) {
-  const testGenerator = convertTestWithVitestPlugin(test, lines, id);
-  const instance = { id, description, lines, method: testGenerator };
+export const tests: TestInstance[] = [];
+
+export function it(description: string, test: TestUserMethod, generatedMeta?: TestGeneratedMeta) {
+  const { method, meta } = convertTestWithVitestPlugin(test, generatedMeta);
+  const instance = { description, method, id: meta.id, lines: meta.lines };
   tests.push(instance);
 }
 
