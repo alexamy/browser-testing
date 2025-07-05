@@ -1,36 +1,16 @@
 import { types as t } from '@babel/core';
 
-// Transform second argument of `it` from async function to async generator,
-// yielding line number for each statement.
-export default function generatorTransformPlugin() {
-  return {
-    name: 'test function generator',
-    visitor: {
-      CallExpression: generatorTransform,
-    },
-  };
-}
+/**  Transform function to an async generator, yielding line number for each statement. */
+export function generatorTransform(fn: t.ArrowFunctionExpression | t.FunctionExpression) {
+  // Make a copy
+  const funcBody = structuredClone(fn.body);
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function generatorTransform(path: any) {
-  // Check if this is an 'it' call with exactly 2 arguments
-  const isItCall = t.isIdentifier(path.node.callee, { name: 'it' });
-  const hasTwoArguments = path.node.arguments.length === 2;
-  const isTestFunction = isItCall && hasTwoArguments;
-  if (!isTestFunction) return;
-
-  // Check if the second argument is an async arrow function or function expression
-  const secondArg = path.node.arguments[1];
-  const isFunction = t.isArrowFunctionExpression(secondArg) || t.isFunctionExpression(secondArg);
-  const isProperMethod = isFunction && secondArg.async;
-  if (!isProperMethod) return;
-
-  // Check function body
-  const funcBody = secondArg.body;
+  // Check that function has loc info
   if (!funcBody.loc) {
     throw new Error('No function body line of code property found.');
   }
 
+  // Check that function body is a block statement
   if (!t.isBlockStatement(funcBody)) {
     throw new Error('Function body must be the block statement.');
   }
@@ -42,14 +22,13 @@ export function generatorTransform(path: any) {
   // Change function to a async generator
   const generatorFunction = t.functionExpression(
     t.identifier('test'), // function name
-    secondArg.params, // keep same parameters
+    fn.params, // keep same parameters
     funcBody, // body
     true, // generator: true
     true // async: true
   );
 
-  // Replace the arrow function with the generator function
-  path.node.arguments[1] = generatorFunction;
+  return generatorFunction;
 }
 
 function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) {
