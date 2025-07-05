@@ -2,14 +2,31 @@
 
 exports[`process inner blocks 1`] = `
 "describe('test group', () => {
-  it('checks', () => {
-    function y() {
-      console.log('hello');
-    }
+  it(
+    'checks',
+    () => {
+      function y() {
+        console.log(1);
+      }
 
-    const x = 1;
-    expect(1).toBe(1);
-  });
+      const x = 1;
+      expect(1).toBe(1);
+    },
+    {
+      id: '6b851eb851eb84',
+      lines: ['function y() {', '  console.log(1);', '}', '', 'const x = 1;', 'expect(1).toBe(1);'],
+      generator: async function* test() {
+        function y() {
+          console.log(1);
+        }
+
+        yield 4;
+        const x = 1;
+        yield 5;
+        expect(1).toBe(1);
+      },
+    }
+  );
 });"
 `;
 
