@@ -1,18 +1,18 @@
 import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
-import { afterEach, beforeEach, expect, it, vi } from 'vitest';
+import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
 import bodyDuplicatorPlugin from './babel/bodyDuplicator';
 import generatorTransformPlugin from './babel/generatorTransform';
 import browserTestsBabelPlugin from './babel';
 
-beforeEach(() => {
-  vi.spyOn(Math, 'random').mockImplementation(() => 0.42);
-});
-
-afterEach(() => {
-  vi.restoreAllMocks();
+vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
+  const mod = await importOriginal();
+  return {
+    ...mod,
+    getRandomId: vi.fn(() => '6b851eb851eb84'),
+  };
 });
 
 // Read tsx and remove `@ts-nocheck` directive
