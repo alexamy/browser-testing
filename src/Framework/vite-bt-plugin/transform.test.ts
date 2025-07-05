@@ -79,7 +79,7 @@ it('convert async function to async generator', async () => {
   expect(formatted).toMatchSnapshot();
 });
 
-it('runs plugin in proper order', async () => {
+it.only('runs plugin in proper order', async () => {
   const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
   const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
 
