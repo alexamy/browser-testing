@@ -60,10 +60,10 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
     const oldBody = t.isSwitchCase(block) ? block.consequent : block.body;
 
     for (const expression of oldBody) {
-      // Add yield and original expression
+      // Skip expression without line of code information
       if (!expression.loc) continue;
 
-      // skip function definition
+      // Append yield, except some blocks
       if (!t.isFunctionDeclaration(expression)) {
         const line = expression.loc.start.line - startLine - 1;
         const yieldExpression = t.yieldExpression(t.numericLiteral(line));
@@ -71,6 +71,7 @@ function addYieldsAt(block: t.BlockStatement | t.SwitchCase, startLine: number) 
         newBody.push(yieldStatement);
       }
 
+      // Append original expression
       newBody.push(expression);
 
       // Recursively call add yields for inner blocks
