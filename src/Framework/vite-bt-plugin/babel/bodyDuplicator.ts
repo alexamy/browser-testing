@@ -43,13 +43,19 @@ export function bodyDuplicator(path: any) {
   const codeLines = sourceLines.slice(start, end - 1);
   const codeLinesIndent = codeLines.map((line) => line.replace(/^\s{2}/, ''));
 
-  // Add the line contents array as the third argument
-  const stringLiterals = codeLinesIndent.map((line) => t.stringLiteral(line));
-  const lineContentsArray = t.arrayExpression(stringLiterals);
-  path.node.arguments.push(lineContentsArray);
+  // Make the line contents array
+  const lineContentLiterals = codeLinesIndent.map((line) => t.stringLiteral(line));
+  const lineContentsArray = t.arrayExpression(lineContentLiterals);
 
-  // Add the random id as the fourth argument
+  // Make the random id
   const randomId = getRandomId();
-  const idArgument = t.stringLiteral(randomId);
-  path.node.arguments.push(idArgument);
+  const randomIdLiteral = t.stringLiteral(randomId);
+
+  // Make object argument
+  const extraArg = t.objectExpression([
+    t.objectProperty(t.stringLiteral('id'), randomIdLiteral),
+    t.objectProperty(t.stringLiteral('lines'), lineContentsArray),
+  ]);
+
+  path.node.arguments.push(extraArg);
 }
