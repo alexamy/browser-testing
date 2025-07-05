@@ -39,7 +39,7 @@ async function transformCode(code: string) {
   }
 
   // prettier
-  const formatted = await prettier.format(code, {
+  const formatted = await prettier.format(transformed.code, {
     parser: 'babel',
     singleQuote: true,
     trailingComma: 'es5',
