@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`process inner blocks 1`] = `
+exports[`remove extra indentations for inner blocks 1`] = `
 "describe('test group', () => {
   it(
     'checks',
@@ -21,114 +21,6 @@ exports[`process inner blocks 1`] = `
         '',
         'const x = 1;',
         'expect(1).toBe(1);',
-      ],
-      generator: async function* test() {
-        function y() {
-          console.log('hello');
-        }
-        yield 4;
-        const x = 1;
-        yield 5;
-        expect(1).toBe(1);
-      },
-    }
-  );
-});"
-`;
-
-exports[`remove extra indentation for inner blocks 1`] = `
-"describe('test group', () => {
-  it(
-    'checks',
-    async () => {
-      function y() {
-        console.log('hello');
-      }
-
-      const x = 1;
-      expect(1).toBe(1);
-    },
-    {
-      id: '6b851eb851eb84',
-      lines: [
-        '  function y() {',
-        "    console.log('hello');",
-        '  }',
-        '',
-        '  const x = 1;',
-        '  expect(1).toBe(1);',
-      ],
-      generator: async function* test() {
-        function y() {
-          console.log('hello');
-        }
-        yield 4;
-        const x = 1;
-        yield 5;
-        expect(1).toBe(1);
-      },
-    }
-  );
-});"
-`;
-
-exports[`remove extra indentations for inner blocks 1`] = `
-"describe('test group', () => {
-  it(
-    'checks',
-    async () => {
-      function y() {
-        console.log('hello');
-      }
-
-      const x = 1;
-      expect(1).toBe(1);
-    },
-    {
-      id: '6b851eb851eb84',
-      lines: [
-        '  function y() {',
-        "    console.log('hello');",
-        '  }',
-        '',
-        '  const x = 1;',
-        '  expect(1).toBe(1);',
-      ],
-      generator: async function* test() {
-        function y() {
-          console.log('hello');
-        }
-        yield 4;
-        const x = 1;
-        yield 5;
-        expect(1).toBe(1);
-      },
-    }
-  );
-});"
-`;
-
-exports[`remove more extra indentation for inner blocks 1`] = `
-"describe('test group', () => {
-  it(
-    'checks',
-    async () => {
-      function y() {
-        console.log('hello');
-      }
-
-      const x = 1;
-      expect(1).toBe(1);
-    },
-    {
-      id: '6b851eb851eb84',
-      lines: [
-        '  function y() {',
-        "    console.log('hello');",
-        '  }',
-        '',
-        '  const x = 1;',
-        '  expect(1).toBe(1);',
       ],
       generator: async function* test() {
         function y() {
