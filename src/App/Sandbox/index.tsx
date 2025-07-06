@@ -17,14 +17,13 @@ function useParent() {
   return parent;
 }
 
-// Empty container to run tests
-export function Sandbox() {
+function useMessageListener(test: ReturnType<typeof useTest>) {
   const tests = useTestsRegistry();
-  const test = useTest();
-  const parent = useParent();
 
   useEffect(() => {
     function listener({ data }: MessageEvent<RunnerEvent>) {
+      console.log('sandbox', data);
+
       if (data.type === 'select') {
         const instance = tests[data.testId];
         test.select(instance);
@@ -37,6 +36,13 @@ export function Sandbox() {
 
     return () => window.removeEventListener('message', listener);
   }, [test, tests]);
+}
+
+// Empty container to run tests
+export function Sandbox() {
+  const parent = useParent();
+  const test = useTest();
+  useMessageListener(test);
 
   useEffect(() => {
     parent?.postMessage({
