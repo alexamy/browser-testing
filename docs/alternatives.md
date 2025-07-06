@@ -41,8 +41,8 @@ import '@testing-library/jest-dom/vitest';
 ```tsx
 import { cleanup, render } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Counter } from './Counter';
 import { afterEach, expect, it } from 'vitest';
+import { Counter } from './Counter';
 
 afterEach(cleanup);
 
@@ -88,9 +88,9 @@ export default defineConfig({
 `Counter.test.tsx`:
 
 ```tsx
+import { expect, it } from 'vitest';
 import { render } from 'vitest-browser-react';
 import { Counter } from './Counter';
-import { expect, it } from 'vitest';
 
 it('increments', async () => {
   const screen = render(<Counter start={0} />);
