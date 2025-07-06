@@ -30,7 +30,7 @@ function useLogs() {
 }
 
 //#region useTest
-function useTest() {
+export function useTest() {
   const [instance, setInstance] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
   const [currentLine, setCurrentLine] = useState<number>();
