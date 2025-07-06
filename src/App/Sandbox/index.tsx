@@ -25,10 +25,10 @@ export function Sandbox() {
 
   useEffect(() => {
     function listener({ data }: MessageEvent<RunnerEvent>) {
-      if (data.type === 'select-test') {
+      if (data.type === 'select') {
         const instance = tests[data.testId];
         test.select(instance);
-      } else if (data.type === 'start-test') {
+      } else if (data.type === 'start') {
         test.start();
       }
     }
