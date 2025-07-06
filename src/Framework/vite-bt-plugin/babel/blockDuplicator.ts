@@ -2,18 +2,8 @@ import { types as t } from '@babel/core';
 
 /** Transform code block to an array of strings. */
 export function blockDuplicator(codeBlock: t.BlockStatement, sourceCode: string) {
-  // Check that function has loc info
-  if (!codeBlock.loc) {
-    throw new Error('No function body line of code property found.');
-  }
-
-  // Get line numbers of block
-  const start = codeBlock.loc.start.line;
-  const end = codeBlock.loc.end.line;
-
-  // Get code for line numbers
-  const sourceLines = sourceCode.split('\n');
-  const codeLines = sourceLines.slice(start, end - 1);
+  // Get source code
+  const codeLines = extractSourceCode(codeBlock, sourceCode);
 
   // Remove extra indentation
   const spaceRegex = / {0,}/;
@@ -27,4 +17,21 @@ export function blockDuplicator(codeBlock: t.BlockStatement, sourceCode: string)
   const lineContentsArray = t.arrayExpression(lineContentLiterals);
 
   return lineContentsArray;
+}
+
+export function extractSourceCode(statement: t.Statement, sourceCode: string) {
+  // Check that function has loc info
+  if (!statement.loc) {
+    throw new Error('No function body line of code property found.');
+  }
+
+  // Get line numbers of block
+  const start = statement.loc.start.line;
+  const end = statement.loc.end.line;
+
+  // Get code for line numbers
+  const sourceLines = sourceCode.split('\n');
+  const codeLines = sourceLines.slice(start, end - 1);
+
+  return codeLines;
 }
