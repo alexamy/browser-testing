@@ -71,9 +71,9 @@ export function TestsUI() {
           </div>
           <div className={s.codeLines}>
             {t.current
-              ? t.current.lines.map((source, i) => (
+              ? t.current.source.map((line, i) => (
                   <pre key={i} style={{ fontWeight: i === t.currentLine ? 'bold' : 'normal' }}>
-                    {source}
+                    {line}
                   </pre>
                 ))
               : null}

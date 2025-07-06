@@ -13,13 +13,13 @@ export type TestMethod = (opts?: TestOptions) => TestGenerator;
 export interface TestInstance {
   description: string;
   id: string;
-  lines: string[];
+  source: string[];
   generator: TestMethod;
 }
 
 interface TestGeneratedMeta {
   id: string;
-  lines: string[];
+  source: string[];
   generator: TestMethod;
 }
 
@@ -46,7 +46,7 @@ function validateGeneratedMeta(meta: TestGeneratedMeta | undefined) {
     );
   }
 
-  if (meta.lines.length === 0) {
+  if (meta.source.length === 0) {
     throw new Error(
       'Found empty test body source. Check that Vite plugin is enabled and transpiles bt tests correctly.'
     );
