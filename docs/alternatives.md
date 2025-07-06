@@ -1,5 +1,10 @@
 # Other ways to test components in the browser
 
+In almost all scenarios testing library is used:
+
+- [Testing library React](https://testing-library.com/docs/react-testing-library/intro)
+- [Testing library User event](https://testing-library.com/docs/user-event/intro)
+
 ## Vitest + `happy-dom` / `jsdom`
 
 - [Vitest](https://vitest.dev/guide/)
