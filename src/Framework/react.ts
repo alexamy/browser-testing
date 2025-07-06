@@ -2,6 +2,10 @@ import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
 
+export function useTestsRegistry() {
+  return tests;
+}
+
 //#region useLogs
 function processLogMessage(arg: unknown) {
   const lines =
