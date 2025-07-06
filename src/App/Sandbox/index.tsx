@@ -1,6 +1,6 @@
 import { type TestInstance } from '@framework/test';
 import { useEffect, useState } from 'react';
-import type { IpcEvent } from '../ipc';
+import type { SandboxEvent } from '../ipc';
 
 function useParent() {
   const [parent, setParent] = useState<Window>();
@@ -24,9 +24,9 @@ export function Sandbox() {
 
   useEffect(() => {
     parent?.postMessage({
-      type: 'change-progress',
+      type: 'progress-changed',
       inProgress,
-    } satisfies IpcEvent);
+    } satisfies SandboxEvent);
   }, [parent, inProgress]);
 
   return <></>;

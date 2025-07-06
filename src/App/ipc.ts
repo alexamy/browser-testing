@@ -1,1 +1,1 @@
-export type IpcEvent = { type: 'change-progress'; inProgress: boolean };
+export type SandboxEvent = { type: 'progress-changed'; inProgress: boolean };
