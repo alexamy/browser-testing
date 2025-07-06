@@ -1,7 +1,8 @@
+import { types as t } from '@babel/core';
+import { generate } from '@babel/generator';
 import { blockDuplicator } from './babel/blockDuplicator';
 import { generatorTransform } from './babel/generatorTransform';
-import { types as t } from '@babel/core';
-import { getRandomId } from './babel/randomId';
+import crypto from 'node:crypto';
 
 export default function () {
   return {
@@ -36,12 +37,13 @@ function callTransformer(path: any) {
   const generator = generatorTransform(testFn);
 
   // Make the random id
-  const randomId = getRandomId();
-  const randomIdLiteral = t.stringLiteral(randomId);
+  const fnSourceCode = generate(path.node).code.replaceAll(/\s+/g, '');
+  const hash = crypto.createHash('sha256').update(fnSourceCode).digest('hex').substring(0, 12);
+  const hashLiteral = t.stringLiteral(hash);
 
   // Make object argument
   const extraArg = t.objectExpression([
-    t.objectProperty(t.stringLiteral('id'), randomIdLiteral),
+    t.objectProperty(t.stringLiteral('id'), hashLiteral),
     t.objectProperty(t.stringLiteral('source'), codeStrings),
     t.objectProperty(t.stringLiteral('generator'), generator),
   ]);

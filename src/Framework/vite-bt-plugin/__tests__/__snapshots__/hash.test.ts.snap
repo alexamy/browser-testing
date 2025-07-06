@@ -1,0 +1,121 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`calculates persistent hash based on test source code, excluding extra indentation 1`] = `
+"// id #1
+it(
+  'description',
+  () => {
+    const x = 1;
+  },
+  {
+    id: 'de517f387b01',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// id #1 - persist for the same call
+it(
+  'description',
+  () => {
+    const x = 1;
+  },
+  {
+    id: 'de517f387b01',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// id #1 - doesn't depend on spaces newlines etc
+// prettier-ignore
+it('description', () => {const x = 1;}, { "id": "de517f387b01", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
+
+describe('group', () => {
+  // id #1 - doesn't depend on indentation
+  it(
+    'description',
+    () => {
+      const x = 1;
+    },
+    {
+      id: 'de517f387b01',
+      source: ['const x = 1;'],
+      generator: async function* test() {
+        yield 0;
+        const x = 1;
+      },
+    }
+  );
+});
+
+// id #2 - depends on description
+it(
+  'description 2',
+  () => {
+    const x = 1;
+  },
+  {
+    id: '0cb0e10a8116',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// id #3 - depends on test body
+it(
+  'description',
+  () => {
+    const y = 2;
+  },
+  {
+    id: '0ccb5342dcd0',
+    source: ['const y = 2;'],
+    generator: async function* test() {
+      yield 0;
+      const y = 2;
+    },
+  }
+);
+
+// id #4 - depends on async or not
+it(
+  'description',
+  async () => {
+    const x = 1;
+  },
+  {
+    id: '65aa51678566',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// id #4 - is the same as previous, but different for async
+it(
+  'description',
+  async () => {
+    const x = 1;
+  },
+  {
+    id: '65aa51678566',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);"
+`;

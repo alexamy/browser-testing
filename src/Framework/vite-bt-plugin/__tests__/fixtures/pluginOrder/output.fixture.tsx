@@ -20,7 +20,7 @@ it(
     expect(count.innerText).equals('Count: 3');
   },
   {
-    id: '6b851eb851eb84',
+    id: '6b851eb851eb',
     source: [
       'const screen = render(<Counter start={0} />);',
       "const count = screen.getByText('Count: 0');",

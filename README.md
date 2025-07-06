@@ -30,6 +30,7 @@ Write tests in `.bt.tsx` files and import them inside the App.
 
 - Use `import { render, it, userEvent } from '@framework/test';`
 - Use assertions from `chai` package
+- It is highly recommended to use autoformatter like prettier or avoid multiple statements on the same line
 
 Examples:
 
