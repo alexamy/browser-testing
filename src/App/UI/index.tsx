@@ -2,6 +2,8 @@ import { type TestInstance } from '@framework/test';
 import { useTests } from '@framework/react';
 import { useBodyStyle } from './useBodyStyle';
 import s from './ui.module.css';
+import { useEffect, useRef } from 'react';
+import type { RunnerEvent } from '../ipc';
 
 //#region TestLine
 interface TestLineProps {
@@ -24,13 +26,27 @@ function TestLine({ instance, onClick, selected }: TestLineProps) {
 
 //#region TestsUI
 export function TestsUI() {
+  const sandbox = useRef<HTMLIFrameElement>(null);
   const t = useTests();
 
   useBodyStyle('ui');
 
+  useEffect(() => {
+    if (!t.current) return;
+
+    sandbox.current?.contentWindow?.postMessage({
+      type: 'select',
+      testId: t.current.id,
+    } satisfies RunnerEvent);
+
+    sandbox.current?.contentWindow?.postMessage({
+      type: 'start',
+    } satisfies RunnerEvent);
+  }, [t.current]);
+
   return (
     <>
-      <iframe src="/sandbox" className={s.frame} />
+      <iframe ref={sandbox} src="/sandbox" className={s.frame} />
 
       <div className={s.framework}>
         <div>

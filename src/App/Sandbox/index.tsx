@@ -2,6 +2,7 @@ import { type TestInstance } from '@framework/test';
 import { useEffect, useState } from 'react';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import { useTest, useTestsRegistry } from '@framework/react';
+import { cleanup } from '@testing-library/react';
 
 function useParent() {
   const [parent, setParent] = useState<Window>();
@@ -21,14 +22,15 @@ function useMessageListener(test: ReturnType<typeof useTest>) {
   const tests = useTestsRegistry();
 
   useEffect(() => {
-    function listener({ data }: MessageEvent<RunnerEvent>) {
+    async function listener({ data }: MessageEvent<RunnerEvent>) {
       console.log('sandbox', data);
 
       if (data.type === 'select') {
         const instance = tests[data.testId];
         test.select(instance);
       } else if (data.type === 'start') {
-        test.start();
+        cleanup();
+        await test.start();
       }
     }
 
