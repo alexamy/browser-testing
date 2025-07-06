@@ -23,8 +23,7 @@ function callTransformer(path: any) {
   // Check if the second argument is an async arrow function or function expression
   const testFn = path.node.arguments[1];
   const isFunction = t.isArrowFunctionExpression(testFn) || t.isFunctionExpression(testFn);
-  const isProperMethod = isFunction && testFn.async;
-  if (!isProperMethod) return;
+  if (!isFunction) return;
 
   // Check that function body is a block statement
   if (!t.isBlockStatement(testFn.body)) {
@@ -43,7 +42,7 @@ function callTransformer(path: any) {
   // Make object argument
   const extraArg = t.objectExpression([
     t.objectProperty(t.stringLiteral('id'), randomIdLiteral),
-    t.objectProperty(t.stringLiteral('lines'), codeStrings),
+    t.objectProperty(t.stringLiteral('source'), codeStrings),
     t.objectProperty(t.stringLiteral('generator'), generator),
   ]);
 
