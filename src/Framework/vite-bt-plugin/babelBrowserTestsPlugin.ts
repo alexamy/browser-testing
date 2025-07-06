@@ -2,7 +2,7 @@ import { types as t } from '@babel/core';
 import generate from '@babel/generator';
 import { blockDuplicator } from './babel/blockDuplicator';
 import { generatorTransform } from './babel/generatorTransform';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 export default function () {
   return {
