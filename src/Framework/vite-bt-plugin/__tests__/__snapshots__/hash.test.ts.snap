@@ -7,7 +7,23 @@ exports[`calculates persistent hash based on test source code, excluding extra i
     const x = 1;
   },
   {
-    id: 'e6cdfb7097f18',
+    id: 'eb43faca169b4',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// persist for the same call
+it(
+  'description',
+  () => {
+    const x = 1;
+  },
+  {
+    id: 'd6c6dddb5f661',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -18,7 +34,7 @@ exports[`calculates persistent hash based on test source code, excluding extra i
 
 // doesn't depend on spaces newlines etc
 // prettier-ignore
-it('description', () => {const x = 1;}, { "id": "8759f7c5e871f", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
+it('description', () => {const x = 1;}, { "id": "88eee56ad7b91", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
 
 describe('group', () => {
   // doesn't depend on indentation
@@ -28,7 +44,7 @@ describe('group', () => {
       const x = 1;
     },
     {
-      id: 'fac95536bad2d',
+      id: 'ff33854237258',
       source: ['const x = 1;'],
       generator: async function* test() {
         yield 0;
@@ -45,23 +61,7 @@ it(
     const x = 1;
   },
   {
-    id: '52fb265ed774b',
-    source: ['const x = 1;'],
-    generator: async function* test() {
-      yield 0;
-      const x = 1;
-    },
-  }
-);
-
-// depends on async or not
-it(
-  'description',
-  async () => {
-    const x = 1;
-  },
-  {
-    id: '5e9ec9ed59dd1',
+    id: 'cb909b789b81',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -77,11 +77,43 @@ it(
     const y = 2;
   },
   {
-    id: 'eb94c1cfe250b',
+    id: 'b4d0d300e7aeb',
     source: ['const y = 2;'],
     generator: async function* test() {
       yield 0;
       const y = 2;
+    },
+  }
+);
+
+// depends on async or not
+it(
+  'description',
+  async () => {
+    const x = 1;
+  },
+  {
+    id: 'f7904711a061c',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// is the same as previous, but different for async
+it(
+  'description',
+  async () => {
+    const x = 1;
+  },
+  {
+    id: 'b5fa79ed7598c',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
     },
   }
 );"
