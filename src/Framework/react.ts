@@ -55,7 +55,7 @@ function useTest() {
     setIsDone(Boolean(done));
   }
 
-  async function run(delay = 0) {
+  async function start(delay = 0) {
     if (!generator) return;
 
     for await (const line of generator) {
@@ -69,7 +69,7 @@ function useTest() {
     setIsDone(true);
   }
 
-  return { instance, currentLine, isDone, select, step, run, restart };
+  return { instance, currentLine, isDone, select, step, start, restart };
 }
 
 //#region useTests
@@ -104,7 +104,7 @@ export function useTests() {
     test.restart();
 
     await runWithLogs(async () => {
-      await test.run(stepDelay);
+      await test.start(stepDelay);
     });
 
     logs.log('Completed!');
