@@ -1,16 +1,8 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
 import { transform } from './transform.ts';
-
-vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
-  const mod = await importOriginal();
-  return {
-    ...mod,
-    getRandomId: vi.fn(() => '6b851eb851eb84'),
-  };
-});
 
 // Read tsx and remove `@ts-nocheck` directive
 async function readTsx(filePath: string) {
@@ -42,27 +34,37 @@ async function transformCode(code: string) {
   return withLastNewline;
 }
 
-it('transforms all language features properly', async () => {
-  const fixturePath = './fixtures/generatorTransform.fixture.tsx';
-  const input = await readTsx(fixturePath);
-  const output = await transformCode(input);
+describe('Code transformation', () => {
+  vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
+    const mod = await importOriginal();
+    return {
+      ...mod,
+      getRandomId: vi.fn(() => '6b851eb851eb84'),
+    };
+  });
 
-  expect(output).toMatchSnapshot();
-});
+  it('transforms all language features properly', async () => {
+    const fixturePath = './fixtures/generatorTransform.fixture.tsx';
+    const input = await readTsx(fixturePath);
+    const output = await transformCode(input);
 
-it('remove extra indentations for inner blocks', async () => {
-  const fixturePath = './fixtures/indentation.fixture.tsx';
-  const input = await readTsx(fixturePath);
-  const output = await transformCode(input);
+    expect(output).toMatchSnapshot();
+  });
 
-  expect(output).toMatchSnapshot();
-});
+  it('remove extra indentations for inner blocks', async () => {
+    const fixturePath = './fixtures/indentation.fixture.tsx';
+    const input = await readTsx(fixturePath);
+    const output = await transformCode(input);
 
-it('runs plugin in proper order', async () => {
-  const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
-  const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
+    expect(output).toMatchSnapshot();
+  });
 
-  const transformed = await transformCode(input);
+  it('runs plugin in proper order', async () => {
+    const input = await readTsx('./fixtures/pluginOrder/input.fixture.tsx');
+    const output = await readTsx('./fixtures/pluginOrder/output.fixture.tsx');
 
-  expect(transformed).toEqual(output);
+    const transformed = await transformCode(input);
+
+    expect(transformed).toEqual(output);
+  });
 });

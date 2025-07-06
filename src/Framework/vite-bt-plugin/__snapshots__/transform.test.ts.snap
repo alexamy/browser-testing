@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`remove extra indentations for inner blocks 1`] = `
+exports[`Code transformation > remove extra indentations for inner blocks 1`] = `
 "describe('test group', () => {
   it(
     'checks',
@@ -36,7 +36,7 @@ exports[`remove extra indentations for inner blocks 1`] = `
 });"
 `;
 
-exports[`transforms all language features properly 1`] = `
+exports[`Code transformation > transforms all language features properly 1`] = `
 "import { it } from '@framework';
 
 const x = 1;
