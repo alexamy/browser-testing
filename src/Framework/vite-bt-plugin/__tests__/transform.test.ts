@@ -1,7 +1,7 @@
 import { expect, it, vi } from 'vitest';
-import { readTsx, transformCode } from './test.helper.ts';
+import { readTsx, transformCode } from './helper.ts';
 
-vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
+vi.mock(import('../babel/randomId.ts'), async (importOriginal) => {
   const mod = await importOriginal();
   return {
     ...mod,

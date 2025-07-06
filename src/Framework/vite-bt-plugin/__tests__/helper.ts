@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import * as prettier from 'prettier';
-import { transform } from './transform.ts';
+import { transform } from '../transform.ts';
 
 // Read tsx and remove `@ts-nocheck` directive
 export async function readTsx(filePath: string) {
