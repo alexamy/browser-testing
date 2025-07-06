@@ -2,6 +2,9 @@
 
 ## Vitest + `happy-dom` / `jsdom`
 
+- [Vitest](https://vitest.dev/guide/)
+- [happy-dom](https://github.com/capricorn86/happy-dom)
+
 `vite.config.ts`:
 
 ```ts
@@ -44,7 +47,9 @@ it('increments', async () => {
 });
 ```
 
-## Vitest browser mode
+## Vitest browser mode (experimental)
+
+- [Vitest browser mode](https://vitest.dev/guide/browser/)
 
 `vite.config.ts`:
 
