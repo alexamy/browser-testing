@@ -38,7 +38,7 @@ function callTransformer(path: any) {
 
   // Make the random id
   const fnSourceCode = generate(path.node).code.replaceAll(/\s+/g, '');
-  const hash = crypto.createHash('sha256').update(fnSourceCode).digest('hex');
+  const hash = crypto.createHash('sha256').update(fnSourceCode).digest('hex').substring(0, 12);
   const hashLiteral = t.stringLiteral(hash);
 
   // Make object argument

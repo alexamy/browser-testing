@@ -8,7 +8,7 @@ it(
     const x = 1;
   },
   {
-    id: 'de517f387b010cec0a888465782b1aba41c232e642d0e2efa9a7b9317b72c7c6',
+    id: 'de517f387b01',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -24,7 +24,7 @@ it(
     const x = 1;
   },
   {
-    id: 'de517f387b010cec0a888465782b1aba41c232e642d0e2efa9a7b9317b72c7c6',
+    id: 'de517f387b01',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -35,7 +35,7 @@ it(
 
 // id #1 - doesn't depend on spaces newlines etc
 // prettier-ignore
-it('description', () => {const x = 1;}, { "id": "de517f387b010cec0a888465782b1aba41c232e642d0e2efa9a7b9317b72c7c6", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
+it('description', () => {const x = 1;}, { "id": "de517f387b01", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
 
 describe('group', () => {
   // id #1 - doesn't depend on indentation
@@ -45,7 +45,7 @@ describe('group', () => {
       const x = 1;
     },
     {
-      id: 'de517f387b010cec0a888465782b1aba41c232e642d0e2efa9a7b9317b72c7c6',
+      id: 'de517f387b01',
       source: ['const x = 1;'],
       generator: async function* test() {
         yield 0;
@@ -62,7 +62,7 @@ it(
     const x = 1;
   },
   {
-    id: '0cb0e10a811662cce75d12b587d3b4d5b7080ad227f71d1bfcfbeeb65a67d900',
+    id: '0cb0e10a8116',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -78,7 +78,7 @@ it(
     const y = 2;
   },
   {
-    id: '0ccb5342dcd057b241ba5eb6f961e63a59de56b56dbce76f7b5dc10302d4c39d',
+    id: '0ccb5342dcd0',
     source: ['const y = 2;'],
     generator: async function* test() {
       yield 0;
@@ -94,7 +94,7 @@ it(
     const x = 1;
   },
   {
-    id: '65aa51678566e8014c91230f5daeee006018bd9244886241caf00e2bbf98e219',
+    id: '65aa51678566',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -110,7 +110,7 @@ it(
     const x = 1;
   },
   {
-    id: '65aa51678566e8014c91230f5daeee006018bd9244886241caf00e2bbf98e219',
+    id: '65aa51678566',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
