@@ -1,9 +1,8 @@
-import * as babel from '@babel/core';
 import fs from 'fs/promises';
 import path from 'path';
 import { expect, it, vi } from 'vitest';
 import * as prettier from 'prettier';
-import browserTestsBabelPlugin from './babelBrowserTestsPlugin.ts';
+import { transform } from './transform.ts';
 
 vi.mock(import('./babel/randomId.ts'), async (importOriginal) => {
   const mod = await importOriginal();
@@ -25,14 +24,7 @@ async function readTsx(filePath: string) {
 /** Transforms code with babel and format with prettier. */
 async function transformCode(code: string) {
   // babel
-  const transformed = await babel.transformAsync(code, {
-    filename: 'fixture.tsx',
-    presets: ['@babel/preset-typescript'],
-    plugins: [browserTestsBabelPlugin],
-    generatorOpts: {
-      retainLines: true,
-    },
-  });
+  const transformed = await transform(code, 'fixture.tsx');
 
   if (!transformed || !transformed.code) {
     throw new Error('Failed to transform code by Babel.');
