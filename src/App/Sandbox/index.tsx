@@ -28,6 +28,8 @@ export function Sandbox() {
       if (data.type === 'select-test') {
         const instance = tests[data.testId];
         test.select(instance);
+      } else if (data.type === 'start-test') {
+        test.start();
       }
     }
 
