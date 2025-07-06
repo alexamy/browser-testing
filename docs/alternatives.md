@@ -1,5 +1,10 @@
 # Other ways to test components in the browser
 
+- [Vitest + `happy-dom` / `jsdom`](#vitest--happy-dom--jsdom)
+- [Vitest browser mode (experimental)](#vitest-browser-mode-experimental)
+- [Storybook 9 interaction tests](#storybook-9-interaction-tests)
+- [Playwright component testing (experimental)](#playwright-component-testing-experimental)
+
 In almost all scenarios testing library is used:
 
 - [Testing library React](https://testing-library.com/docs/react-testing-library/intro)
