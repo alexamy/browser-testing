@@ -34,6 +34,7 @@ function useTest() {
   const [instance, setInstance] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
   const [currentLine, setCurrentLine] = useState<number>();
+  const [inProgress, setInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
   function select(test: TestInstance | undefined) {
@@ -48,9 +49,11 @@ function useTest() {
   async function step() {
     if (!generator) return;
 
+    setInProgress(true);
     const { done, value: line } = await generator.next();
-    const hasLine = line !== undefined && Number.isFinite(line);
+    setInProgress(false);
 
+    const hasLine = line !== undefined && Number.isFinite(line);
     setCurrentLine(hasLine ? line : undefined);
     setIsDone(Boolean(done));
   }
@@ -58,18 +61,20 @@ function useTest() {
   async function start(delay = 0) {
     if (!generator) return;
 
+    setInProgress(true);
     for await (const line of generator) {
       setCurrentLine(line);
       if (delay > 0) {
         await new Promise((r) => setTimeout(r, delay));
       }
     }
+    setInProgress(false);
 
     setCurrentLine(undefined);
     setIsDone(true);
   }
 
-  return { instance, currentLine, isDone, select, step, start, restart };
+  return { instance, currentLine, inProgress, isDone, select, step, start, restart };
 }
 
 //#region useTests
