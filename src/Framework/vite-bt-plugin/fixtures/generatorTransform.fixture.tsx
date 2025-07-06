@@ -5,6 +5,10 @@ import { it } from '@framework';
 const x = 1;
 const y = 2;
 
+it('sync', () => {
+  expect(true).toBe(true);
+});
+
 it('increments', async () => {
   const screen = render(<Counter start={0} />);
   const count = screen.getByText('Count: 0');

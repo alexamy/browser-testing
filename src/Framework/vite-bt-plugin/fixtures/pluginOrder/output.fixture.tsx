@@ -21,7 +21,7 @@ it(
   },
   {
     id: '6b851eb851eb84',
-    lines: [
+    source: [
       'const screen = render(<Counter start={0} />);',
       "const count = screen.getByText('Count: 0');",
       '',

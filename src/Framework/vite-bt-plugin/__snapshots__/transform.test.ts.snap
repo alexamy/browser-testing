@@ -14,7 +14,7 @@ exports[`remove extra indentations for inner blocks 1`] = `
     },
     {
       id: '6b851eb851eb84',
-      lines: [
+      source: [
         'function y() {',
         "  console.log('hello');",
         '}',
@@ -41,6 +41,21 @@ exports[`transforms all language features properly 1`] = `
 
 const x = 1;
 const y = 2;
+
+it(
+  'sync',
+  () => {
+    expect(true).toBe(true);
+  },
+  {
+    id: '6b851eb851eb84',
+    source: ['expect(true).toBe(true);'],
+    generator: async function* test() {
+      yield 0;
+      expect(true).toBe(true);
+    },
+  }
+);
 
 it(
   'increments',
@@ -114,7 +129,7 @@ it(
   },
   {
     id: '6b851eb851eb84',
-    lines: [
+    source: [
       'const screen = render(<Counter start={0} />);',
       "const count = screen.getByText('Count: 0');",
       '',
