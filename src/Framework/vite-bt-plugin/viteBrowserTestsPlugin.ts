@@ -1,6 +1,5 @@
-import * as babel from '@babel/core';
 import { type Plugin } from 'vite';
-import browserTestsBabelPlugin from './babelBrowserTestsPlugin';
+import { transform } from './transform';
 
 interface PluginOptions {
   includes?: RegExp;
@@ -19,14 +18,7 @@ export function browserTestsPlugin({
       }
 
       // Transform
-      const result = await babel.transformAsync(code, {
-        filename: id,
-        presets: ['@babel/preset-typescript'],
-        plugins: [browserTestsBabelPlugin],
-        generatorOpts: {
-          retainLines: true,
-        },
-      });
+      const result = await transform(code, id);
 
       if (!result?.code) {
         throw new Error(`Babel transform failed for ${id}`);

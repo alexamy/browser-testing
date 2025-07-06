@@ -33,7 +33,7 @@ export function TestsUI() {
         <div>
           <h4>Test list</h4>
           <div className={s.testList}>
-            {t.tests.map((instance, i) => (
+            {Object.values(t.tests).map((instance, i) => (
               <TestLine
                 key={i}
                 instance={instance}

@@ -13,7 +13,7 @@ exports[`remove extra indentations for inner blocks 1`] = `
       expect(1).toBe(1);
     },
     {
-      id: '6b851eb851eb84',
+      id: '6b851eb851eb',
       source: [
         'function y() {',
         "  console.log('hello');",
@@ -48,7 +48,7 @@ it(
     expect(true).toBe(true);
   },
   {
-    id: '6b851eb851eb84',
+    id: '6b851eb851eb',
     source: ['expect(true).toBe(true);'],
     generator: async function* test() {
       yield 0;
@@ -128,7 +128,7 @@ it(
     }
   },
   {
-    id: '6b851eb851eb84',
+    id: '6b851eb851eb',
     source: [
       'const screen = render(<Counter start={0} />);',
       "const count = screen.getByText('Count: 0');",

@@ -61,12 +61,12 @@ function validateGeneratedMeta(meta: TestGeneratedMeta | undefined) {
   return meta;
 }
 
-export const tests: TestInstance[] = [];
+export const tests: Record<string, TestInstance> = {};
 
 export function it(description: string, test: TestUserMethod, generatedMeta?: TestGeneratedMeta) {
   const meta = validateGeneratedMeta(generatedMeta);
   const instance = { ...meta, description };
-  tests.push(instance);
+  tests[instance.id] = instance;
 }
 
 //#region testing library
