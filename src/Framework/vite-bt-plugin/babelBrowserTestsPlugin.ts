@@ -23,8 +23,7 @@ function callTransformer(path: any) {
   // Check if the second argument is an async arrow function or function expression
   const testFn = path.node.arguments[1];
   const isFunction = t.isArrowFunctionExpression(testFn) || t.isFunctionExpression(testFn);
-  const isProperMethod = isFunction && testFn.async;
-  if (!isProperMethod) return;
+  if (!isFunction) return;
 
   // Check that function body is a block statement
   if (!t.isBlockStatement(testFn.body)) {

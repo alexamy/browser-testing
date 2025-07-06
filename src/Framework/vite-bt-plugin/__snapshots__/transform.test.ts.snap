@@ -43,6 +43,21 @@ const x = 1;
 const y = 2;
 
 it(
+  'sync',
+  () => {
+    expect(true).toBe(true);
+  },
+  {
+    id: '6b851eb851eb84',
+    lines: ['expect(true).toBe(true);'],
+    generator: async function* test() {
+      yield 0;
+      expect(true).toBe(true);
+    },
+  }
+);
+
+it(
   'increments',
   async () => {
     const screen = render(<Counter start={0} />);
