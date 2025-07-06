@@ -5,6 +5,9 @@
 `vite.config.ts`:
 
 ```ts
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react-swc';
+
 export default defineConfig({
   plugins: [react()],
   test: {
@@ -42,6 +45,48 @@ it('increments', async () => {
 ```
 
 ## Vitest browser mode
+
+`vite.config.ts`:
+
+```ts
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react-swc';
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    testTimeout: 500,
+    browser: {
+      provider: 'playwright',
+      enabled: true,
+      instances: [
+        {
+          browser: 'chromium',
+        },
+      ],
+    },
+  },
+});
+```
+
+`Counter.test.tsx`:
+
+```tsx
+import { render } from 'vitest-browser-react';
+import { Counter } from './Counter';
+import { expect, it } from 'vitest';
+
+it('increments', async () => {
+  const screen = render(<Counter start={0} />);
+
+  const increment = screen.getByRole('button', { name: /Inc/ });
+  await increment.click();
+
+  const count = screen.getByText('Count: 1');
+  await expect.element(count).toBeInTheDocument();
+});
+```
 
 ## Storybook 9 interaction tests
 
