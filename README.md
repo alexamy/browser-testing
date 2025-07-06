@@ -1,5 +1,11 @@
 # Testing React components in the browser
 
+- [Quick start](#quick-start)
+- [Description](#description)
+  - [DX](#dx)
+  - [How does it work?](#how-does-it-work)
+  - [Alternatives](#alternatives)
+
 Just a fun project.
 
 Powered by:
@@ -29,26 +35,12 @@ Examples:
 
 - Test - `App/Counter.bt.tsx` (bt for browser testing)
 
-## How does it work?
+### How does it work?
 
 - All tests run in browser
 - Any `*.bt.tsx` file is transpiled by Vite plugin to allow inspection and step-by-step execution
 - `Testing library` helpers and `Chai` assertions can work in browser
 
-## Other approaches (not for comparison)
+### Alternatives
 
-- Vitest + Testing library: `Counter.test.tsx`
-
-```
-git checkout vitest-happy-dom
-npm i
-npm run test
-```
-
-- Vitest browser mode + Playwright: `Counter.test.tsx`
-
-```
-git checkout playwright-browser
-npm i
-npm run test
-```
+Read [this](./docs/alternatives.md).
