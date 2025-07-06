@@ -42,7 +42,7 @@ function callTransformer(path: any) {
   // Make object argument
   const extraArg = t.objectExpression([
     t.objectProperty(t.stringLiteral('id'), randomIdLiteral),
-    t.objectProperty(t.stringLiteral('lines'), codeStrings),
+    t.objectProperty(t.stringLiteral('source'), codeStrings),
     t.objectProperty(t.stringLiteral('generator'), generator),
   ]);
 
