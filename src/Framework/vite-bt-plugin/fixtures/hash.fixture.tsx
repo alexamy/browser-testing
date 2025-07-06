@@ -15,13 +15,13 @@ describe('group', () => {
   });
 });
 
-// depends on async or not
-it('description', async () => {
+// depends on description
+it('description 2', () => {
   const x = 1;
 });
 
-// depends on description
-it('description 2', () => {
+// depends on async or not
+it('description', async () => {
   const x = 1;
 });
 
