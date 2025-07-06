@@ -1,29 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`calculates persistent hash based on test source code, excluding extra indentation 1`] = `
-"it(
-  'description',
-  () => {
-    const x = 1;
-  },
-  {
-    id: 'eb43faca169b4',
-    source: ['const x = 1;'],
-    generator: async function* test() {
-      yield 0;
-      const x = 1;
-    },
-  }
-);
-
-// persist for the same call
+"// id #1
 it(
   'description',
   () => {
     const x = 1;
   },
   {
-    id: 'd6c6dddb5f661',
+    id: 'eeb35a0ae4f24',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -32,19 +17,35 @@ it(
   }
 );
 
-// doesn't depend on spaces newlines etc
+// id #1 - persist for the same call
+it(
+  'description',
+  () => {
+    const x = 1;
+  },
+  {
+    id: 'e23852325adc',
+    source: ['const x = 1;'],
+    generator: async function* test() {
+      yield 0;
+      const x = 1;
+    },
+  }
+);
+
+// id #1 - doesn't depend on spaces newlines etc
 // prettier-ignore
-it('description', () => {const x = 1;}, { "id": "88eee56ad7b91", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
+it('description', () => {const x = 1;}, { "id": "29b1024a74181", "source": [], "generator": async function* test() {yield -1;const x = 1;} });
 
 describe('group', () => {
-  // doesn't depend on indentation
+  // id #1 - doesn't depend on indentation
   it(
     'description',
     () => {
       const x = 1;
     },
     {
-      id: 'ff33854237258',
+      id: 'e9809a44135fe',
       source: ['const x = 1;'],
       generator: async function* test() {
         yield 0;
@@ -54,14 +55,14 @@ describe('group', () => {
   );
 });
 
-// depends on description
+// id #2 - depends on description
 it(
   'description 2',
   () => {
     const x = 1;
   },
   {
-    id: 'cb909b789b81',
+    id: '13e783a7acf71',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -70,14 +71,14 @@ it(
   }
 );
 
-// depends on test body
+// id #3 - depends on test body
 it(
   'description',
   () => {
     const y = 2;
   },
   {
-    id: 'b4d0d300e7aeb',
+    id: '082db5e495a26',
     source: ['const y = 2;'],
     generator: async function* test() {
       yield 0;
@@ -86,14 +87,14 @@ it(
   }
 );
 
-// depends on async or not
+// id #4 - depends on async or not
 it(
   'description',
   async () => {
     const x = 1;
   },
   {
-    id: 'f7904711a061c',
+    id: '4ff2cea871ea1',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;
@@ -102,14 +103,14 @@ it(
   }
 );
 
-// is the same as previous, but different for async
+// id #4 - is the same as previous, but different for async
 it(
   'description',
   async () => {
     const x = 1;
   },
   {
-    id: 'b5fa79ed7598c',
+    id: 'fd898974ada38',
     source: ['const x = 1;'],
     generator: async function* test() {
       yield 0;

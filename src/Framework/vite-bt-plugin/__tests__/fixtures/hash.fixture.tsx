@@ -1,41 +1,42 @@
 // @ts-nocheck
 
+// id #1
 it('description', () => {
   const x = 1;
 });
 
-// persist for the same call
+// id #1 - persist for the same call
 it('description', () => {
   const x = 1;
 });
 
-// doesn't depend on spaces newlines etc
+// id #1 - doesn't depend on spaces newlines etc
 // prettier-ignore
 it('description', () => { const x  =  1; });
 
 describe('group', () => {
-  // doesn't depend on indentation
+  // id #1 - doesn't depend on indentation
   it('description', () => {
     const x = 1;
   });
 });
 
-// depends on description
+// id #2 - depends on description
 it('description 2', () => {
   const x = 1;
 });
 
-// depends on test body
+// id #3 - depends on test body
 it('description', () => {
   const y = 2;
 });
 
-// depends on async or not
+// id #4 - depends on async or not
 it('description', async () => {
   const x = 1;
 });
 
-// is the same as previous, but different for async
+// id #4 - is the same as previous, but different for async
 it('description', async () => {
   const x = 1;
 });
