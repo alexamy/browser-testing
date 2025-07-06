@@ -13,7 +13,7 @@ export function blockDuplicator(codeBlock: t.BlockStatement, sourceCode: string)
   return lineContentsArray;
 }
 
-export function extractSourceCode(statement: t.Statement, sourceCode: string) {
+function extractSourceCode(statement: t.Expression | t.Statement, sourceCode: string) {
   // Check that function has loc info
   if (!statement.loc) {
     throw new Error('No function body line of code property found.');
@@ -30,7 +30,7 @@ export function extractSourceCode(statement: t.Statement, sourceCode: string) {
   return codeLines;
 }
 
-export function removeExtraIndentation(codeLines: string[]) {
+function removeExtraIndentation(codeLines: string[]) {
   const spaceRegex = / {0,}/;
   const nonEmptyLines = codeLines.filter((line) => line);
   const indentationLevels = nonEmptyLines.map((line) => line.match(spaceRegex)![0].length);
