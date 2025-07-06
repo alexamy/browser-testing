@@ -1,11 +1,15 @@
 import { expect, it, vi } from 'vitest';
 import { readTsx, transformCode } from './helper.ts';
 
-vi.mock(import('../babel/randomId.ts'), async (importOriginal) => {
-  const mod = await importOriginal();
+// Mock crypto at the top level
+vi.mock('node:crypto', () => {
   return {
-    ...mod,
-    getRandomId: vi.fn(() => '6b851eb851eb84'),
+    default: {
+      createHash: vi.fn(() => ({
+        update: vi.fn().mockReturnThis(),
+        digest: vi.fn(() => '6b851eb851eb'),
+      })),
+    },
   };
 });
 
