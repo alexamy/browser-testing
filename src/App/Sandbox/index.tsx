@@ -87,7 +87,8 @@ function TestComponent({ instance }: { instance: TestInstance }) {
   useActorController(actor);
 
   const value = useSelector(actor, (snapshot) => snapshot.value);
-  useEffect(() => console.log(value), [value]);
+  const context = useSelector(actor, (snapshot) => snapshot.context);
+  useEffect(() => console.log(value, context), [value, context]);
 
   return <></>;
 }

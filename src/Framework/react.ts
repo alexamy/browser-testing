@@ -58,7 +58,6 @@ export const singleTestMachine = setup({
       { generator: TestGenerator }
     >(async ({ input }) => {
       const { value, done } = await input.generator.next();
-      // console.log('step', value);
       const hasLine = value !== undefined && Number.isFinite(value);
       const result = {
         currentLine: hasLine ? value : undefined,
@@ -101,13 +100,14 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
-        actions: assign(({ event }) => event.output),
         onDone: [
           {
+            actions: assign(({ event }) => event.output),
             guard: 'is done',
             target: 'done',
           },
           {
+            actions: assign(({ event }) => event.output),
             target: 'ready',
           },
         ],
@@ -117,13 +117,14 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
-        actions: assign(({ event }) => event.output),
         onDone: [
           {
+            actions: assign(({ event }) => event.output),
             guard: 'is done',
             target: 'done',
           },
           {
+            actions: assign(({ event }) => event.output),
             target: 'running',
           },
         ],
