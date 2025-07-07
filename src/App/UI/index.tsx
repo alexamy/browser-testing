@@ -32,17 +32,17 @@ export function TestsUI() {
   useBodyStyle('ui');
 
   useEffect(() => {
-    if (!t.current) return;
+    if (!t.selected) return;
 
     sandbox.current?.contentWindow?.postMessage({
       type: 'select',
-      testId: t.current.id,
+      testId: t.selected.id,
     } satisfies RunnerEvent);
 
     sandbox.current?.contentWindow?.postMessage({
       type: 'start',
     } satisfies RunnerEvent);
-  }, [t.current]);
+  }, [t.selected]);
 
   return (
     <>
@@ -56,7 +56,7 @@ export function TestsUI() {
               <TestLine
                 key={i}
                 instance={instance}
-                selected={instance === t.current}
+                selected={instance === t.selected}
                 onClick={() => t.select(instance)}
               />
             ))}
@@ -66,7 +66,7 @@ export function TestsUI() {
         <div>
           <h4>Code</h4>
           <div>
-            {t.current ? (
+            {t.selected ? (
               <div className={s.codeButtons}>
                 <button onClick={t.start} disabled={t.isDone}>
                   Start
@@ -89,8 +89,8 @@ export function TestsUI() {
             ) : null}
           </div>
           <div className={s.codeLines}>
-            {t.current
-              ? t.current.source.map((lines, i) => (
+            {t.selected
+              ? t.selected.source.map((lines, i) => (
                   <pre key={i} style={{ fontWeight: i === t.currentLine ? 'bold' : 'normal' }}>
                     {lines}
                   </pre>

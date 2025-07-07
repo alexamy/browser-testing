@@ -140,7 +140,7 @@ export function useTests() {
     setStepDelay: setStepDelayChecked,
 
     logs: logs.data,
-    current: test.instance,
+    selected: test.instance,
     currentLine: test.currentLine,
     isDone: test.isDone,
   };
