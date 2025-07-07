@@ -1,7 +1,7 @@
 import { singleTestMachine } from '@framework/react';
 import { tests, type TestInstance } from '@framework/test';
 import { useActorRef, useSelector } from '@xstate/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Actor } from 'xstate';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 
@@ -51,15 +51,14 @@ export function Sandbox() {
 //#region intance
 function useInProgressSend(actor: Actor<typeof singleTestMachine>) {
   const value = useSelector(actor, (snapshot) => snapshot.value);
+  const inProgress = useMemo(() => value === 'running' || value === 'stepping', [value]);
 
   useEffect(() => {
-    const inProgress = value === 'running' || value === 'stepping';
-
     window.parent.postMessage({
       type: 'progress-changed',
       inProgress,
     } satisfies SandboxEvent);
-  }, [value]);
+  }, [inProgress]);
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {
