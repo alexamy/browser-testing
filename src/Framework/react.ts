@@ -68,7 +68,7 @@ export const singleTestMachine = setup({
   }),
   on: {
     restart: {
-      target: 'initial',
+      target: 'ready',
       actions: assign(({ context }) => ({
         generator: context.instance.generator(),
         currentLine: 0,
@@ -76,7 +76,7 @@ export const singleTestMachine = setup({
     },
   },
   states: {
-    initial: {
+    ready: {
       on: {
         step: {
           target: 'step',
