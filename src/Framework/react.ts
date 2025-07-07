@@ -41,7 +41,7 @@ interface SingleTestMachineContext {
   currentLine?: number;
 }
 
-type SingleTestMachineEvent = { type: 'step' } | { type: 'restart' };
+type SingleTestMachineEvent = { type: 'run' } | { type: 'step' } | { type: 'restart' };
 type SingleTestMachineTag = 'in progress';
 
 export const singleTestMachine = setup({
@@ -50,6 +50,9 @@ export const singleTestMachine = setup({
     input: {} as SingleTestMachineInput,
     events: {} as SingleTestMachineEvent,
     tags: {} as SingleTestMachineTag,
+  },
+  guards: {
+    'is done': ({ context }) => context.currentLine === undefined,
   },
   actors: {
     'run step': fromPromise<{ line?: number }, { generator: TestGenerator }>(async ({ input }) => {
@@ -89,9 +92,15 @@ export const singleTestMachine = setup({
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
         actions: assign(({ event }) => ({ currentLine: event.output.line })),
-        onDone: {
-          target: 'done',
-        },
+        onDone: [
+          {
+            guard: 'is done',
+            target: 'done',
+          },
+          {
+            target: 'ready',
+          },
+        ],
       },
     },
     done: {
