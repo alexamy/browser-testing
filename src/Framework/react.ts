@@ -88,9 +88,9 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
+        actions: assign(({ event }) => ({ currentLine: event.output.line })),
         onDone: {
           target: 'done',
-          actions: assign(({ event }) => ({ currentLine: event.output.line })),
         },
       },
     },
