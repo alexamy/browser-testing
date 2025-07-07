@@ -6,11 +6,16 @@ import type { Actor } from 'xstate';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 
 //#region root
-function useCheckParent() {
+function useMessageDebug() {
   useEffect(() => {
     if (window.parent === window) {
       console.warn('Sandbox should be running in the iframe');
     }
+
+    const listener = (ev: MessageEvent) => console.log(ev.data);
+
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
   }, []);
 }
 
@@ -32,19 +37,9 @@ function useSelectedInstance() {
   return instance;
 }
 
-function useMessageDebug() {
-  useEffect(() => {
-    const listener = (ev: MessageEvent) => console.log(ev.data);
-
-    window.addEventListener('message', listener);
-    return () => window.removeEventListener('message', listener);
-  }, []);
-}
-
 // Empty container to run tests
 export function Sandbox() {
   const instance = useSelectedInstance();
-  useCheckParent();
   useMessageDebug();
 
   return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
