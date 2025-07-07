@@ -6,7 +6,10 @@ import type { RunnerEvent } from '../ipc';
 
 function useMessageDebug() {
   useEffect(() => {
-    const listener = (ev: MessageEvent) => console.log('runner receive', ev.data);
+    const listener = (ev: MessageEvent) => {
+      if (ev.data?.source?.startsWith('react-devtool')) return;
+      console.log('runner receive', ev.data);
+    };
 
     window.addEventListener('message', listener);
     return () => window.removeEventListener('message', listener);
