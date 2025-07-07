@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
-import { setup } from 'xstate';
+import { assign, setup } from 'xstate';
 import { useActor } from '@xstate/react';
 
 export function useTestsRegistry() {
@@ -41,7 +41,7 @@ interface SingleTestMachineContext {
   currentLine: number;
 }
 
-type SingleTestMachineEvent = { type: 'start' };
+type SingleTestMachineEvent = { type: 'restart' };
 
 export const singleTestMachine = setup({
   types: {
@@ -56,7 +56,18 @@ export const singleTestMachine = setup({
     generator: input.instance.generator(),
     currentLine: 0,
   }),
-  states: {},
+  on: {
+    restart: {
+      target: 'initial',
+      actions: assign(({ context }) => ({
+        generator: context.instance.generator(),
+        currentLine: 0,
+      })),
+    },
+  },
+  states: {
+    initial: {},
+  },
 });
 
 //#region useTest
