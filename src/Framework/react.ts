@@ -71,6 +71,7 @@ export const singleTestMachine = setup({
   },
 }).createMachine({
   id: 'single test machine',
+  initial: 'ready',
   context: ({ input }) => ({
     instance: input.instance,
     generator: input.instance.generator(),
@@ -79,7 +80,7 @@ export const singleTestMachine = setup({
   }),
   on: {
     restart: {
-      target: 'ready',
+      target: '.ready',
       actions: assign(({ context }) => ({
         generator: context.instance.generator(),
         currentLine: 0,
@@ -93,11 +94,11 @@ export const singleTestMachine = setup({
           target: 'running',
         },
         step: {
-          target: 'step',
+          target: 'stepping',
         },
       },
     },
-    step: {
+    stepping: {
       tags: ['in progress'],
       invoke: {
         src: 'run step',
