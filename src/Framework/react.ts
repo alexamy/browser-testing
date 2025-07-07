@@ -38,7 +38,7 @@ interface SingleTestMachineInput {
 interface SingleTestMachineContext {
   instance: TestInstance;
   generator: TestGenerator;
-  currentLine: number;
+  currentLine?: number;
 }
 
 type SingleTestMachineEvent = { type: 'step' } | { type: 'restart' };
@@ -52,14 +52,12 @@ export const singleTestMachine = setup({
     tags: {} as SingleTestMachineTag,
   },
   actors: {
-    'run step': fromPromise<{ line: number | void }, { generator: TestGenerator }>(
-      async ({ input }) => {
-        const data = await input.generator.next();
-        const line = data.value;
-
-        return { line };
-      }
-    ),
+    'run step': fromPromise<{ line?: number }, { generator: TestGenerator }>(async ({ input }) => {
+      const data = await input.generator.next();
+      const line = data.value;
+      const hasLine = line !== undefined && Number.isFinite(line);
+      return { line: hasLine ? line : undefined };
+    }),
   },
 }).createMachine({
   id: 'single test machine',
