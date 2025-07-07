@@ -12,7 +12,7 @@ function useMessageDebug() {
       console.warn('Sandbox should be running in the iframe');
     }
 
-    const listener = (ev: MessageEvent) => console.log(ev.data);
+    const listener = (ev: MessageEvent) => console.log('sandbox get', ev.data);
 
     window.addEventListener('message', listener);
     return () => window.removeEventListener('message', listener);
@@ -42,7 +42,7 @@ export function Sandbox() {
   const instance = useSelectedInstance();
   useMessageDebug();
 
-  return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
+  return instance ? <TestComponent key={instance.id} instance={instance} /> : null;
 }
 
 //#region intance
@@ -65,9 +65,6 @@ function TestComponent({ instance }: { instance: TestInstance }) {
   });
 
   useInProgressSend(actor);
-
-  const selected = useSelector(actor, (snapshot) => snapshot.context.instance.id);
-  useEffect(() => console.log(selected), [selected]);
 
   return <></>;
 }
