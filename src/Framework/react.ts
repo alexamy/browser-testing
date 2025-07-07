@@ -43,14 +43,12 @@ interface SingleTestMachineContext {
 }
 
 type SingleTestMachineEvent = { type: 'run' } | { type: 'step' } | { type: 'restart' };
-type SingleTestMachineTag = 'in progress';
 
 export const singleTestMachine = setup({
   types: {
     context: {} as SingleTestMachineContext,
     input: {} as SingleTestMachineInput,
     events: {} as SingleTestMachineEvent,
-    tags: {} as SingleTestMachineTag,
   },
   guards: {
     'is done': ({ context }) => context.isDone,
@@ -100,7 +98,6 @@ export const singleTestMachine = setup({
       },
     },
     stepping: {
-      tags: ['in progress'],
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
@@ -117,7 +114,6 @@ export const singleTestMachine = setup({
       },
     },
     running: {
-      tags: ['in progress'],
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),

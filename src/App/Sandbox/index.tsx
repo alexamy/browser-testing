@@ -4,6 +4,7 @@ import type { RunnerEvent, SandboxEvent } from '../ipc';
 import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
 import { cleanup } from '@testing-library/react';
 import { useActor, useActorRef, useSelector } from '@xstate/react';
+import type { Actor, ActorRef } from 'xstate';
 
 //#region root
 function useCheckParent() {
@@ -39,10 +40,25 @@ export function Sandbox() {
 }
 
 //#region intance
+function useInProgressSend(actor: Actor<typeof singleTestMachine>) {
+  const value = useSelector(actor, (snapshot) => snapshot.value);
+
+  useEffect(() => {
+    const inProgress = value === 'running' || value === 'stepping';
+
+    window.parent.postMessage({
+      type: 'progress-changed',
+      inProgress,
+    } satisfies SandboxEvent);
+  }, [value]);
+}
+
 function TestComponent({ instance }: { instance: TestInstance }) {
-  const [state, send, actor] = useActor(singleTestMachine, {
+  const actor = useActorRef(singleTestMachine, {
     input: { instance },
   });
+
+  useInProgressSend(actor);
 
   const selected = useSelector(actor, (snapshot) => snapshot.context.instance.id);
   useEffect(() => console.log(selected), [selected]);
