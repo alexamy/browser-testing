@@ -45,6 +45,7 @@ function TestComponent({ instance }: { instance: TestInstance }) {
   });
 
   const selected = useSelector(test, (snapshot) => snapshot.context.instance.id);
+  useEffect(() => console.log(selected), [selected]);
 
-  return <>{selected}</>;
+  return <></>;
 }
