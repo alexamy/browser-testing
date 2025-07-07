@@ -41,18 +41,21 @@ interface SingleTestMachineContext {
   currentLine: number;
 }
 
+type SingleTestMachineEvent = { type: 'start' };
+
 export const singleTestMachine = setup({
   types: {
     context: {} as SingleTestMachineContext,
     input: {} as SingleTestMachineInput,
+    events: {} as SingleTestMachineEvent,
   },
 }).createMachine({
+  id: 'single test machine',
   context: ({ input }) => ({
     instance: input.instance,
     generator: input.instance.generator(),
     currentLine: 0,
   }),
-  id: 'single test machine',
   states: {},
 });
 
