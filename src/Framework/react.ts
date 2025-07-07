@@ -1,6 +1,8 @@
 import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
+import { setup } from 'xstate';
+import { useActor } from '@xstate/react';
 
 export function useTestsRegistry() {
   return tests;
@@ -28,6 +30,31 @@ function useLogs() {
 
   return { data, log, reset };
 }
+
+interface SingleTestMachineInput {
+  instance: TestInstance;
+}
+
+interface SingleTestMachineContext {
+  instance: TestInstance;
+  generator: TestGenerator;
+  currentLine: number;
+}
+
+export const singleTestMachine = setup({
+  types: {
+    context: {} as SingleTestMachineContext,
+    input: {} as SingleTestMachineInput,
+  },
+}).createMachine({
+  context: ({ input }) => ({
+    instance: input.instance,
+    generator: input.instance.generator(),
+    currentLine: 0,
+  }),
+  id: 'single test machine',
+  states: {},
+});
 
 //#region useTest
 export function useTest() {
