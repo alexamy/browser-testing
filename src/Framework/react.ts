@@ -82,6 +82,7 @@ export const singleTestMachine = setup({
       actions: assign(({ context }) => ({
         generator: context.instance.generator(),
         currentLine: 0,
+        isDone: false,
       })),
     },
   },
