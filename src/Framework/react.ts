@@ -39,6 +39,7 @@ interface SingleTestMachineContext {
   instance: TestInstance;
   generator: TestGenerator;
   currentLine?: number;
+  isDone: boolean;
 }
 
 type SingleTestMachineEvent = { type: 'run' } | { type: 'step' } | { type: 'restart' };
@@ -52,14 +53,20 @@ export const singleTestMachine = setup({
     tags: {} as SingleTestMachineTag,
   },
   guards: {
-    'is done': ({ context }) => context.currentLine === undefined,
+    'is done': ({ context }) => context.isDone,
   },
   actors: {
-    'run step': fromPromise<{ line?: number }, { generator: TestGenerator }>(async ({ input }) => {
-      const data = await input.generator.next();
-      const line = data.value;
-      const hasLine = line !== undefined && Number.isFinite(line);
-      return { line: hasLine ? line : undefined };
+    'run step': fromPromise<
+      { currentLine?: number; isDone: boolean },
+      { generator: TestGenerator }
+    >(async ({ input }) => {
+      const { value, done } = await input.generator.next();
+      const hasLine = value !== undefined && Number.isFinite(value);
+      const result = {
+        currentLine: hasLine ? value : undefined,
+        isDone: Boolean(done),
+      };
+      return result;
     }),
   },
 }).createMachine({
@@ -68,6 +75,7 @@ export const singleTestMachine = setup({
     instance: input.instance,
     generator: input.instance.generator(),
     currentLine: 0,
+    isDone: false,
   }),
   on: {
     restart: {
@@ -94,7 +102,7 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
-        actions: assign(({ event }) => ({ currentLine: event.output.line })),
+        actions: assign(({ event }) => event.output),
         onDone: [
           {
             guard: 'is done',
@@ -111,7 +119,7 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
-        actions: assign(({ event }) => ({ currentLine: event.output.line })),
+        actions: assign(({ event }) => event.output),
         onDone: [
           {
             guard: 'is done',
