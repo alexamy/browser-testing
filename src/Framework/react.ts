@@ -81,6 +81,9 @@ export const singleTestMachine = setup({
   states: {
     ready: {
       on: {
+        run: {
+          target: 'running',
+        },
         step: {
           target: 'step',
         },
@@ -99,6 +102,23 @@ export const singleTestMachine = setup({
           },
           {
             target: 'ready',
+          },
+        ],
+      },
+    },
+    running: {
+      tags: ['in progress'],
+      invoke: {
+        src: 'run step',
+        input: ({ context }) => ({ generator: context.generator }),
+        actions: assign(({ event }) => ({ currentLine: event.output.line })),
+        onDone: [
+          {
+            guard: 'is done',
+            target: 'done',
+          },
+          {
+            target: 'running',
           },
         ],
       },
