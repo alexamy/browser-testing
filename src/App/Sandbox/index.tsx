@@ -18,22 +18,34 @@ function useSelectedInstance() {
   const [instance, setInstance] = useState<TestInstance>();
 
   useEffect(() => {
-    window.addEventListener('message', (ev: MessageEvent<RunnerEvent>) => {
-      console.log('getting', ev.data);
+    function listener(ev: MessageEvent<RunnerEvent>) {
       if (ev.data.type === 'select') {
         const test = tests[ev.data.testId];
         setInstance(test);
       }
-    });
+    }
+
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
   }, []);
 
   return instance;
+}
+
+function useMessageDebug() {
+  useEffect(() => {
+    const listener = (ev: MessageEvent) => console.log(ev.data);
+
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
+  }, []);
 }
 
 // Empty container to run tests
 export function Sandbox() {
   const instance = useSelectedInstance();
   useCheckParent();
+  useMessageDebug();
 
   return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
 }
