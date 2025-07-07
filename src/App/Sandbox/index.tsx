@@ -5,6 +5,7 @@ import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
 import { cleanup } from '@testing-library/react';
 import { useActorRef, useSelector } from '@xstate/react';
 
+//#region root
 function useCheckParent() {
   useEffect(() => {
     if (window.parent === window) {
@@ -37,6 +38,7 @@ export function Sandbox() {
   return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
 }
 
+//#region intance
 function TestComponent({ instance }: { instance: TestInstance }) {
   const test = useActorRef(singleTestMachine, {
     input: { instance },
