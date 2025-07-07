@@ -34,7 +34,7 @@ export function Sandbox() {
   const instance = useSelectedInstance();
   useCheckParent();
 
-  return <>{instance ? <TestComponent instance={instance} /> : null}</>;
+  return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {
@@ -43,7 +43,6 @@ function TestComponent({ instance }: { instance: TestInstance }) {
   });
 
   const selected = useSelector(test, (snapshot) => snapshot.context.instance.id);
-  console.log(instance.id, selected);
 
   return <>{selected}</>;
 }
