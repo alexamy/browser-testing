@@ -33,15 +33,12 @@ export function TestsUI() {
   useBodyStyle('ui');
 
   useEffect(() => {
+    console.log('sending', t.selected);
     if (!t.selected) return;
 
     sandbox.current?.contentWindow?.postMessage({
       type: 'select',
       testId: t.selected.id,
-    } satisfies RunnerEvent);
-
-    sandbox.current?.contentWindow?.postMessage({
-      type: 'start',
     } satisfies RunnerEvent);
   }, [t.selected]);
 

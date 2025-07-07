@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
 import { cleanup } from '@testing-library/react';
-import { useActorRef } from '@xstate/react';
+import { useActorRef, useSelector } from '@xstate/react';
 
 function useCheckParent() {
   useEffect(() => {
@@ -18,6 +18,7 @@ function useSelectedInstance() {
 
   useEffect(() => {
     window.addEventListener('message', (ev: MessageEvent<RunnerEvent>) => {
+      console.log('getting', ev.data);
       if (ev.data.type === 'select') {
         const test = tests[ev.data.testId];
         setInstance(test);
@@ -37,9 +38,12 @@ export function Sandbox() {
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {
-  const actor = useActorRef(singleTestMachine, {
+  const test = useActorRef(singleTestMachine, {
     input: { instance },
   });
 
-  return <></>;
+  const selected = useSelector(test, (snapshot) => snapshot.context.instance.id);
+  console.log(instance.id, selected);
+
+  return <>{selected}</>;
 }
