@@ -1,9 +1,10 @@
-import { type TestInstance } from '@framework/test';
-import { useTests } from '@framework/react';
+import { tests, type TestInstance } from '@framework/test';
+import { singleTestMachine, useTests } from '@framework/react';
 import { useBodyStyle } from './useBodyStyle';
 import s from './ui.module.css';
 import { useEffect, useRef } from 'react';
 import type { RunnerEvent } from '../ipc';
+import { useActor } from '@xstate/react';
 
 //#region TestLine
 interface TestLineProps {
@@ -28,6 +29,14 @@ function TestLine({ instance, onClick, selected }: TestLineProps) {
 export function TestsUI() {
   const sandbox = useRef<HTMLIFrameElement>(null);
   const t = useTests();
+
+  const [state, send] = useActor(singleTestMachine, {
+    input: {
+      instance: Object.values(tests).at(0)!,
+    },
+  });
+
+  send({ type: 'run' });
 
   useBodyStyle('ui');
 
