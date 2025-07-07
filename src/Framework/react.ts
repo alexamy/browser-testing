@@ -2,7 +2,6 @@ import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
 import { assign, fromPromise, setup } from 'xstate';
-import { useActor } from '@xstate/react';
 
 export function useTestsRegistry() {
   return tests;
