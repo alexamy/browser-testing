@@ -1,57 +1,29 @@
 import { type TestInstance } from '@framework/test';
 import { useEffect, useState } from 'react';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
-import { useTest, useTestsRegistry } from '@framework/react';
+import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
 import { cleanup } from '@testing-library/react';
+import { useActorRef } from '@xstate/react';
 
-function useParent() {
-  const [parent, setParent] = useState<Window>();
-
+function useCheckParent() {
   useEffect(() => {
     if (window.parent === window) {
-      console.warn('Sandbox is meant to be loaded in the iframe.');
+      console.warn('Sandbox should be running in the iframe');
     }
-
-    setParent(window.parent);
   }, []);
-
-  return parent;
-}
-
-function useMessageListener(test: ReturnType<typeof useTest>) {
-  const tests = useTestsRegistry();
-
-  useEffect(() => {
-    async function listener({ data }: MessageEvent<RunnerEvent>) {
-      console.log('sandbox', data);
-
-      if (data.type === 'select') {
-        const instance = tests[data.testId];
-        test.select(instance);
-      } else if (data.type === 'start') {
-        cleanup();
-        await test.start();
-      }
-    }
-
-    window.addEventListener('message', listener);
-
-    return () => window.removeEventListener('message', listener);
-  }, [test, tests]);
 }
 
 // Empty container to run tests
 export function Sandbox() {
-  const parent = useParent();
-  const test = useTest();
-  useMessageListener(test);
+  useCheckParent();
 
-  useEffect(() => {
-    parent?.postMessage({
-      type: 'progress-changed',
-      inProgress: test.inProgress,
-    } satisfies SandboxEvent);
-  }, [parent, test.inProgress]);
+  const [current, setCurrent] = useState<TestInstance>();
+
+  const actor = useActorRef(singleTestMachine, {
+    input: {
+      instance: current,
+    },
+  });
 
   return <></>;
 }

@@ -30,15 +30,6 @@ export function TestsUI() {
   const sandbox = useRef<HTMLIFrameElement>(null);
   const t = useTests();
 
-  const actor = useActorRef(singleTestMachine, {
-    input: {
-      instance: Object.values(tests).at(0)!,
-    },
-  });
-
-  console.log('send');
-  actor.send({ type: 'step' });
-
   useBodyStyle('ui');
 
   useEffect(() => {
