@@ -45,7 +45,7 @@ export function Sandbox() {
   const instance = useSelectedInstance();
   useMessageDebug();
 
-  return instance ? <TestComponent key={instance.id} instance={instance} /> : null;
+  return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
 }
 
 //#region intance
