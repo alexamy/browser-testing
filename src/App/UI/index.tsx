@@ -1,10 +1,9 @@
-import { tests, type TestInstance } from '@framework/test';
-import { singleTestMachine, useTests } from '@framework/react';
-import { useBodyStyle } from './useBodyStyle';
-import s from './ui.module.css';
+import { useTests } from '@framework/react';
+import { type TestInstance } from '@framework/test';
 import { useEffect, useRef } from 'react';
 import type { RunnerEvent } from '../ipc';
-import { useActor, useActorRef, useSelector } from '@xstate/react';
+import s from './ui.module.css';
+import { useBodyStyle } from './useBodyStyle';
 
 //#region TestLine
 interface TestLineProps {

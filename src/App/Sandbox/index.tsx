@@ -1,10 +1,9 @@
+import { singleTestMachine } from '@framework/react';
 import { tests, type TestInstance } from '@framework/test';
+import { useActorRef, useSelector } from '@xstate/react';
 import { useEffect, useState } from 'react';
+import type { Actor } from 'xstate';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
-import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
-import { cleanup } from '@testing-library/react';
-import { useActor, useActorRef, useSelector } from '@xstate/react';
-import type { Actor, ActorRef } from 'xstate';
 
 //#region root
 function useCheckParent() {
