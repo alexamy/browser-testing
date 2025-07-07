@@ -1,7 +1,7 @@
 import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
-import { assign, setup } from 'xstate';
+import { assign, fromPromise, setup } from 'xstate';
 import { useActor } from '@xstate/react';
 
 export function useTestsRegistry() {
@@ -41,13 +41,25 @@ interface SingleTestMachineContext {
   currentLine: number;
 }
 
-type SingleTestMachineEvent = { type: 'restart' };
+type SingleTestMachineEvent = { type: 'step' } | { type: 'restart' };
+type SingleTestMachineTag = 'in progress';
 
 export const singleTestMachine = setup({
   types: {
     context: {} as SingleTestMachineContext,
     input: {} as SingleTestMachineInput,
     events: {} as SingleTestMachineEvent,
+    tags: {} as SingleTestMachineTag,
+  },
+  actors: {
+    'run step': fromPromise<{ line: number | void }, { generator: TestGenerator }>(
+      async ({ input }) => {
+        const data = await input.generator.next();
+        const line = data.value;
+
+        return { line };
+      }
+    ),
   },
 }).createMachine({
   id: 'single test machine',
@@ -66,7 +78,27 @@ export const singleTestMachine = setup({
     },
   },
   states: {
-    initial: {},
+    initial: {
+      on: {
+        step: {
+          target: 'step',
+        },
+      },
+    },
+    step: {
+      tags: ['in progress'],
+      invoke: {
+        src: 'run step',
+        input: ({ context }) => ({ generator: context.generator }),
+        onDone: {
+          target: 'done',
+          actions: assign(({ event }) => ({ currentLine: event.output.line })),
+        },
+      },
+    },
+    done: {
+      type: 'final',
+    },
   },
 });
 
