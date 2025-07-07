@@ -61,12 +61,30 @@ function useInProgressSend(actor: Actor<typeof singleTestMachine>) {
   }, [inProgress]);
 }
 
+function useActorController(actor: Actor<typeof singleTestMachine>) {
+  useEffect(() => {
+    function listener(ev: MessageEvent<RunnerEvent>) {
+      if (ev.data.type === 'start') {
+        actor.send({ type: 'start' });
+      } else if (ev.data.type === 'step') {
+        actor.send({ type: 'step' });
+      } else if (ev.data.type === 'restart') {
+        actor.send({ type: 'restart' });
+      }
+    }
+
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
+  }, [actor]);
+}
+
 function TestComponent({ instance }: { instance: TestInstance }) {
   const actor = useActorRef(singleTestMachine, {
     input: { instance },
   });
 
   useInProgressSend(actor);
+  useActorController(actor);
 
   return <></>;
 }

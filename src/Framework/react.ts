@@ -41,7 +41,7 @@ interface SingleTestMachineContext {
   isDone: boolean;
 }
 
-type SingleTestMachineEvent = { type: 'run' } | { type: 'step' } | { type: 'restart' };
+type SingleTestMachineEvent = { type: 'start' } | { type: 'step' } | { type: 'restart' };
 
 export const singleTestMachine = setup({
   types: {
@@ -88,7 +88,7 @@ export const singleTestMachine = setup({
   states: {
     ready: {
       on: {
-        run: {
+        start: {
           target: 'running',
         },
         step: {
