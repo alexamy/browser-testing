@@ -13,10 +13,8 @@ function useCheckParent() {
   }, []);
 }
 
-// Empty container to run tests
-export function Sandbox() {
+function useSelectedInstance() {
   const [instance, setInstance] = useState<TestInstance>();
-  useCheckParent();
 
   useEffect(() => {
     window.addEventListener('message', (ev: MessageEvent<RunnerEvent>) => {
@@ -26,6 +24,14 @@ export function Sandbox() {
       }
     });
   }, []);
+
+  return instance;
+}
+
+// Empty container to run tests
+export function Sandbox() {
+  const instance = useSelectedInstance();
+  useCheckParent();
 
   return <>{instance ? <TestComponent instance={instance} /> : null}</>;
 }
