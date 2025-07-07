@@ -11,19 +11,28 @@ function sendSelected(ref: React.RefObject<HTMLIFrameElement | null>, id: string
   } satisfies RunnerEvent);
 }
 
+function sendDirective(
+  ref: React.RefObject<HTMLIFrameElement | null>,
+  type: 'start' | 'step' | 'restart'
+) {
+  ref.current?.contentWindow?.postMessage({
+    type,
+  } satisfies RunnerEvent);
+}
+
 export function SimpleUI() {
   const tests = useTestsRegistry();
-  const sandbox = useRef<HTMLIFrameElement>(null);
+  const frame = useRef<HTMLIFrameElement>(null);
   useBodyStyle('ui');
 
   const [selected, setSelected] = useState<string>();
   useEffect(() => {
-    if (selected) sendSelected(sandbox, selected);
+    if (selected) sendSelected(frame, selected);
   }, [selected]);
 
   return (
     <div>
-      <iframe ref={sandbox} src="/sandbox" className={s.frame} />
+      <iframe ref={frame} src="/sandbox" className={s.frame} />
 
       {Object.values(tests).map((test) => (
         <div
@@ -34,6 +43,14 @@ export function SimpleUI() {
           {test.id} {test.description}
         </div>
       ))}
+
+      {selected ? (
+        <>
+          <button onClick={() => sendDirective(frame, 'start')}>Start</button>
+          <button onClick={() => sendDirective(frame, 'step')}>Step</button>
+          <button onClick={() => sendDirective(frame, 'restart')}>Restart</button>
+        </>
+      ) : null}
     </div>
   );
 }
