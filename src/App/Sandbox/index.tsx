@@ -86,5 +86,8 @@ function TestComponent({ instance }: { instance: TestInstance }) {
   useInProgressSend(actor);
   useActorController(actor);
 
+  const value = useSelector(actor, (snapshot) => snapshot.value);
+  useEffect(() => console.log(value), [value]);
+
   return <></>;
 }
