@@ -15,14 +15,15 @@ function useCheckParent() {
 
 // Empty container to run tests
 export function Sandbox() {
+  const [current, setCurrent] = useState<TestInstance>();
   useCheckParent();
 
-  const [current, setCurrent] = useState<TestInstance>();
+  return <>{current ? <TestComponent instance={current} /> : null}</>;
+}
 
+function TestComponent({ instance }: { instance: TestInstance }) {
   const actor = useActorRef(singleTestMachine, {
-    input: {
-      instance: current,
-    },
+    input: { instance },
   });
 
   return <></>;
