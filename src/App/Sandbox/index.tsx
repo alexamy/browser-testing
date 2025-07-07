@@ -1,4 +1,4 @@
-import { type TestInstance } from '@framework/test';
+import { tests, type TestInstance } from '@framework/test';
 import { useEffect, useState } from 'react';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
@@ -15,10 +15,19 @@ function useCheckParent() {
 
 // Empty container to run tests
 export function Sandbox() {
-  const [current, setCurrent] = useState<TestInstance>();
+  const [instance, setInstance] = useState<TestInstance>();
   useCheckParent();
 
-  return <>{current ? <TestComponent instance={current} /> : null}</>;
+  useEffect(() => {
+    window.addEventListener('message', (ev: MessageEvent<RunnerEvent>) => {
+      if (ev.data.type === 'select') {
+        const test = tests[ev.data.testId];
+        setInstance(test);
+      }
+    });
+  }, []);
+
+  return <>{instance ? <TestComponent instance={instance} /> : null}</>;
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {
