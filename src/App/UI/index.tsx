@@ -4,7 +4,7 @@ import { useBodyStyle } from './useBodyStyle';
 import s from './ui.module.css';
 import { useEffect, useRef } from 'react';
 import type { RunnerEvent } from '../ipc';
-import { useActor } from '@xstate/react';
+import { useActor, useActorRef, useSelector } from '@xstate/react';
 
 //#region TestLine
 interface TestLineProps {
@@ -30,13 +30,14 @@ export function TestsUI() {
   const sandbox = useRef<HTMLIFrameElement>(null);
   const t = useTests();
 
-  const [state, send] = useActor(singleTestMachine, {
+  const actor = useActorRef(singleTestMachine, {
     input: {
       instance: Object.values(tests).at(0)!,
     },
   });
 
-  send({ type: 'run' });
+  console.log('send');
+  actor.send({ type: 'step' });
 
   useBodyStyle('ui');
 
@@ -56,7 +57,6 @@ export function TestsUI() {
   return (
     <>
       <iframe ref={sandbox} src="/sandbox" className={s.frame} />
-
       <div className={s.framework}>
         <div>
           <h4>Test list</h4>

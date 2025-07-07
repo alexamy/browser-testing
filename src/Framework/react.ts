@@ -61,6 +61,7 @@ export const singleTestMachine = setup({
       { generator: TestGenerator }
     >(async ({ input }) => {
       const { value, done } = await input.generator.next();
+      // console.log('step', value);
       const hasLine = value !== undefined && Number.isFinite(value);
       const result = {
         currentLine: hasLine ? value : undefined,
@@ -132,9 +133,7 @@ export const singleTestMachine = setup({
         ],
       },
     },
-    done: {
-      type: 'final',
-    },
+    done: {},
   },
 });
 
