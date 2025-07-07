@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import { singleTestMachine, useTest, useTestsRegistry } from '@framework/react';
 import { cleanup } from '@testing-library/react';
-import { useActorRef, useSelector } from '@xstate/react';
+import { useActor, useActorRef, useSelector } from '@xstate/react';
 
 //#region root
 function useCheckParent() {
@@ -40,11 +40,11 @@ export function Sandbox() {
 
 //#region intance
 function TestComponent({ instance }: { instance: TestInstance }) {
-  const test = useActorRef(singleTestMachine, {
+  const [state, send, actor] = useActor(singleTestMachine, {
     input: { instance },
   });
 
-  const selected = useSelector(test, (snapshot) => snapshot.context.instance.id);
+  const selected = useSelector(actor, (snapshot) => snapshot.context.instance.id);
   useEffect(() => console.log(selected), [selected]);
 
   return <></>;
