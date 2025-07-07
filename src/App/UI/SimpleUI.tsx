@@ -4,6 +4,15 @@ import { useBodyStyle } from './useBodyStyle';
 import s from './ui.module.css';
 import type { RunnerEvent } from '../ipc';
 
+function useMessageDebug() {
+  useEffect(() => {
+    const listener = (ev: MessageEvent) => console.log('runner receive', ev.data);
+
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
+  }, []);
+}
+
 function sendSelected(ref: React.RefObject<HTMLIFrameElement | null>, id: string) {
   ref.current?.contentWindow?.postMessage({
     type: 'select',
@@ -24,6 +33,7 @@ export function SimpleUI() {
   const tests = useTestsRegistry();
   const frame = useRef<HTMLIFrameElement>(null);
   useBodyStyle('ui');
+  useMessageDebug();
 
   const [selected, setSelected] = useState<string>();
   useEffect(() => {

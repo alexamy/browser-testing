@@ -12,7 +12,7 @@ function useMessageDebug() {
       console.warn('Sandbox should be running in the iframe');
     }
 
-    const listener = (ev: MessageEvent) => console.log('sandbox get', ev.data);
+    const listener = (ev: MessageEvent) => console.log('sandbox receive', ev.data);
 
     window.addEventListener('message', listener);
     return () => window.removeEventListener('message', listener);
