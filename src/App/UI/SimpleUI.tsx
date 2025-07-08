@@ -1,5 +1,5 @@
 import { useTestsRegistry } from '@framework/react';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBodyStyle } from './useBodyStyle';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import type { TestInstance } from '@framework/test';
@@ -94,10 +94,10 @@ function SimpleUIContent({ frame, sandbox }: { frame: IFrameRef; sandbox: Sandbo
   return (
     <div>
       <>
-        <button disabled={canProceed} onClick={() => sendDirective(frame, 'start')}>
+        <button disabled={!canProceed} onClick={() => sendDirective(frame, 'start')}>
           Start
         </button>
-        <button disabled={canProceed} onClick={() => sendDirective(frame, 'step')}>
+        <button disabled={!canProceed} onClick={() => sendDirective(frame, 'step')}>
           Step
         </button>
         <button disabled={inProgress} onClick={() => sendDirective(frame, 'restart')}>
