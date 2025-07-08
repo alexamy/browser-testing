@@ -18,6 +18,9 @@ export default defineConfig({
   plugins: [tsconfigPaths(), react(), reloadPageOnHMR(), browserTestsPlugin()],
   build: {
     minify: false,
+    rollupOptions: {
+      external: [/node_modules/],
+    },
   },
   test: {
     environment: 'happy-dom',
