@@ -11,6 +11,7 @@ export interface SingleTestMachineContext {
   generator: TestGenerator;
   currentLine?: number;
   isDone: boolean;
+  logs: string[];
 }
 
 export type SingleTestMachineEvent = { type: 'start' } | { type: 'step' } | { type: 'restart' };
@@ -27,6 +28,7 @@ export const singleTestMachine = setup({
       generator: context.instance.generator(),
       currentLine: undefined,
       isDone: false,
+      logs: [],
     })),
   },
   actors: {
@@ -51,6 +53,7 @@ export const singleTestMachine = setup({
     generator: input.instance.generator(),
     currentLine: undefined,
     isDone: false,
+    logs: [],
   }),
   on: {
     restart: {
@@ -73,7 +76,6 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
-        // TODO: add on error
         onDone: [
           {
             actions: assign(({ event }) => event.output),
@@ -85,6 +87,12 @@ export const singleTestMachine = setup({
             target: 'ready',
           },
         ],
+        onError: {
+          target: 'error',
+          actions: assign(({ context, event }) => ({
+            logs: [...context.logs, (event.error as Error).message],
+          })),
+        },
       },
     },
     running: {
@@ -103,8 +111,15 @@ export const singleTestMachine = setup({
             target: 'running',
           },
         ],
+        onError: {
+          target: 'error',
+          actions: assign(({ context, event }) => ({
+            logs: [...context.logs, (event.error as Error).message],
+          })),
+        },
       },
     },
+    error: {},
     done: {},
   },
 });
