@@ -73,6 +73,7 @@ function useActorController(actor: Actor<typeof singleTestMachine>) {
 
 function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
   const state = useSelector(actor, (snapshot) => snapshot.value);
+  const currentTest = useSelector(actor, (snapshot) => snapshot.context.instance.id);
   const currentLine = useSelector(actor, (snapshot) => snapshot.context.currentLine);
   const isDone = useSelector(actor, (snapshot) => snapshot.context.isDone);
   const inProgress = useMemo(() => state === 'running' || state === 'stepping', [state]);
@@ -81,11 +82,12 @@ function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
     window.parent.postMessage({
       type: 'update',
       state,
+      currentTest,
       currentLine,
       isDone,
       inProgress,
     } satisfies SandboxEvent);
-  }, [state, currentLine, inProgress, isDone]);
+  }, [state, currentTest, currentLine, inProgress, isDone]);
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {

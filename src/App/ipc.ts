@@ -4,6 +4,7 @@ import type { StateValueFrom } from 'xstate';
 export type SandboxEvent = {
   type: 'update';
   state: StateValueFrom<typeof singleTestMachine>;
+  currentTest: string;
   currentLine?: number;
   isDone: boolean;
   inProgress: boolean;
