@@ -63,7 +63,6 @@ export const singleTestMachine = setup({
       on: {
         start: {
           target: 'running',
-          actions: ['cleanup'],
         },
         step: {
           target: 'stepping',

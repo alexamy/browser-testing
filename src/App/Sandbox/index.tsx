@@ -4,6 +4,7 @@ import { useActorRef, useSelector } from '@xstate/react';
 import { useEffect, useMemo, useState } from 'react';
 import type { Actor } from 'xstate';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
+import { cleanup } from '@testing-library/react';
 
 //#region root
 function useMessageDebug() {
@@ -29,6 +30,7 @@ function useSelectedInstance() {
     function listener(ev: MessageEvent<RunnerEvent>) {
       if (ev.data.type === 'select') {
         const test = tests[ev.data.testId];
+        cleanup();
         setInstance(test);
       }
     }
