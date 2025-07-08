@@ -2,7 +2,7 @@ import { useTestsRegistry } from '@framework/react';
 import { useEffect, useRef, useState } from 'react';
 import { useBodyStyle } from './useBodyStyle';
 import s from './ui.module.css';
-import type { RunnerEvent } from '../ipc';
+import type { RunnerEvent, SandboxEvent } from '../ipc';
 import type { TestInstance } from '@framework/test';
 
 function useMessageDebug() {
@@ -15,6 +15,21 @@ function useMessageDebug() {
     window.addEventListener('message', listener);
     return () => window.removeEventListener('message', listener);
   }, []);
+}
+
+function useSandboxState() {
+  const [state, setState] = useState<SandboxEvent>();
+
+  useEffect(() => {
+    const listener = (ev: MessageEvent<SandboxEvent>) => {
+      setState(ev.data);
+    };
+
+    window.addEventListener('message', listener);
+    return () => window.removeEventListener('message', listener);
+  }, []);
+
+  return state;
 }
 
 function sendSelected(ref: React.RefObject<HTMLIFrameElement | null>, id: string) {
@@ -36,9 +51,11 @@ function sendDirective(
 export function SimpleUI() {
   const tests = useTestsRegistry();
   const frame = useRef<HTMLIFrameElement>(null);
+
   useBodyStyle('ui');
   useMessageDebug();
 
+  const sandbox = useSandboxState();
   const [selected, setSelected] = useState<TestInstance>();
   useEffect(() => {
     if (selected) sendSelected(frame, selected.id);
@@ -63,6 +80,13 @@ export function SimpleUI() {
           <button onClick={() => sendDirective(frame, 'start')}>Start</button>
           <button onClick={() => sendDirective(frame, 'step')}>Step</button>
           <button onClick={() => sendDirective(frame, 'restart')}>Restart</button>
+          <div>
+            {selected.source.map((line, i) => (
+              <pre key={i} style={{ fontWeight: sandbox?.currentLine === i ? 'bold' : 'normal' }}>
+                {line}
+              </pre>
+            ))}
+          </div>
         </>
       ) : null}
     </div>
