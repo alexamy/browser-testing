@@ -1,9 +1,9 @@
 import { useTestsRegistry } from '@framework/react';
 import { useEffect, useRef, useState } from 'react';
 import { useBodyStyle } from './useBodyStyle';
-import s from './ui.module.css';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import type { TestInstance } from '@framework/test';
+import s from './ui.module.css';
 
 function useMessageDebug() {
   useEffect(() => {
@@ -80,7 +80,7 @@ export function SimpleUI() {
           <button onClick={() => sendDirective(frame, 'start')}>Start</button>
           <button onClick={() => sendDirective(frame, 'step')}>Step</button>
           <button onClick={() => sendDirective(frame, 'restart')}>Restart</button>
-          <div>
+          <div className={s.codeLines}>
             {selected.source.map((line, i) => (
               <pre key={i} style={{ fontWeight: sandbox?.currentLine === i ? 'bold' : 'normal' }}>
                 {line}

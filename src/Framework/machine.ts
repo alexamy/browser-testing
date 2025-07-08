@@ -40,7 +40,7 @@ export const singleTestMachine = setup({
   context: ({ input }) => ({
     instance: input.instance,
     generator: input.instance.generator(),
-    currentLine: 0,
+    currentLine: undefined,
     isDone: false,
   }),
   on: {
@@ -48,7 +48,7 @@ export const singleTestMachine = setup({
       target: '.ready',
       actions: assign(({ context }) => ({
         generator: context.instance.generator(),
-        currentLine: 0,
+        currentLine: undefined,
         isDone: false,
       })),
     },
