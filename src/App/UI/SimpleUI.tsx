@@ -38,8 +38,6 @@ export function SimpleUI() {
   useBodyStyle('ui');
   useMessageDebug();
 
-  // TODO: add single event from sandbox with state of machine
-
   const [selected, setSelected] = useState<string>();
   useEffect(() => {
     if (selected) sendSelected(frame, selected);

@@ -30,18 +30,18 @@ function useLogs() {
   return { data, log, reset };
 }
 
-interface SingleTestMachineInput {
+export interface SingleTestMachineInput {
   instance: TestInstance;
 }
 
-interface SingleTestMachineContext {
+export interface SingleTestMachineContext {
   instance: TestInstance;
   generator: TestGenerator;
   currentLine?: number;
   isDone: boolean;
 }
 
-type SingleTestMachineEvent = { type: 'start' } | { type: 'step' } | { type: 'restart' };
+export type SingleTestMachineEvent = { type: 'start' } | { type: 'step' } | { type: 'restart' };
 
 export const singleTestMachine = setup({
   types: {

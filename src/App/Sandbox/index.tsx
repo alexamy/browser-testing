@@ -49,18 +49,6 @@ export function Sandbox() {
 }
 
 //#region intance
-function useInProgressSend(actor: Actor<typeof singleTestMachine>) {
-  const value = useSelector(actor, (snapshot) => snapshot.value);
-  const inProgress = useMemo(() => value === 'running' || value === 'stepping', [value]);
-
-  useEffect(() => {
-    window.parent.postMessage({
-      type: 'progress-changed',
-      inProgress,
-    } satisfies SandboxEvent);
-  }, [inProgress]);
-}
-
 function useActorController(actor: Actor<typeof singleTestMachine>) {
   useEffect(() => {
     function listener(ev: MessageEvent<RunnerEvent>) {
@@ -78,17 +66,27 @@ function useActorController(actor: Actor<typeof singleTestMachine>) {
   }, [actor]);
 }
 
+function useActorSyncSend(actor: Actor<typeof singleTestMachine>) {
+  const value = useSelector(actor, (snapshot) => snapshot.value);
+  const context = useSelector(actor, (snapshot) => snapshot.context);
+
+  useEffect(() => {
+    console.log(value, context);
+    window.parent.postMessage({
+      type: 'update',
+      value,
+      context,
+    } satisfies SandboxEvent);
+  }, [value, context]);
+}
+
 function TestComponent({ instance }: { instance: TestInstance }) {
   const actor = useActorRef(singleTestMachine, {
     input: { instance },
   });
 
-  useInProgressSend(actor);
   useActorController(actor);
-
-  const value = useSelector(actor, (snapshot) => snapshot.value);
-  const context = useSelector(actor, (snapshot) => snapshot.context);
-  useEffect(() => console.log(value, context), [value, context]);
+  useActorSyncSend(actor);
 
   return <></>;
 }
