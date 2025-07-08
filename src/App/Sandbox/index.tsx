@@ -71,7 +71,7 @@ function useActorController(actor: Actor<typeof singleTestMachine>) {
   }, [actor]);
 }
 
-function useActorSyncSend(actor: Actor<typeof singleTestMachine>) {
+function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
   const value = useSelector(actor, (snapshot) => snapshot.value);
   const context = useSelector(actor, (snapshot) => snapshot.context);
   const inProgress = useMemo(() => value === 'running' || value === 'stepping', [value]);
@@ -92,7 +92,7 @@ function TestComponent({ instance }: { instance: TestInstance }) {
   });
 
   useActorController(actor);
-  useActorSyncSend(actor);
+  useActorUpdateSend(actor);
 
   return <></>;
 }

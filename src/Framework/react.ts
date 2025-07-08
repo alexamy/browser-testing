@@ -30,6 +30,7 @@ function useLogs() {
   return { data, log, reset };
 }
 
+//#region single test machine
 export interface SingleTestMachineInput {
   instance: TestInstance;
 }
