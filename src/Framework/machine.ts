@@ -79,7 +79,7 @@ export const singleTestMachine = setup({
         onDone: [
           {
             actions: assign(({ event }) => event.output),
-            guard: ({ context }) => context.isDone,
+            guard: ({ event }) => event.output.isDone,
             target: 'done',
           },
           {
@@ -102,7 +102,7 @@ export const singleTestMachine = setup({
         onDone: [
           {
             actions: assign(({ event }) => event.output),
-            guard: ({ context }) => context.isDone,
+            guard: ({ event }) => event.output.isDone,
             target: 'done',
           },
           {
