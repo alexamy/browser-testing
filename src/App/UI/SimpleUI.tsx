@@ -5,6 +5,21 @@ import type { RunnerEvent, SandboxEvent } from '../ipc';
 import type { TestInstance } from '@framework/test';
 import s from './ui.module.css';
 
+type IFrameRef = React.RefObject<HTMLIFrameElement | null>;
+
+function sendSelected(ref: IFrameRef, id: string) {
+  ref.current?.contentWindow?.postMessage({
+    type: 'select',
+    testId: id,
+  } satisfies RunnerEvent);
+}
+
+function sendDirective(ref: IFrameRef, type: 'start' | 'step' | 'restart') {
+  ref.current?.contentWindow?.postMessage({
+    type,
+  } satisfies RunnerEvent);
+}
+
 function useMessageDebug() {
   useEffect(() => {
     const listener = (ev: MessageEvent) => {
@@ -22,7 +37,9 @@ function useSandboxState() {
 
   useEffect(() => {
     const listener = (ev: MessageEvent<SandboxEvent>) => {
-      setState(ev.data);
+      if (ev.data.type === 'update') {
+        setState(ev.data);
+      }
     };
 
     window.addEventListener('message', listener);
@@ -32,42 +49,22 @@ function useSandboxState() {
   return state;
 }
 
-function sendSelected(ref: React.RefObject<HTMLIFrameElement | null>, id: string) {
-  ref.current?.contentWindow?.postMessage({
-    type: 'select',
-    testId: id,
-  } satisfies RunnerEvent);
-}
-
-function sendDirective(
-  ref: React.RefObject<HTMLIFrameElement | null>,
-  type: 'start' | 'step' | 'restart'
-) {
-  ref.current?.contentWindow?.postMessage({
-    type,
-  } satisfies RunnerEvent);
-}
-
 export function SimpleUI() {
-  useBodyStyle('ui');
-  useMessageDebug();
-
-  const sandbox = useSandboxState();
-
-  return <>{sandbox ? <SimpleUIContent sandbox={sandbox} /> : null}</>;
-}
-
-function SimpleUIContent({ sandbox }: { sandbox: SandboxEvent }) {
   const tests = useTestsRegistry();
   const frame = useRef<HTMLIFrameElement>(null);
+
+  useBodyStyle('ui');
+  useMessageDebug();
 
   const [selected, setSelected] = useState<TestInstance>();
   useEffect(() => {
     if (selected) sendSelected(frame, selected.id);
   }, [selected]);
 
+  const sandbox = useSandboxState();
+
   return (
-    <div>
+    <>
       <iframe ref={frame} src="/sandbox" className={s.frame} />
 
       <div className={s.codeLines}>
@@ -82,33 +79,42 @@ function SimpleUIContent({ sandbox }: { sandbox: SandboxEvent }) {
         ))}
       </div>
 
-      {selected ? (
-        <>
-          <button
-            disabled={sandbox.inProgress || sandbox.isDone}
-            onClick={() => sendDirective(frame, 'start')}
-          >
-            Start
-          </button>
-          <button
-            disabled={sandbox.inProgress || sandbox.isDone}
-            onClick={() => sendDirective(frame, 'step')}
-          >
-            Step
-          </button>
-          <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'restart')}>
-            Restart
-          </button>
+      {sandbox ? <SimpleUIContent frame={frame} sandbox={sandbox} /> : null}
+    </>
+  );
+}
 
-          <div className={s.codeLines}>
-            {selected.source.map((line, i) => (
-              <pre key={i} style={{ fontWeight: sandbox?.currentLine === i ? 'bold' : 'normal' }}>
-                {line}
-              </pre>
-            ))}
-          </div>
-        </>
-      ) : null}
+function SimpleUIContent({ frame, sandbox }: { frame: IFrameRef; sandbox: SandboxEvent }) {
+  const tests = useTestsRegistry();
+  const selected = tests[sandbox.currentTest];
+
+  return (
+    <div>
+      <>
+        <button
+          disabled={sandbox.inProgress || sandbox.isDone}
+          onClick={() => sendDirective(frame, 'start')}
+        >
+          Start
+        </button>
+        <button
+          disabled={sandbox.inProgress || sandbox.isDone}
+          onClick={() => sendDirective(frame, 'step')}
+        >
+          Step
+        </button>
+        <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'restart')}>
+          Restart
+        </button>
+
+        <div className={s.codeLines}>
+          {selected.source.map((line, i) => (
+            <pre key={i} style={{ fontWeight: sandbox?.currentLine === i ? 'bold' : 'normal' }}>
+              {line}
+            </pre>
+          ))}
+        </div>
+      </>
 
       {sandbox.logs.length > 0 ? (
         <div>
