@@ -93,6 +93,7 @@ export const singleTestMachine = setup({
             target: 'done',
           },
           {
+            reenter: true,
             actions: assign(({ event }) => event.output),
             target: 'running',
           },
