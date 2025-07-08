@@ -9,7 +9,7 @@ import type { RunnerEvent, SandboxEvent } from '../ipc';
 function useMessageDebug() {
   useEffect(() => {
     if (window.parent === window) {
-      console.warn('Sandbox should be running in the iframe');
+      console.warn('Sandbox should be running in the iframe.');
     }
 
     const listener = (ev: MessageEvent) => {
@@ -48,7 +48,7 @@ export function Sandbox() {
   return <>{instance ? <TestComponent key={instance.id} instance={instance} /> : null}</>;
 }
 
-//#region intance
+//#region instance
 function useActorController(actor: Actor<typeof singleTestMachine>) {
   useEffect(() => {
     function listener(ev: MessageEvent<RunnerEvent>) {
@@ -69,15 +69,16 @@ function useActorController(actor: Actor<typeof singleTestMachine>) {
 function useActorSyncSend(actor: Actor<typeof singleTestMachine>) {
   const value = useSelector(actor, (snapshot) => snapshot.value);
   const context = useSelector(actor, (snapshot) => snapshot.context);
+  const inProgress = useMemo(() => value === 'running' || value === 'stepping', [value]);
 
   useEffect(() => {
-    console.log(value, context);
     window.parent.postMessage({
       type: 'update',
       value,
       context,
+      inProgress,
     } satisfies SandboxEvent);
-  }, [value, context]);
+  }, [value, context, inProgress]);
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {

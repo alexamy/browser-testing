@@ -5,6 +5,7 @@ export type SandboxEvent = {
   type: 'update';
   context: SingleTestMachineContext;
   value: StateValueFrom<typeof singleTestMachine>;
+  inProgress: boolean;
 };
 
 export type RunnerEvent =
