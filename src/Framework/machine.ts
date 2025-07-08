@@ -1,3 +1,4 @@
+import { cleanup } from '@testing-library/react';
 import type { TestGenerator, TestInstance } from '.';
 import { assign, fromPromise, setup } from 'xstate';
 
@@ -19,6 +20,14 @@ export const singleTestMachine = setup({
     context: {} as SingleTestMachineContext,
     input: {} as SingleTestMachineInput,
     events: {} as SingleTestMachineEvent,
+  },
+  actions: {
+    cleanup: () => cleanup(),
+    reset: assign(({ context }) => ({
+      generator: context.instance.generator(),
+      currentLine: undefined,
+      isDone: false,
+    })),
   },
   actors: {
     'run step': fromPromise<
@@ -46,11 +55,7 @@ export const singleTestMachine = setup({
   on: {
     restart: {
       target: '.ready',
-      actions: assign(({ context }) => ({
-        generator: context.instance.generator(),
-        currentLine: undefined,
-        isDone: false,
-      })),
+      actions: ['cleanup', 'reset'],
     },
   },
   states: {
@@ -58,6 +63,7 @@ export const singleTestMachine = setup({
       on: {
         start: {
           target: 'running',
+          actions: ['cleanup'],
         },
         step: {
           target: 'stepping',
