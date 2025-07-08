@@ -19,10 +19,6 @@ function useMessageDebug() {
 
 function useSandboxState() {
   const [state, setState] = useState<SandboxEvent>();
-  const currentLine = useMemo(() => state?.currentLine, [state]);
-  const isDone = useMemo(() => state?.isDone, [state]);
-  const inProgress = useMemo(() => state?.inProgress, [state]);
-  const logs = useMemo(() => state?.logs, [state]);
 
   useEffect(() => {
     const listener = (ev: MessageEvent<SandboxEvent>) => {
@@ -33,12 +29,7 @@ function useSandboxState() {
     return () => window.removeEventListener('message', listener);
   }, []);
 
-  return {
-    currentLine,
-    isDone,
-    inProgress,
-    logs,
-  };
+  return state;
 }
 
 function sendSelected(ref: React.RefObject<HTMLIFrameElement | null>, id: string) {
@@ -58,13 +49,18 @@ function sendDirective(
 }
 
 export function SimpleUI() {
-  const tests = useTestsRegistry();
-  const frame = useRef<HTMLIFrameElement>(null);
-
   useBodyStyle('ui');
   useMessageDebug();
 
   const sandbox = useSandboxState();
+
+  return <>{sandbox ? <SimpleUIContent sandbox={sandbox} /> : null}</>;
+}
+
+function SimpleUIContent({ sandbox }: { sandbox: SandboxEvent }) {
+  const tests = useTestsRegistry();
+  const frame = useRef<HTMLIFrameElement>(null);
+
   const [selected, setSelected] = useState<TestInstance>();
   useEffect(() => {
     if (selected) sendSelected(frame, selected.id);
@@ -106,7 +102,7 @@ export function SimpleUI() {
 
           <div className={s.codeLines}>
             {selected.source.map((line, i) => (
-              <pre key={i} style={{ fontWeight: sandbox.currentLine === i ? 'bold' : 'normal' }}>
+              <pre key={i} style={{ fontWeight: sandbox?.currentLine === i ? 'bold' : 'normal' }}>
                 {line}
               </pre>
             ))}
@@ -114,7 +110,7 @@ export function SimpleUI() {
         </>
       ) : null}
 
-      {sandbox.logs && sandbox.logs.length > 0 ? (
+      {sandbox.logs.length > 0 ? (
         <div>
           Logs:
           {sandbox.logs.map((line, i) => (
