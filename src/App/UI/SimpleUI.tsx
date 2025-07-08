@@ -1,5 +1,5 @@
 import { useTestsRegistry } from '@framework/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useBodyStyle } from './useBodyStyle';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import type { TestInstance } from '@framework/test';
@@ -19,6 +19,9 @@ function useMessageDebug() {
 
 function useSandboxState() {
   const [state, setState] = useState<SandboxEvent>();
+  const currentLine = useMemo(() => state?.currentLine, [state]);
+  const isDone = useMemo(() => state?.isDone, [state]);
+  const inProgress = useMemo(() => state?.inProgress, [state]);
 
   useEffect(() => {
     const listener = (ev: MessageEvent<SandboxEvent>) => {
@@ -29,7 +32,11 @@ function useSandboxState() {
     return () => window.removeEventListener('message', listener);
   }, []);
 
-  return state;
+  return {
+    currentLine,
+    isDone,
+    inProgress,
+  };
 }
 
 function sendSelected(ref: React.RefObject<HTMLIFrameElement | null>, id: string) {
@@ -77,12 +84,18 @@ export function SimpleUI() {
 
       {selected ? (
         <>
-          <button onClick={() => sendDirective(frame, 'start')}>Start</button>
-          <button onClick={() => sendDirective(frame, 'step')}>Step</button>
-          <button onClick={() => sendDirective(frame, 'restart')}>Restart</button>
+          <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'start')}>
+            Start
+          </button>
+          <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'step')}>
+            Step
+          </button>
+          <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'restart')}>
+            Restart
+          </button>
           <div className={s.codeLines}>
             {selected.source.map((line, i) => (
-              <pre key={i} style={{ fontWeight: sandbox?.currentLine === i ? 'bold' : 'normal' }}>
+              <pre key={i} style={{ fontWeight: sandbox.currentLine === i ? 'bold' : 'normal' }}>
                 {line}
               </pre>
             ))}
