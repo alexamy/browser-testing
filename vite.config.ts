@@ -16,6 +16,9 @@ function reloadPageOnHMR(): Plugin {
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [tsconfigPaths(), react(), reloadPageOnHMR(), browserTestsPlugin()],
+  build: {
+    minify: false,
+  },
   test: {
     environment: 'happy-dom',
     setupFiles: ['./vitest-setup.ts'],
