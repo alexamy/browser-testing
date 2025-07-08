@@ -84,10 +84,16 @@ export function SimpleUI() {
 
       {selected ? (
         <>
-          <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'start')}>
+          <button
+            disabled={sandbox.inProgress || sandbox.isDone}
+            onClick={() => sendDirective(frame, 'start')}
+          >
             Start
           </button>
-          <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'step')}>
+          <button
+            disabled={sandbox.inProgress || sandbox.isDone}
+            onClick={() => sendDirective(frame, 'step')}
+          >
             Step
           </button>
           <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'restart')}>
