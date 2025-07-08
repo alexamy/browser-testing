@@ -30,8 +30,8 @@ function useSelectedInstance() {
     function listener(ev: MessageEvent<RunnerEvent>) {
       if (ev.data.type === 'select') {
         const test = tests[ev.data.testId];
-        cleanup();
         setInstance(test);
+        cleanup();
       }
     }
 
