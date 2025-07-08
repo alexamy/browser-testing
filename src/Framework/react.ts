@@ -2,6 +2,10 @@ import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
 
+export function useTestsRegistry() {
+  return tests;
+}
+
 //#region useLogs
 function processLogMessage(arg: unknown) {
   const lines =
@@ -25,11 +29,12 @@ function useLogs() {
   return { data, log, reset };
 }
 
-//#region useTests
-function useTest() {
+//#region useTest
+export function useTest() {
   const [instance, setInstance] = useState<TestInstance>();
   const [generator, setGenerator] = useState<TestGenerator>();
   const [currentLine, setCurrentLine] = useState<number>();
+  const [inProgress, setInProgress] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
   function select(test: TestInstance | undefined) {
@@ -44,30 +49,35 @@ function useTest() {
   async function step() {
     if (!generator) return;
 
+    setInProgress(true);
     const { done, value: line } = await generator.next();
-    const hasLine = line !== undefined && Number.isFinite(line);
+    setInProgress(false);
 
+    const hasLine = line !== undefined && Number.isFinite(line);
     setCurrentLine(hasLine ? line : undefined);
     setIsDone(Boolean(done));
   }
 
-  async function run(delay = 0) {
+  async function start(delay = 0) {
     if (!generator) return;
 
+    setInProgress(true);
     for await (const line of generator) {
       setCurrentLine(line);
       if (delay > 0) {
         await new Promise((r) => setTimeout(r, delay));
       }
     }
+    setInProgress(false);
 
     setCurrentLine(undefined);
     setIsDone(true);
   }
 
-  return { instance, currentLine, isDone, select, step, run, restart };
+  return { instance, currentLine, inProgress, isDone, select, step, start, restart };
 }
 
+//#region useTests
 export function useTests() {
   const logs = useLogs();
   const test = useTest();
@@ -99,7 +109,7 @@ export function useTests() {
     test.restart();
 
     await runWithLogs(async () => {
-      await test.run(stepDelay);
+      await test.start(stepDelay);
     });
 
     logs.log('Completed!');
@@ -130,7 +140,7 @@ export function useTests() {
     setStepDelay: setStepDelayChecked,
 
     logs: logs.data,
-    current: test.instance,
+    selected: test.instance,
     currentLine: test.currentLine,
     isDone: test.isDone,
   };

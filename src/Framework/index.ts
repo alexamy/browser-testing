@@ -1,6 +1,3 @@
-import { render as renderRtl } from '@testing-library/react';
-import userEventDefault from '@testing-library/user-event';
-
 //#region types
 export interface TestOptions {
   dummy?: void;
@@ -68,23 +65,3 @@ export function it(description: string, test: TestUserMethod, generatedMeta?: Te
   const instance = { ...meta, description };
   tests[instance.id] = instance;
 }
-
-//#region testing library
-export const TESTS_MOUNT_ID = 'test-root';
-
-export function render(
-  ...[markup, options]: Parameters<typeof renderRtl>
-): ReturnType<typeof renderRtl> {
-  // Find the test root element
-  const root = document.getElementById(TESTS_MOUNT_ID);
-  if (!root) {
-    throw new Error('Test root is not found');
-  }
-
-  // Render on test root element
-  const result = renderRtl(markup, { ...options, container: root });
-
-  return result;
-}
-
-export const userEvent = userEventDefault;

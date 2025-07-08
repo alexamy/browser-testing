@@ -1,11 +1,6 @@
-// import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
-import './index.css';
-import { TestsUI } from './App';
 import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import { App } from './App';
+import './index.css';
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <TestsUI />
-  </StrictMode>
-);
+createRoot(document.getElementById('root')!).render(<App />);

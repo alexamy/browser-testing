@@ -28,7 +28,8 @@
     "baseUrl": ".",
     "paths": {
       "@framework/test": ["./src/Framework/index.ts"],
-      "@framework/react": ["./src/Framework/react.ts"]
+      "@framework/react": ["./src/Framework/react.ts"],
+      "@framework/machine": ["./src/Framework/machine.ts"]
     }
   },
   "include": ["src"]

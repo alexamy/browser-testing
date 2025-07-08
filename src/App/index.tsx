@@ -1,94 +1,14 @@
-import { type TestInstance } from '@framework/test';
-import { useTests } from '@framework/react';
-import s from './index.module.css';
+import { Route } from './Route';
+import { Sandbox } from './Sandbox';
+import { TestsUI } from './UI';
+import { SimpleUI } from './UI/SimpleUI';
 import './tests';
 
-//#region TestLine
-interface TestLineProps {
-  instance: TestInstance;
-  onClick(): void;
-  selected?: boolean;
-}
-
-function TestLine({ instance, onClick, selected }: TestLineProps) {
-  return (
-    <div
-      className={s.testLine}
-      onClick={onClick}
-      style={{ fontWeight: selected ? 'bold' : 'normal' }}
-    >
-      {instance.id} {instance.description}{' '}
-    </div>
-  );
-}
-
-//#region TestsUI
-export function TestsUI() {
-  const t = useTests();
-
+export function App() {
   return (
     <>
-      <div id="test-root" className={s.testRoot}></div>
-      <div className={s.framework}>
-        <div>
-          <h4>Test list</h4>
-          <div className={s.testList}>
-            {Object.values(t.tests).map((instance, i) => (
-              <TestLine
-                key={i}
-                instance={instance}
-                selected={instance === t.current}
-                onClick={() => t.select(instance)}
-              />
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <h4>Code</h4>
-          <div>
-            {t.current ? (
-              <div className={s.codeButtons}>
-                <button onClick={t.start} disabled={t.isDone}>
-                  Start
-                </button>
-                <button onClick={t.step} disabled={t.isDone}>
-                  Step
-                </button>
-                <button onClick={t.restart}>Restart</button>
-                <label>
-                  Step delay:{' '}
-                  <input
-                    type="number"
-                    min={0}
-                    value={t.stepDelay}
-                    onChange={(e) => t.setStepDelay(parseInt(e.currentTarget.value))}
-                    style={{ width: '100px' }}
-                  />
-                </label>
-              </div>
-            ) : null}
-          </div>
-          <div className={s.codeLines}>
-            {t.current
-              ? t.current.source.map((line, i) => (
-                  <pre key={i} style={{ fontWeight: i === t.currentLine ? 'bold' : 'normal' }}>
-                    {line}
-                  </pre>
-                ))
-              : null}
-          </div>
-        </div>
-
-        <div>
-          <h4>Logger</h4>
-          <div className={s.logList}>
-            {t.logs.map((logLine, i) => (
-              <p key={i}>{logLine}</p>
-            ))}
-          </div>
-        </div>
-      </div>
+      <Route path="/" component={SimpleUI} />
+      <Route path="/sandbox" component={Sandbox} />
     </>
   );
 }

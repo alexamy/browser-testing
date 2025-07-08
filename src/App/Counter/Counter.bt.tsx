@@ -1,6 +1,8 @@
+import { it } from '@framework/test';
+import { render } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { expect } from 'chai';
-import { Counter } from './Counter';
-import { render, it, userEvent } from '@framework/test';
+import { Counter } from '.';
 
 it('shows initial state', async () => {
   const screen = render(<Counter start={4} />);
