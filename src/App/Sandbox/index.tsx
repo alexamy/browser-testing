@@ -14,7 +14,7 @@ function useMessageDebug() {
 
     const listener = (ev: MessageEvent) => {
       if (ev.data?.source?.startsWith('react-devtool')) return;
-      console.log('sandbox => runner', ev.data);
+      console.log('runner => sandbox', ev.data);
     };
 
     window.addEventListener('message', listener);

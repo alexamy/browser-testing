@@ -9,7 +9,7 @@ function useMessageDebug() {
   useEffect(() => {
     const listener = (ev: MessageEvent) => {
       if (ev.data?.source?.startsWith('react-devtool')) return;
-      console.log('runner => sandbox', ev.data);
+      console.log('sandbox => runner', ev.data);
     };
 
     window.addEventListener('message', listener);
