@@ -58,6 +58,11 @@ function useActorController(actor: Actor<typeof singleTestMachine>) {
         actor.send({ type: 'step' });
       } else if (ev.data.type === 'restart') {
         actor.send({ type: 'restart' });
+      } else if (ev.data.type === 'select') {
+        // do nothing, processed on level above
+      } else {
+        // exhaustive match
+        throw new Error(ev.data satisfies never);
       }
     }
 
