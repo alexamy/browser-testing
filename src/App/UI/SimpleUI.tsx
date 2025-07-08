@@ -72,15 +72,17 @@ export function SimpleUI() {
     <div>
       <iframe ref={frame} src="/sandbox" className={s.frame} />
 
-      {Object.values(tests).map((test) => (
-        <div
-          key={test.id}
-          style={{ fontWeight: test.id === selected?.id ? 'bold' : 'normal' }}
-          onClick={() => setSelected(test)}
-        >
-          {test.id} {test.description}
-        </div>
-      ))}
+      <div className={s.codeLines}>
+        {Object.values(tests).map((test) => (
+          <pre
+            key={test.id}
+            style={{ fontWeight: test.id === selected?.id ? 'bold' : 'normal' }}
+            onClick={() => setSelected(test)}
+          >
+            {test.id} {test.description}
+          </pre>
+        ))}
+      </div>
 
       {selected ? (
         <>
@@ -99,6 +101,7 @@ export function SimpleUI() {
           <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'restart')}>
             Restart
           </button>
+
           <div className={s.codeLines}>
             {selected.source.map((line, i) => (
               <pre key={i} style={{ fontWeight: sandbox.currentLine === i ? 'bold' : 'normal' }}>
