@@ -1,7 +1,7 @@
 import { singleTestMachine } from '@framework/machine';
 import { tests, type TestInstance } from '@framework/test';
 import { useActorRef, useSelector } from '@xstate/react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Actor } from 'xstate';
 import type { RunnerEvent, SandboxEvent } from '../ipc';
 import { cleanup } from '@testing-library/react';
@@ -75,7 +75,6 @@ function useActorController(actor: Actor<typeof singleTestMachine>) {
 
 function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
   const state = useSelector(actor, (snapshot) => snapshot.value);
-  const inProgress = useMemo(() => state === 'running' || state === 'stepping', [state]);
 
   const currentTest = useSelector(actor, (snapshot) => snapshot.context.instance.id);
   const currentLine = useSelector(actor, (snapshot) => snapshot.context.currentLine);
@@ -89,10 +88,9 @@ function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
       currentTest,
       currentLine,
       isDone,
-      inProgress,
       logs,
     } satisfies SandboxEvent);
-  }, [state, currentTest, currentLine, inProgress, isDone, logs]);
+  }, [state, currentTest, currentLine, isDone, logs]);
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {

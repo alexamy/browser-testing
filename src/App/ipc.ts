@@ -7,7 +7,6 @@ export type SandboxEvent = {
   currentTest: string;
   currentLine?: number;
   isDone: boolean;
-  inProgress: boolean;
   logs: string[];
 };
 

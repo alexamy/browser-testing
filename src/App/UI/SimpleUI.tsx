@@ -88,22 +88,19 @@ function SimpleUIContent({ frame, sandbox }: { frame: IFrameRef; sandbox: Sandbo
   const tests = useTestsRegistry();
   const selected = tests[sandbox.currentTest];
 
+  const canProceed = sandbox.state === 'ready';
+  const inProgress = sandbox.state === 'running' || sandbox.state === 'stepping';
+
   return (
     <div>
       <>
-        <button
-          disabled={sandbox.inProgress || sandbox.isDone}
-          onClick={() => sendDirective(frame, 'start')}
-        >
+        <button disabled={canProceed} onClick={() => sendDirective(frame, 'start')}>
           Start
         </button>
-        <button
-          disabled={sandbox.inProgress || sandbox.isDone}
-          onClick={() => sendDirective(frame, 'step')}
-        >
+        <button disabled={canProceed} onClick={() => sendDirective(frame, 'step')}>
           Step
         </button>
-        <button disabled={sandbox.inProgress} onClick={() => sendDirective(frame, 'restart')}>
+        <button disabled={inProgress} onClick={() => sendDirective(frame, 'restart')}>
           Restart
         </button>
 
