@@ -97,6 +97,7 @@ export const singleTestMachine = setup({
       invoke: {
         src: 'run step',
         input: ({ context }) => ({ generator: context.generator }),
+        // TODO: add on error
         onDone: [
           {
             actions: assign(({ event }) => event.output),
