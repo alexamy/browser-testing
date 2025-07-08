@@ -1,10 +1,11 @@
-import type { singleTestMachine, SingleTestMachineContext } from '@framework/react';
+import type { singleTestMachine } from '@framework/react';
 import type { StateValueFrom } from 'xstate';
 
 export type SandboxEvent = {
   type: 'update';
-  context: SingleTestMachineContext;
-  value: StateValueFrom<typeof singleTestMachine>;
+  state: StateValueFrom<typeof singleTestMachine>;
+  currentLine?: number;
+  isDone: boolean;
   inProgress: boolean;
 };
 
