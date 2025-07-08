@@ -1,4 +1,4 @@
-import { singleTestMachine } from '@framework/react';
+import { singleTestMachine } from '@framework/machine';
 import { tests, type TestInstance } from '@framework/test';
 import { useActorRef, useSelector } from '@xstate/react';
 import { useEffect, useMemo, useState } from 'react';

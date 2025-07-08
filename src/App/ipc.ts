@@ -1,4 +1,4 @@
-import type { singleTestMachine } from '@framework/react';
+import type { singleTestMachine } from '@framework/machine';
 import type { StateValueFrom } from 'xstate';
 
 export type SandboxEvent = {

@@ -1,7 +1,6 @@
 import { cleanup } from '@testing-library/react';
 import { useState } from 'react';
 import { tests, type TestGenerator, type TestInstance } from '.';
-import { assign, fromPromise, setup } from 'xstate';
 
 export function useTestsRegistry() {
   return tests;
@@ -29,109 +28,6 @@ function useLogs() {
 
   return { data, log, reset };
 }
-
-//#region single test machine
-export interface SingleTestMachineInput {
-  instance: TestInstance;
-}
-
-export interface SingleTestMachineContext {
-  instance: TestInstance;
-  generator: TestGenerator;
-  currentLine?: number;
-  isDone: boolean;
-}
-
-export type SingleTestMachineEvent = { type: 'start' } | { type: 'step' } | { type: 'restart' };
-
-export const singleTestMachine = setup({
-  types: {
-    context: {} as SingleTestMachineContext,
-    input: {} as SingleTestMachineInput,
-    events: {} as SingleTestMachineEvent,
-  },
-  actors: {
-    'run step': fromPromise<
-      { currentLine?: number; isDone: boolean },
-      { generator: TestGenerator }
-    >(async ({ input }) => {
-      const { value, done } = await input.generator.next();
-      const hasLine = value !== undefined && Number.isFinite(value);
-      const result = {
-        currentLine: hasLine ? value : undefined,
-        isDone: Boolean(done),
-      };
-      return result;
-    }),
-  },
-}).createMachine({
-  id: 'single test machine',
-  initial: 'ready',
-  context: ({ input }) => ({
-    instance: input.instance,
-    generator: input.instance.generator(),
-    currentLine: 0,
-    isDone: false,
-  }),
-  on: {
-    restart: {
-      target: '.ready',
-      actions: assign(({ context }) => ({
-        generator: context.instance.generator(),
-        currentLine: 0,
-        isDone: false,
-      })),
-    },
-  },
-  states: {
-    ready: {
-      on: {
-        start: {
-          target: 'running',
-        },
-        step: {
-          target: 'stepping',
-        },
-      },
-    },
-    stepping: {
-      invoke: {
-        src: 'run step',
-        input: ({ context }) => ({ generator: context.generator }),
-        // TODO: add on error
-        onDone: [
-          {
-            actions: assign(({ event }) => event.output),
-            guard: ({ context }) => context.isDone,
-            target: 'done',
-          },
-          {
-            actions: assign(({ event }) => event.output),
-            target: 'ready',
-          },
-        ],
-      },
-    },
-    running: {
-      invoke: {
-        src: 'run step',
-        input: ({ context }) => ({ generator: context.generator }),
-        onDone: [
-          {
-            actions: assign(({ event }) => event.output),
-            guard: ({ context }) => context.isDone,
-            target: 'done',
-          },
-          {
-            actions: assign(({ event }) => event.output),
-            target: 'running',
-          },
-        ],
-      },
-    },
-    done: {},
-  },
-});
 
 //#region useTest
 export function useTest() {
