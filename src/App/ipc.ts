@@ -8,6 +8,7 @@ export type SandboxEvent = {
   currentLine?: number;
   isDone: boolean;
   inProgress: boolean;
+  logs: string[];
 };
 
 export type RunnerEvent =

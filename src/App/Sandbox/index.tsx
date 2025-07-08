@@ -80,6 +80,7 @@ function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
   const currentTest = useSelector(actor, (snapshot) => snapshot.context.instance.id);
   const currentLine = useSelector(actor, (snapshot) => snapshot.context.currentLine);
   const isDone = useSelector(actor, (snapshot) => snapshot.context.isDone);
+  const logs = useSelector(actor, (snapshot) => snapshot.context.logs);
 
   useEffect(() => {
     window.parent.postMessage({
@@ -89,8 +90,9 @@ function useActorUpdateSend(actor: Actor<typeof singleTestMachine>) {
       currentLine,
       isDone,
       inProgress,
+      logs,
     } satisfies SandboxEvent);
-  }, [state, currentTest, currentLine, inProgress, isDone]);
+  }, [state, currentTest, currentLine, inProgress, isDone, logs]);
 }
 
 function TestComponent({ instance }: { instance: TestInstance }) {

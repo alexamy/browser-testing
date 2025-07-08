@@ -22,6 +22,7 @@ function useSandboxState() {
   const currentLine = useMemo(() => state?.currentLine, [state]);
   const isDone = useMemo(() => state?.isDone, [state]);
   const inProgress = useMemo(() => state?.inProgress, [state]);
+  const logs = useMemo(() => state?.logs, [state]);
 
   useEffect(() => {
     const listener = (ev: MessageEvent<SandboxEvent>) => {
@@ -36,6 +37,7 @@ function useSandboxState() {
     currentLine,
     isDone,
     inProgress,
+    logs,
   };
 }
 
@@ -110,6 +112,15 @@ export function SimpleUI() {
             ))}
           </div>
         </>
+      ) : null}
+
+      {sandbox.logs && sandbox.logs.length > 0 ? (
+        <div>
+          Logs:
+          {sandbox.logs.map((line, i) => (
+            <div key={i}>{line}</div>
+          ))}
+        </div>
       ) : null}
     </div>
   );
