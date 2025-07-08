@@ -49,9 +49,6 @@ export const singleTestMachine = setup({
     input: {} as SingleTestMachineInput,
     events: {} as SingleTestMachineEvent,
   },
-  guards: {
-    'is done': ({ context }) => context.isDone,
-  },
   actors: {
     'run step': fromPromise<
       { currentLine?: number; isDone: boolean },
@@ -103,7 +100,7 @@ export const singleTestMachine = setup({
         onDone: [
           {
             actions: assign(({ event }) => event.output),
-            guard: 'is done',
+            guard: ({ context }) => context.isDone,
             target: 'done',
           },
           {
@@ -120,7 +117,7 @@ export const singleTestMachine = setup({
         onDone: [
           {
             actions: assign(({ event }) => event.output),
-            guard: 'is done',
+            guard: ({ context }) => context.isDone,
             target: 'done',
           },
           {
