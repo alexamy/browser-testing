@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useBodyStyle } from './useBodyStyle';
 import s from './ui.module.css';
 import type { RunnerEvent } from '../ipc';
+import type { TestInstance } from '@framework/test';
 
 function useMessageDebug() {
   useEffect(() => {
@@ -38,9 +39,9 @@ export function SimpleUI() {
   useBodyStyle('ui');
   useMessageDebug();
 
-  const [selected, setSelected] = useState<string>();
+  const [selected, setSelected] = useState<TestInstance>();
   useEffect(() => {
-    if (selected) sendSelected(frame, selected);
+    if (selected) sendSelected(frame, selected.id);
   }, [selected]);
 
   return (
@@ -50,8 +51,8 @@ export function SimpleUI() {
       {Object.values(tests).map((test) => (
         <div
           key={test.id}
-          style={{ fontWeight: test.id === selected ? 'bold' : 'normal' }}
-          onClick={() => setSelected(test.id)}
+          style={{ fontWeight: test.id === selected?.id ? 'bold' : 'normal' }}
+          onClick={() => setSelected(test)}
         >
           {test.id} {test.description}
         </div>
